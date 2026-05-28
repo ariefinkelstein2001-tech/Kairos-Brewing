@@ -87,6 +87,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 .kb-nav-desktop a{cursor:pointer;transition:color .2s;color:var(--text)}
 .kb-nav-desktop a:hover,.kb-nav-desktop a.active{color:var(--orange)}
+.kb-navitem{position:relative;display:flex;align-items:center}
+.kb-caret{font-size:9px;margin-left:5px;opacity:.8}
+.kb-submenu{
+  position:absolute;top:100%;left:0;margin-top:18px;
+  background:#030303;border-top:2px solid var(--orange);
+  min-width:210px;display:none;flex-direction:column;padding:10px 0;z-index:120;
+  box-shadow:0 12px 30px rgba(0,0,0,.5);
+}
+.kb-submenu::before{content:'';position:absolute;left:0;right:0;top:-18px;height:18px}
+.kb-navitem:hover .kb-submenu{display:flex}
+.kb-submenu a{padding:11px 22px;font-size:14px;letter-spacing:.05em;white-space:nowrap;color:#fff}
+.kb-submenu a:hover{color:var(--orange)}
 @media(min-width:1000px){
   .kb-nav-desktop{display:flex}
   .kb-burger{display:none}
@@ -114,6 +126,28 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 .kb-menu-list a:hover{color:var(--orange);padding-left:8px}
 .kb-menu-list a.active{color:var(--orange)}
+.kb-menu-list a.kb-sub{font-size:18px;padding-left:18px;opacity:.85;margin-top:-4px}
+
+/* ── Tema claro (página de Cervezas / colecciones) ── */
+.kb-light{background:var(--cream);color:#1f1f1f;min-height:70vh}
+.kb-collwrap{max-width:1140px;margin:0 auto;padding:52px clamp(1rem,4vw,3rem) 64px}
+.kb-coll-t{
+  font-family:var(--font-display);font-size:clamp(28px,4.5vw,42px);
+  text-transform:uppercase;text-align:center;color:#1f1f1f;letter-spacing:.01em;
+  margin:52px 0 36px;
+}
+.kb-coll-t:first-child{margin-top:0}
+.kb-light .kb-grid{margin-bottom:8px}
+.kb-light .kb-card{background:transparent;border:none;border-radius:0}
+.kb-light .kb-card:hover{transform:none;border-color:transparent}
+.kb-light .kb-card-img{background:transparent}
+.kb-light .kb-card-name{color:#1f1f1f;font-weight:600}
+.kb-light .kb-card-price{color:#1f1f1f}
+.kb-light .kb-card-price .old{color:#9a9a9a}
+.kb-light select.kb-sel{background:#fff;color:#1f1f1f;border-color:#ccc}
+.kb-light .kb-qty .v{background:#fff;color:#000;border-top:1px solid #ddd;border-bottom:1px solid #ddd}
+.kb-light .kb-qty button:first-child{background:#efe2c4;color:#5a4a22}
+.kb-light .kb-qty button:first-child:hover{background:#e6d4ad}
 
 /* ── HERO carousel ── */
 .kb-hero{position:relative;width:100%;overflow:hidden;background:#000;line-height:0}
@@ -404,7 +438,15 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
     <a data-route="/" onclick="go(event)" aria-label="Inicio"><img class="kb-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING.png?v=1769017156&width=300" alt="Kairos Brewing"></a>
   </div>
   <nav class="kb-nav-desktop">
-    <a data-route="/cervezas" onclick="go(event)">Cervezas</a>
+    <div class="kb-navitem">
+      <a data-route="/cervezas" onclick="go(event)">Cervezas<span class="kb-caret">▼</span></a>
+      <div class="kb-submenu">
+        <a data-route="/cervezas" onclick="go(event)">Todas</a>
+        <a data-route="/cervezas/de-la-casa" onclick="go(event)">De la Casa</a>
+        <a data-route="/cervezas/de-temporada" onclick="go(event)">De Temporada</a>
+        <a data-route="/cervezas/de-artista" onclick="go(event)">De Artista</a>
+      </div>
+    </div>
     <a data-route="/packs" onclick="go(event)">Packs</a>
     <a data-route="/destileria" onclick="go(event)">Destilería</a>
     <a data-route="/merch" onclick="go(event)">Merch</a>
@@ -429,6 +471,9 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
   <div class="kb-menu-list">
     <a data-route="/cervezas" onclick="go(event)">Cervezas</a>
+    <a data-route="/cervezas/de-la-casa" onclick="go(event)" class="kb-sub">De la Casa</a>
+    <a data-route="/cervezas/de-temporada" onclick="go(event)" class="kb-sub">De Temporada</a>
+    <a data-route="/cervezas/de-artista" onclick="go(event)" class="kb-sub">De Artista</a>
     <a data-route="/packs" onclick="go(event)">Packs</a>
     <a data-route="/destileria" onclick="go(event)">Destilería</a>
     <a data-route="/merch" onclick="go(event)">Merch</a>
@@ -523,14 +568,8 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ CERVEZAS ═════ -->
-  <div class="kb-view" id="view-cervezas">
-    <div class="kb-page-head">
-      <h1 class="kb-page-title">Cervezas</h1>
-      <p class="kb-page-sub">Latas 473cc · craft beer artesanal</p>
-    </div>
-    <section class="kb-section">
-      <div class="kb-grid" id="gridCervezas"><div class="kb-loading">Cargando cervezas…</div></div>
-    </section>
+  <div class="kb-view kb-light" id="view-cervezas">
+    <div class="kb-collwrap" id="cervezasContent"><div class="kb-loading">Cargando cervezas…</div></div>
   </div>
 
   <!-- ═════ PACKS ═════ -->
@@ -723,6 +762,7 @@ const ROUTES = {
 };
 function viewFromPath(path){
   const p = path.replace(/\/+$/,'') || '/';
+  if (p.indexOf('/cervezas') === 0) return 'cervezas';
   return ROUTES[p] || ROUTES[path] || 'home';
 }
 function showView(name){
@@ -806,6 +846,21 @@ function isMerch(p){
   return /vaso|jockey|jarra|copa|growler|pin|gorr/.test(t);
 }
 function cleanTitle(s){return String(s||'').replace(/24\s*pack\s*473\s*cc?\s*mayorista\s*/gi,'24 Pack ').replace(/\s+/g,' ').trim()}
+
+// Colección de cada cerveza: usa las colecciones de Shopify; si no, mapa conocido.
+const KNOWN_GROUP = {
+  'neipa-473cc':'casa','nada-personal-german-pils':'casa','red':'casa',
+  'apa-american-pale':'casa','golden-golden-ale':'casa','kenny-bell-american-amber-ale':'casa',
+  'weizen-473cc':'temporada','samba-ipa':'temporada','obertura-stout':'temporada','hoyo-en-uno-hoppy-lager':'temporada',
+  'osagui-japanese-lager':'artista','the-crown-mexican-lager':'artista','l200-stout':'artista',
+};
+function classifyBeer(p){
+  const cols = (p.collections || []).map(c => ((c.handle||'')+' '+(c.title||'')).toLowerCase());
+  if (cols.some(c => /artist/.test(c)))            return 'artista';
+  if (cols.some(c => /temporada|season|estaci/.test(c))) return 'temporada';
+  if (cols.some(c => /casa/.test(c)))              return 'casa';
+  return KNOWN_GROUP[p.handle] || 'casa';
+}
 
 function buildCard(p){
   const variants = p.variants || [];
@@ -891,11 +946,24 @@ async function populateGridFor(view){
     }
   }
   if (view === 'cervezas') {
-    const el = document.getElementById('gridCervezas');
-    if (!el || el.dataset.done) return;
-    const list = products.filter(beers);
-    el.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin cervezas disponibles</div>';
-    el.dataset.done = '1';
+    const host = document.getElementById('cervezasContent');
+    if (!host) return;
+    const path = location.pathname.replace(/\/+$/,'');
+    const mode = path.endsWith('de-la-casa') ? 'casa'
+      : path.endsWith('de-temporada') ? 'temporada'
+      : path.endsWith('de-artista') ? 'artista'
+      : 'todas';
+    if (host.dataset.mode === mode) return;
+    const groups = {casa:[],temporada:[],artista:[]};
+    products.filter(beers).forEach(b => { groups[classifyBeer(b)].push(b); });
+    const titles = {casa:'Colección de la Casa',temporada:'Colección de Temporada',artista:'Colección de Artistas'};
+    const sectionHTML = k => `<h2 class="kb-coll-t">${titles[k]}</h2><div class="kb-grid">${
+      groups[k].length ? groups[k].map(buildCard).join('') : '<div class="kb-loading">Próximamente</div>'}</div>`;
+    const html = mode === 'todas'
+      ? ['casa','temporada','artista'].filter(k => groups[k].length).map(sectionHTML).join('')
+      : sectionHTML(mode);
+    host.innerHTML = html || '<div class="kb-loading">Sin cervezas disponibles</div>';
+    host.dataset.mode = mode;
   }
   if (view === 'packs') {
     const el = document.getElementById('gridPacks');

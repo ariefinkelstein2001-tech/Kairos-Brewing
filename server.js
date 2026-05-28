@@ -46,6 +46,7 @@ const PRODUCTS_QUERY = `{
         id title handle description productType vendor tags
         featuredImage { url altText }
         images(first: 5) { edges { node { url altText } } }
+        collections(first: 10) { edges { node { handle title } } }
         variants(first: 25) {
           edges {
             node {
@@ -92,6 +93,7 @@ async function loadKairosProducts(force = false) {
       tags:        p.tags,
       image:       p.featuredImage?.url || null,
       images:      (p.images?.edges || []).map(e => e.node.url),
+      collections: (p.collections?.edges || []).map(e => ({ handle: e.node.handle, title: e.node.title })),
       variants: p.variants.edges.map(({ node: v }) => ({
         id:             stripGid(v.id, 'ProductVariant'),
         title:          v.title,
