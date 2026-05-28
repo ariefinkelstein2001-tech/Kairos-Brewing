@@ -306,6 +306,10 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-armar-progress-row b{font-size:20px;color:var(--orange-d)}
 .kb-armar-bar{height:6px;border-radius:6px;background:#dad8cf;overflow:hidden}
 .kb-armar-bar-fill{height:100%;width:0;background:var(--orange);transition:width .35s}
+.kb-armar-sizes{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:0 auto 28px}
+.kb-armar-size{background:#fff;color:#1f1f1f;border:1px solid #d8d4c6;border-radius:30px;padding:11px 28px;font-family:var(--font-body);font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;transition:background .15s,color .15s,border-color .15s}
+.kb-armar-size:hover{border-color:var(--orange)}
+.kb-armar-size.active{background:var(--orange);color:#000;border-color:var(--orange)}
 .kb-armar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 14px}
 .kb-armar-card{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
 .kb-armar-card-img{height:180px;width:100%;display:flex;align-items:flex-end;justify-content:center}
@@ -670,8 +674,13 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
     <div class="kb-armar">
       <div class="kb-armar-head">
         <div class="kb-armar-pill"><span class="kb-dot"></span><span id="armarStylesCount">0</span> estilos disponibles</div>
-        <h1 class="kb-armar-title">Arma tu pack a tu pinta.</h1>
+        <h1 class="kb-armar-title">Tú eliges, nosotros lo armamos.</h1>
         <p class="kb-armar-sub">Elige los estilos que más te representan, llena el pack y nosotros te lo dejamos en la puerta. Cervezas frescas, lúpulo serio, locura intacta.</p>
+        <div class="kb-armar-sizes">
+          <button class="kb-armar-size" data-size="6" onclick="armarSetSize(6)">6 Pack</button>
+          <button class="kb-armar-size" data-size="12" onclick="armarSetSize(12)">12 Pack</button>
+          <button class="kb-armar-size" data-size="24" onclick="armarSetSize(24)">24 Pack</button>
+        </div>
         <div class="kb-armar-progress">
           <div class="kb-armar-progress-row"><span><b id="armarCount">0</b> / <span id="armarTarget">6</span> elegidas</span><span id="armarHint">Empieza eligiendo tu estilo favorito</span></div>
           <div class="kb-armar-bar"><div class="kb-armar-bar-fill" id="armarBarFill"></div></div>
@@ -1202,9 +1211,15 @@ function armarAdd(i){
   armarRender();
 }
 function armarRemove(idx){ armarSel.splice(idx,1); armarRender(); }
+function armarSetSize(n){
+  if (![6,12,24].includes(n)) return;
+  history.pushState({}, '', '/arma-tu-pack/' + n);
+  showView('armar');
+}
 function armarRender(){
   const target = armarTarget;
   const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  document.querySelectorAll('.kb-armar-size').forEach(b => b.classList.toggle('active', +b.dataset.size === target));
   set('armarTarget', target);
   set('armarCount', armarSel.length);
   const slots = document.getElementById('armarSlots');
