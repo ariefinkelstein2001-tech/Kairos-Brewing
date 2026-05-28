@@ -449,6 +449,13 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-bd-gallery{display:flex;gap:14px;overflow-x:auto;padding:14px clamp(1rem,4vw,3rem) 70px;scroll-snap-type:x mandatory;scrollbar-width:thin}
 .kb-bd-gallery img{flex:0 0 auto;height:360px;width:auto;border-radius:24px;scroll-snap-align:start}
 @media(max-width:760px){.kb-bd-gallery img{height:260px}}
+.kb-bd-label{font-family:var(--font-body);text-transform:uppercase;letter-spacing:.08em;color:var(--orange);font-size:14px;font-weight:600;margin-bottom:10px}
+.kb-bd-btn--ghost{background:#000}
+.kb-bd-btn--ghost:hover{background:#222}
+.kb-gd-hero{position:relative;min-height:58vh;display:flex;align-items:flex-end;background-size:cover;background-position:center;padding:60px clamp(1rem,4vw,3rem)}
+.kb-gd-hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.kb-gd-hero-h{position:relative;font-family:'Rigeko','Oswald',sans-serif;color:#fff;font-size:clamp(40px,8vw,72px);line-height:1.02;text-transform:uppercase;max-width:1100px;margin:0 auto;width:100%}
+.kb-garden .kb-bd-welcome-txt h1,.kb-garden .kb-bd-sec h2{font-family:'Rigeko','Oswald',sans-serif}
 
 /* ── Cart drawer ── */
 .kb-cart-panel{position:fixed;inset:0;z-index:500;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -786,10 +793,53 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ GARDEN ═════ -->
-  <div class="kb-view kb-badass" id="view-garden">
-    <div class="kb-bd-sec" style="text-align:center;padding-top:90px;padding-bottom:140px">
-      <h2 style="text-align:center">Kairos Garden</h2>
-      <p style="text-align:center;max-width:600px;margin:0 auto">Nuestro taproom al aire libre, donde la cerveza fresca y el buen rato se encuentran. Página completa muy pronto.</p>
+  <div class="kb-view kb-badass kb-garden" id="view-garden">
+    <section class="kb-gd-hero" style="background-image:url('https://cdn.shopify.com/s/files/1/0668/0081/2327/files/kairose-29_1.jpg?v=1752606001&width=2048')">
+      <h1 class="kb-gd-hero-h">Nuestro<br>Beer Garden</h1>
+    </section>
+    <div class="kb-bd-welcome">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ded52a65-5edb-4254-939c-87086cdfac2c-pfti.png?v=1755548719&width=760" alt="Kairos Garden">
+      <div class="kb-bd-welcome-txt">
+        <h1>¡Bienvenido a la madriguera!</h1>
+        <p>Nuestro refugio, donde la cerveza, la cultura, la comida y la comunidad florecen juntas. Un espacio contemporáneo que mezcla sabores del mundo con técnica, identidad y visión estratégica, con una cocina de espíritu callejero y multicultural inspirada en los estilos globales que se ven en las calles, ciudades y espacios gastronómicos de todo el mundo. Un lugar vivo, con platos sabrosos y una barra de carácter único.</p>
+      </div>
+    </div>
+    <div class="kb-bd-btns">
+      <a class="kb-bd-btn kb-bd-btn--ghost" href="https://ayhungry.com/en/kairos-vespucio" target="_blank" rel="noopener">Reservas</a>
+      <a class="kb-bd-btn kb-bd-btn--ghost" href="https://gour.media/garden-locales/" target="_blank" rel="noopener">Carta</a>
+    </div>
+    <section class="kb-bd-sec">
+      <div class="kb-bd-label">Coctelería de primera y cervezas artesanales</div>
+      <h2>Barra</h2>
+      <img class="kb-bd-sec-img" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/368981_1734026055.webp?v=1753286989&width=1600" alt="" loading="lazy">
+      <p>Una barra urbana y contemporánea, creativa y con personalidad. Desde la elaboración de nuestra cerveza, nuestro gin y nuestros propios syrups, te ofrecemos experiencias líquidas que acompañan cada nivel: lo artesanal, lo eficiente y lo clásico. Pero, sobre todo, nuestro ADN.</p>
+    </section>
+    <section class="kb-bd-sec">
+      <div class="kb-bd-label">Descubre la nueva línea del Garden</div>
+      <h2>Huella del Chef</h2>
+      <img class="kb-bd-sec-img" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/512457_1762533486.webp?v=1769440545&width=1600" alt="" loading="lazy">
+      <p>La cocina no es un lugar donde solo se preparan platos. Se construyen experiencias, vínculos y se comparte una filosofía en común. En este espacio, nuestro chef te invita a descubrir una propuesta única, sabrosa y bien pensada, para traerte esa filosofía en común.</p>
+    </section>
+    <section class="kb-bd-sec">
+      <div class="kb-bd-label">La diversidad de la gastronomía en un solo lugar</div>
+      <h2>Cocina contemporánea</h2>
+      <img class="kb-bd-sec-img" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG001.jpg?v=1722953117&width=1600" alt="" loading="lazy">
+      <p>Explora nuestra variedad gastronómica inspirada en distintos lugares del mundo. Una propuesta moderna que mezcla sabores del mundo con técnicas, identidad y visión estratégica, para ofrecerte una experiencia única y especial.</p>
+    </section>
+    <section class="kb-bd-sec">
+      <div class="kb-bd-label">La fusión perfecta de sabores</div>
+      <h2>Nikkei, hamburguesas y más</h2>
+      <div class="kb-bd-imgs2">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/369065_1768491510.webp?v=1769440594&width=900" alt="" loading="lazy">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/foto01-7_21_11zon_1.jpg?v=1752600384&width=900" alt="" loading="lazy">
+      </div>
+      <p>Sumérgete en la fusión de la cocina urbana. Cada bocado es una explosión de sabores únicos que no encontrarás en ningún otro lugar. Ideal para los amantes de la cocina innovadora y deliciosa.</p>
+    </section>
+    <div class="kb-bd-gallery">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/kairose-17_converted_316fac41-c50a-4074-b63c-7e187281d52d-pfti.jpg?v=1755548746&width=900" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/2024-05-03_1.jpg?v=1722879531&width=900" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/kairose-23_f570997b-dfe2-480e-9498-90c6f0c89d7a.jpg?v=1752605966&width=900" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/FOT05270_c869653d-8d99-4a25-a8bd-a63c90a6dbbb.jpg?v=1739644818&width=1600" alt="" loading="lazy">
     </div>
   </div>
 
