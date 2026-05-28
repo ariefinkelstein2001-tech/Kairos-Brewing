@@ -148,6 +148,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-light .kb-qty .v{background:#fff;color:#000;border-top:1px solid #ddd;border-bottom:1px solid #ddd}
 .kb-light .kb-qty button:first-child{background:#efe2c4;color:#5a4a22}
 .kb-light .kb-qty button:first-child:hover{background:#e6d4ad}
+.kb-light .kb-page-head{border-bottom-color:rgba(0,0,0,.12)}
+.kb-light .kb-page-title{color:#1f1f1f}
+.kb-light .kb-info p{color:#444}
+.kb-light .kb-info-card{background:#fff;border-color:rgba(0,0,0,.08)}
+.kb-light .kb-info-card:hover{border-color:var(--orange)}
+.kb-light .kb-info-card h3{color:#1f1f1f}
+.kb-light .kb-info-card p{color:#555}
 
 /* ── HERO carousel ── */
 .kb-hero{position:relative;width:100%;overflow:hidden;background:#000;line-height:0}
@@ -287,39 +294,39 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 }
 .kb-pill:hover{background:var(--orange-l);transform:translateY(-2px)}
 
-/* ── Arma tu pack (identidad Kairos: negro + ámbar) ── */
+/* ── Arma tu pack (fondo claro, identidad Kairos) ── */
 .kb-armar{max-width:1140px;margin:0 auto;padding:48px clamp(1rem,4vw,3rem) 250px}
 .kb-armar-head{text-align:center;max-width:780px;margin:0 auto 38px}
-.kb-armar-pill{display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--orange);border:1px solid var(--orange);border-radius:30px;padding:7px 18px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:22px;font-weight:500}
+.kb-armar-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;color:var(--orange-d);border:1px solid var(--orange);border-radius:30px;padding:7px 18px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:22px;font-weight:600}
 .kb-armar-pill .kb-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 3px rgba(245,166,35,.25)}
-.kb-armar-title{font-family:var(--font-display);font-size:clamp(38px,7vw,74px);color:#fff;line-height:.98;text-transform:uppercase;margin-bottom:16px;letter-spacing:.01em}
-.kb-armar-sub{color:var(--mut);font-size:15px;max-width:560px;margin:0 auto 28px;line-height:1.55}
+.kb-armar-title{font-family:var(--font-display);font-size:clamp(38px,7vw,74px);color:#1f1f1f;line-height:.98;text-transform:uppercase;margin-bottom:16px;letter-spacing:.01em}
+.kb-armar-sub{color:#555;font-size:15px;max-width:560px;margin:0 auto 28px;line-height:1.55}
 .kb-armar-progress{max-width:640px;margin:0 auto}
-.kb-armar-progress-row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--mut);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
-.kb-armar-progress-row b{font-size:20px;color:var(--orange)}
-.kb-armar-bar{height:6px;border-radius:6px;background:#222;overflow:hidden}
+.kb-armar-progress-row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:#666;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
+.kb-armar-progress-row b{font-size:20px;color:var(--orange-d)}
+.kb-armar-bar{height:6px;border-radius:6px;background:#dad8cf;overflow:hidden}
 .kb-armar-bar-fill{height:100%;width:0;background:var(--orange);transition:width .35s}
 .kb-armar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 14px}
 .kb-armar-card{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
 .kb-armar-card-img{height:180px;width:100%;display:flex;align-items:flex-end;justify-content:center}
 .kb-armar-card-img img{max-height:100%;width:auto;object-fit:contain}
-.kb-armar-card-name{font-size:14px;font-weight:500;color:#fff;line-height:1.25}
-.kb-armar-card-price{font-weight:600;color:#fff;font-size:17px}
+.kb-armar-card-name{font-size:14px;font-weight:600;color:#1f1f1f;line-height:1.25}
+.kb-armar-card-price{font-weight:700;color:#1f1f1f;font-size:17px}
 .kb-armar-plus{width:44px;height:44px;border-radius:50%;background:var(--orange);color:#000;font-size:26px;line-height:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:transform .15s,background .15s}
 .kb-armar-plus:hover{background:var(--orange-l);transform:scale(1.1)}
 .kb-armar-plus:disabled{opacity:.3;pointer-events:none}
 
-.kb-armar-bar-sticky{position:fixed;left:0;right:0;bottom:0;z-index:300;background:#0a0a0a;border-top:2px solid var(--orange);padding:14px clamp(1rem,4vw,3rem) 16px;box-shadow:0 -10px 30px rgba(0,0,0,.55)}
+.kb-armar-bar-sticky{position:fixed;left:0;right:0;bottom:0;z-index:300;background:#f3f1e7;border-top:2px solid var(--orange);padding:14px clamp(1rem,4vw,3rem) 16px;box-shadow:0 -8px 26px rgba(0,0,0,.16)}
 .kb-armar-slots{display:flex;gap:10px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end}
-.kb-slot{width:50px;height:122px;border-radius:8px;background:#191919;border:1px solid #2c2c2c;position:relative;flex-shrink:0;transition:width .2s}
+.kb-slot{width:50px;height:122px;border-radius:8px;background:#13110d;border:1px solid #d9d6c8;position:relative;flex-shrink:0;transition:width .2s}
 .kb-slot.filled{width:88px;background:transparent;border-color:transparent;display:flex;align-items:flex-end;justify-content:center}
-.kb-slot.filled img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.55))}
+.kb-slot.filled img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.3))}
 .kb-slot-x{position:absolute;top:-8px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--orange);color:#000;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
 .kb-armar-foot{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .kb-armar-foot-l{display:flex;flex-direction:column}
-.kb-armar-foot-l span:first-child{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
-.kb-armar-total{font-family:var(--font-display);font-size:32px;color:#fff;line-height:1.1}
-.kb-armar-cta{background:#333;color:#8a8a8a;padding:16px 30px;border-radius:32px;font-family:var(--font-body);font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;min-width:240px;transition:background .15s,color .15s}
+.kb-armar-foot-l span:first-child{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#777}
+.kb-armar-total{font-family:var(--font-display);font-size:32px;color:#1f1f1f;line-height:1.1}
+.kb-armar-cta{background:#cfcabb;color:#fff;padding:16px 30px;border-radius:32px;font-family:var(--font-body);font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;min-width:240px;transition:background .15s,color .15s}
 .kb-armar-cta.ready{background:var(--orange);color:#000;cursor:pointer}
 .kb-armar-cta.ready:hover{background:var(--orange-l)}
 @media(max-width:680px){
@@ -490,7 +497,6 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
         <a data-route="/cervezas/de-artista" onclick="go(event)">De Artista</a>
       </div>
     </div>
-    <a data-route="/packs" onclick="go(event)">Packs</a>
     <div class="kb-navitem">
       <a data-route="/arma-tu-pack/6" onclick="go(event)">Arma tu Pack<span class="kb-caret">▼</span></a>
       <div class="kb-submenu">
@@ -499,7 +505,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
         <a data-route="/arma-tu-pack/24" onclick="go(event)">24 Pack</a>
       </div>
     </div>
-    <a data-route="/destileria" onclick="go(event)">Destilería</a>
+    <a data-route="/packs" onclick="go(event)">Packs</a>
     <a data-route="/merch" onclick="go(event)">Merch</a>
     <a data-route="/restaurantes" onclick="go(event)">Restaurantes</a>
     <a data-route="/eventos" onclick="go(event)">Eventos</a>
@@ -525,12 +531,11 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
     <a data-route="/cervezas/de-la-casa" onclick="go(event)" class="kb-sub">De la Casa</a>
     <a data-route="/cervezas/de-temporada" onclick="go(event)" class="kb-sub">De Temporada</a>
     <a data-route="/cervezas/de-artista" onclick="go(event)" class="kb-sub">De Artista</a>
-    <a data-route="/packs" onclick="go(event)">Packs</a>
     <a data-route="/arma-tu-pack/6" onclick="go(event)">Arma tu Pack</a>
     <a data-route="/arma-tu-pack/6" onclick="go(event)" class="kb-sub">6 Pack</a>
     <a data-route="/arma-tu-pack/12" onclick="go(event)" class="kb-sub">12 Pack</a>
     <a data-route="/arma-tu-pack/24" onclick="go(event)" class="kb-sub">24 Pack</a>
-    <a data-route="/destileria" onclick="go(event)">Destilería</a>
+    <a data-route="/packs" onclick="go(event)">Packs</a>
     <a data-route="/merch" onclick="go(event)">Merch</a>
     <a data-route="/restaurantes" onclick="go(event)">Restaurantes</a>
     <a data-route="/eventos" onclick="go(event)">Eventos</a>
@@ -628,7 +633,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ ARMA TU PACK ═════ -->
-  <div class="kb-view" id="view-armar">
+  <div class="kb-view kb-light" id="view-armar">
     <div class="kb-armar">
       <div class="kb-armar-head">
         <div class="kb-armar-pill"><span class="kb-dot"></span><span id="armarStylesCount">0</span> estilos disponibles</div>
@@ -654,7 +659,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ PACKS ═════ -->
-  <div class="kb-view" id="view-packs">
+  <div class="kb-view kb-light" id="view-packs">
     <div class="kb-page-head">
       <h1 class="kb-page-title">Packs</h1>
       <p class="kb-page-sub">6/12/24 packs · mix de estilos</p>
@@ -665,7 +670,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ DESTILERÍA ═════ -->
-  <div class="kb-view" id="view-destileria">
+  <div class="kb-view kb-light" id="view-destileria">
     <div class="kb-page-head">
       <h1 class="kb-page-title">Destilería</h1>
       <p class="kb-page-sub">Gin · Whiskey · Ron · Vermut</p>
@@ -676,7 +681,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ MERCH ═════ -->
-  <div class="kb-view" id="view-merch">
+  <div class="kb-view kb-light" id="view-merch">
     <div class="kb-page-head">
       <h1 class="kb-page-title">Merch</h1>
       <p class="kb-page-sub">Vasos · jockeys · growlers · pins</p>
@@ -687,7 +692,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ RESTAURANTES ═════ -->
-  <div class="kb-view" id="view-restaurantes">
+  <div class="kb-view kb-light" id="view-restaurantes">
     <div class="kb-page-head">
       <h1 class="kb-page-title">Restaurantes</h1>
       <p class="kb-page-sub">Visita nuestros locales · taproom y experiencias</p>
@@ -715,7 +720,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ EVENTOS ═════ -->
-  <div class="kb-view" id="view-eventos">
+  <div class="kb-view kb-light" id="view-eventos">
     <div class="kb-page-head">
       <h1 class="kb-page-title">Eventos</h1>
       <p class="kb-page-sub">Catas · lanzamientos · activaciones</p>
@@ -744,7 +749,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   </div>
 
   <!-- ═════ NOSOTROS ═════ -->
-  <div class="kb-view" id="view-nosotros">
+  <div class="kb-view kb-light" id="view-nosotros">
     <div class="kb-page-head">
       <h1 class="kb-page-title">Nosotros</h1>
       <p class="kb-page-sub">Craft beer desde 2017 · sin filtrar, sin aditivos</p>
