@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Dela+Gothic+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Dela+Gothic+One&family=Nunito:wght@400;700;800&family=Roboto:wght@300;400;500;700&family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* Fuentes propias de Kairos (mismas que el sitio original en PageFly) */
 @font-face{font-family:'Rigeko';src:url("https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Rigeko_42dc2729-db72-4867-b240-0bddd82a9bc1.woff2?v=1739802873") format("woff2");font-display:swap}
@@ -470,6 +470,29 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-ev-send{margin-top:22px;background:var(--orange);color:#000;border-radius:8px;padding:14px 44px;font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:15px;cursor:pointer;transition:background .15s}
 .kb-ev-send:hover{background:var(--orange-l)}
 
+/* ── Nosotros (historia + equipo) ── */
+.kb-ns-hero{position:relative;min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;background-size:cover;background-position:center}
+.kb-ns-hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.32)}
+.kb-ns-hero h1{position:relative;font-family:var(--font-heavy);color:#fff;font-size:clamp(48px,11vw,118px);letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.kb-ns-time{max-width:1120px;margin:0 auto;padding:10px clamp(1rem,4vw,3rem)}
+.kb-ns-block{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);align-items:center;padding:54px 0;border-bottom:1px solid rgba(0,0,0,.1)}
+.kb-ns-block:last-child{border-bottom:none}
+.kb-ns-block:nth-of-type(even) .kb-ns-media{order:2}
+.kb-ns-year{font-family:var(--font-heavy);font-size:clamp(34px,5.4vw,62px);color:#1f1f1f;margin-bottom:20px;line-height:1}
+.kb-ns-txt p{font-family:'Roboto',sans-serif;color:#444;font-size:16px;line-height:1.75;margin-bottom:15px;text-align:justify}
+.kb-ns-quote{font-family:var(--font-display);color:var(--orange-d);font-size:clamp(20px,2.4vw,26px);text-transform:uppercase;letter-spacing:.03em;margin-top:6px}
+.kb-ns-media{display:flex;flex-direction:column;gap:16px}
+.kb-ns-media img{width:100%;border-radius:22px;display:block;object-fit:cover;aspect-ratio:4/3}
+@media(max-width:820px){.kb-ns-block{grid-template-columns:1fr;gap:22px;padding:40px 0}.kb-ns-block:nth-of-type(even) .kb-ns-media{order:0}}
+.kb-ns-team{max-width:1120px;margin:0 auto;padding:64px clamp(1rem,4vw,3rem) 90px}
+.kb-ns-team h2{text-align:center;font-family:var(--font-heavy);font-size:clamp(30px,5vw,54px);color:#1f1f1f;text-transform:uppercase;margin-bottom:44px;letter-spacing:.02em}
+.kb-ns-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(14px,2vw,24px)}
+@media(max-width:900px){.kb-ns-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.kb-ns-grid{grid-template-columns:repeat(2,1fr)}}
+.kb-ns-member video{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:16px;display:block;background:#111}
+.kb-ns-member h3{font-family:'Josefin Sans',sans-serif;font-weight:700;margin-top:12px;font-size:18px;color:#1f1f1f}
+.kb-ns-member span{display:block;font-family:'Josefin Sans',sans-serif;font-weight:400;font-size:13px;color:#777;margin-top:2px}
+
 /* ── Cart drawer ── */
 .kb-cart-panel{position:fixed;inset:0;z-index:500;opacity:0;pointer-events:none;transition:opacity .3s}
 .kb-cart-panel.open{opacity:1;pointer-events:all}
@@ -887,27 +910,97 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 
   <!-- ═════ NOSOTROS ═════ -->
   <div class="kb-view kb-light" id="view-nosotros">
-    <div class="kb-page-head">
-      <h1 class="kb-page-title">Nosotros</h1>
-      <p class="kb-page-sub">Craft beer desde 2017 · sin filtrar, sin aditivos</p>
+    <div class="kb-ns-hero" style="background-image:url('https://cdn.shopify.com/s/files/1/0668/0081/2327/files/NOSTROS12.png?v=1769536256')">
+      <h1>NOSOTROS</h1>
     </div>
-    <div class="kb-info">
-      <p><strong>Kairos Brewing</strong> nació en 2017 con una sola misión: hacer craft beer honesta, viva y con carácter. Nada de preservantes, nada de aditivos, nada de atajos.</p>
-      <p>Lo que empezó como un proyecto entre amigos hoy es una de las cervecerías artesanales más reconocidas de Chile, con <strong>17 estilos en producción</strong>, tres locales propios (Garden, Brewing y Badass) y presencia en bares, botillerías y restaurantes de todo el país.</p>
-      <p>Cada lote es cervecería en vivo: lo embotellamos sin filtrar, conservado en frío, y te lo entregamos lo más fresco posible. Por eso recomendamos siempre mantener la cerveza refrigerada — es producto vivo.</p>
-      <div class="kb-info-grid">
-        <div class="kb-info-card">
-          <h3>Nuestra Promesa</h3>
-          <p>100% natural · sin preservantes · sin aditivos · sin filtrar. Sólo agua, malta, lúpulo y levadura.</p>
+
+    <div class="kb-ns-time">
+      <section class="kb-ns-block">
+        <div class="kb-ns-media">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/FOT09987.jpg?v=1753316691&width=1100" alt="Kairos 2025" loading="lazy">
         </div>
-        <div class="kb-info-card">
-          <h3>Premios</h3>
-          <p>Medalla de Oro Catador 2024 (Gin Banny) · Plata Catador 2023 · varias menciones en festivales nacionales.</p>
+        <div class="kb-ns-txt">
+          <h2 class="kb-ns-year">2025-Hoy</h2>
+          <p>Se abrió una nueva etapa para Kairos, impulsada por la necesidad de explorar formatos más íntimos y urbanos. Así nació Badass, un Urban Kitchen &amp; Social Club concebido como el living del conejo: un bar de barrio con carácter, donde conviven coctelería de autor, gastronomía contemporánea y la cerveza de siempre. Un viaje especial por Argentina permitió observar de cerca su vida callejera, sus bares y la relación cotidiana con la cerveza, entregando ideas cercanas que ayudaron a dar forma a este nuevo espacio.</p>
+          <p>Ese mismo año, la marca siguió expandiendo su universo con la apertura de Kairos Garden Antofagasta. Un segundo Garden que rescata la magia del original y la reinterpreta desde un entorno único frente al mar. Al igual que Vespucio y Badass, cada espacio Kairos es distinto, pero comparte un mismo corazón: crear lugares con mística propia, donde cada visita se transforma en un momento único e irrepetible.</p>
         </div>
-        <div class="kb-info-card">
-          <h3>Contacto</h3>
-          <p>info@kairos-brewing.com<br>Pudahuel, Santiago de Chile</p>
+      </section>
+
+      <section class="kb-ns-block">
+        <div class="kb-ns-media">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/HISTORIA_KAIROS21.png?v=1769533185&width=1100" alt="Kairos 2024" loading="lazy">
         </div>
+        <div class="kb-ns-txt">
+          <h2 class="kb-ns-year">2024</h2>
+          <p>Este año consolidó a Kairos como un ecosistema vivo. Brewing, Garden y Destilados comenzaron a operar como una sola marca, unida por una visión clara: transformar momentos cotidianos en experiencias memorables.</p>
+          <p>Ese espíritu tomó forma primero en Kairos Garden, inaugurado en mayo. Un espacio pensado para detener el reloj y vivir la experiencia completa: cerveza directa desde los tanques, cocina urbana, música y hospitalidad emocional en un beer garden de 1600 metros cuadrados. Un punto de encuentro donde la esencia Kairos se vive en tiempo real.</p>
+          <p>Con la fábrica a plena capacidad, Kairos Brewing alcanzó altos estándares de calidad, superó los 100 puntos de venta y fortaleció su portafolio con Gin Banny, nuevamente Medalla de Oro en Catador 2024, el lanzamiento de la variedad London Dry y la creación de la Colección de Artistas: ediciones limitadas que conectan cerveza, diseño y corazón.</p>
+        </div>
+      </section>
+
+      <section class="kb-ns-block">
+        <div class="kb-ns-media">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/JAK.png?v=1769532108&width=1100" alt="Kairos 2023" loading="lazy">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/vH_9a5069e2-9663-4a1e-8158-238a196b2918.png?v=1769531450&width=1100" alt="Kairos 2023" loading="lazy">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Diseno_sin_titulo89.png?v=1769531976&width=1100" alt="Kairos 2023" loading="lazy">
+        </div>
+        <div class="kb-ns-txt">
+          <h2 class="kb-ns-year">2023</h2>
+          <p>Kairos dio un salto decisivo al apostar por elevar el estándar cervecero chileno y consolidarse como una marca de bebidas premium hechas en casa. La importación de una fábrica de última tecnología, la transparencia total de los procesos y una obsesión por la precisión marcaron esta nueva etapa. En paralelo, nació Gin Banny, el primer destilado propio de la casa, cuyo desarrollo fue reconocido con medalla de plata en Catador 2023, confirmando la consistencia y calidad del proyecto.</p>
+          <p>Esa misma visión dio vida a Kairos Garden: no un bar, sino una experiencia. Un espacio donde cerveza, destilación, cocina, música y naturaleza conviven con la fábrica abierta al público. Inspirado por un extenso viaje por los grandes polos cerveceros y gastronómicos del mundo: España, Irlanda, Inglaterra, Bégica, República Checha, Holanda, Alemania y Austria, el Garden se convirtió en el Jardín del Conejo hecho realidad: un lugar para conectar, bajar el ritmo y vivir el momento.</p>
+        </div>
+      </section>
+
+      <section class="kb-ns-block">
+        <div class="kb-ns-media">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/HISTORIA_KAIROS3.png?v=1769529646&width=1100" alt="Kairos 2022" loading="lazy">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/v3.png?v=1769528116&width=1100" alt="Kairos 2022" loading="lazy">
+        </div>
+        <div class="kb-ns-txt">
+          <h2 class="kb-ns-year">2022</h2>
+          <p>La evolución de Kairos fue natural. Durante casi un año, la marca creció arrendando la fábrica de una cervecería histórica, un período que permitió afinar estilos y comprender algo esencial: cada lugar y persona vive la cerveza de forma distinta. De esa escucha nacieron nuevas recetas y expresiones: Golden, Weizen, Red, Pils y Neipa, que ampliaron el universo Kairos sin perder su esencia.</p>
+          <p>A mediados de 2022, llegó un punto de inflexión. Ante el cierre de la cervecería que los había acompañado, Kairos decidió dar un paso valiente y adquirir esa misma planta: un espacio con historia, imperfecto, pero lleno de potencial. Con ello nació el primer equipo humano de la marca y una nueva forma de estar en la calle, representada por la Combeer, una combi Volkswagen que llevó Kairos directo a las personas. Ese año, la marca creció de 10 a más de 50 puntos de venta, consolidando una cultura donde la cercanía, la experiencia y la hospitalidad emocional se transformaron en su verdadera fuerza.</p>
+        </div>
+      </section>
+
+      <section class="kb-ns-block">
+        <div class="kb-ns-media">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/HISTORIA_KAIROS_2.png?v=1769525514&width=1100" alt="Kairos 2020-2021" loading="lazy">
+        </div>
+        <div class="kb-ns-txt">
+          <h2 class="kb-ns-year">2020-2021</h2>
+          <p>Kairos Brewing nació durante la pandemia, cuando el mundo se detuvo y el tiempo adquirió un nuevo valor. En medio de ese silencio, los viajes se transformaron en una fuente profunda de inspiración: recorrer cervecerías, bares y taprooms, observar otras formas de vivir la cerveza y absorber una cultura donde el disfrute del momento era lo central. En uno de esos viajes apareció el nombre Kairos, ese instante perfecto, especial e irrepetible que define una manera de estar en el mundo.</p>
+          <p>Esa visión se volvió realidad el 16 de noviembre de 2021, con el nacimiento formal de Kairos Brewing. Junto a Banny, nuestro conejo, símbolo de un mundo que corre, pero que aquí se detiene, comenzamos a construir un universo donde cada cerveza cuenta una historia.</p>
+          <p class="kb-ns-quote">Aquí no se corre, se vive el momento...</p>
+        </div>
+      </section>
+
+      <section class="kb-ns-block">
+        <div class="kb-ns-media">
+          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/HISTORIA_KAIROS.png?v=1769524320&width=1100" alt="Kairos 2017-2019" loading="lazy">
+        </div>
+        <div class="kb-ns-txt">
+          <h2 class="kb-ns-year">2017-2019</h2>
+          <p>Kairos no nació de un plan ni de una oficina. La idea de la cervecería comenzó el 2017, en una tarde cualquiera, entre música, amigos, familia y una olla casera de 10 litros. Un kit de cerveza fue la chispa de algo que aún no tenía nombre, pero sí propósito: la semilla de un proyecto que comenzaba a tomar forma sin saber hasta dónde podía llegar.</p>
+          <p>La cerveza llegó sin buscarla y lo cambió todo. Se transformó en curiosidad, luego en obsesión, y finalmente en una forma de entender la cultura, la ciencia y la conexión humana. A través de estilos y sabores de distintas partes del mundo, fue creciendo la idea de crear algo más que una bebida: una plataforma de momentos memorables. Kairos estaba en camino.</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="kb-ns-team">
+      <h2>Conoce al equipo</h2>
+      <div class="kb-ns-grid">
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/8034d08dd73c49a790406d3c7013fefc.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Benja</h3><span>Gerente General</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/685ae5e054b6440490783a5096876b38.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Diego</h3><span>Gerente Finanzas</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/cfcf2592cb3c4ead8c9bdd66f73b62e5.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Lucho</h3><span>Encargado de Operación</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/6ce92fece6bc48a983051697bb3f2ea6.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Seba</h3><span>Encargado de Marketing</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/3dbe318ad1204baf980b43ef615542df.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Mati</h3><span>Coordinador Logístico</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/18e0e8ee7bca491d8cb126a193ef20d3.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Arie</h3><span>Ecommerce Manager</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/d17cadcd13b4496b84c9fec1908a835e.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Carlos</h3><span>Head Brewer</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/0ec15f3daaf94782a3bab9284afbc6c5.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>David</h3><span>Maestro Cervecero</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/a60246fecef7422b99c18f6ae8a2eedf.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Julio</h3><span>Maestro Cervecero</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/c66d33ba351a4907b4758d7e0d4ae704.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Vicho</h3><span>Maestro Cervecero</span></div>
+        <div class="kb-ns-member"><video src="https://cdn.shopify.com/videos/c/o/v/32bcae24eaa44bf69fb63dc6cfba86a2.mp4" autoplay muted loop playsinline preload="metadata"></video><h3>Tomacho</h3><span>Sommelier Corporativo</span></div>
       </div>
     </div>
   </div>
