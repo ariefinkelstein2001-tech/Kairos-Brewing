@@ -497,6 +497,16 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-ns-member h3{font-family:'Josefin Sans',sans-serif;font-weight:700;margin-top:12px;font-size:18px;color:#1f1f1f}
 .kb-ns-member span{display:block;font-family:'Josefin Sans',sans-serif;font-weight:400;font-size:13px;color:#777;margin-top:2px}
 
+/* ── Páginas legales (términos / privacidad) ── */
+.kb-legal{max-width:820px;margin:0 auto;padding:64px clamp(1rem,4vw,3rem) 90px}
+.kb-legal h1{font-family:var(--font-display);font-size:clamp(30px,5vw,52px);color:#1f1f1f;text-transform:uppercase;letter-spacing:.02em;margin-bottom:6px}
+.kb-legal .kb-legal-eyebrow{font-family:var(--font-body);text-transform:uppercase;letter-spacing:.14em;color:var(--orange-d);font-size:13px;font-weight:600;margin-bottom:28px}
+.kb-legal h2{font-family:var(--font-body);font-weight:700;font-size:clamp(20px,2.6vw,26px);color:#1f1f1f;text-transform:uppercase;letter-spacing:.03em;margin:34px 0 14px}
+.kb-legal p{font-family:'Roboto',sans-serif;color:#444;font-size:15px;line-height:1.75;margin-bottom:16px}
+.kb-legal ul{margin:0 0 16px 22px;color:#444;font-family:'Roboto',sans-serif;font-size:15px;line-height:1.7}
+.kb-legal li{margin-bottom:7px}
+.kb-legal a{color:var(--orange-d);text-decoration:underline;word-break:break-word}
+
 /* ── Cart drawer ── */
 .kb-cart-panel{position:fixed;inset:0;z-index:500;opacity:0;pointer-events:none;transition:opacity .3s}
 .kb-cart-panel.open{opacity:1;pointer-events:all}
@@ -1008,6 +1018,67 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       </div>
     </div>
   </div>
+
+  <div class="kb-view kb-light" id="view-terminos">
+    <div class="kb-legal">
+      <h1>Políticas de uso</h1>
+      <p class="kb-legal-eyebrow">Política de envío</p>
+      <h2>Política de envío</h2>
+      <p>Kairos Brewing realiza envíos en la REGIÓN METROPOLITANA a través de servicios externos que vienen incluidos en la tarifa del TOTAL DEL PEDIDO.</p>
+      <p>En caso de que el usuario ofreciera una dirección equivocada, imprecisa o confusa, y no sea posible localizarlo ni contactarlo, Kairos Brewing quedará liberado de la responsabilidad del envío.</p>
+      <p>Será responsabilidad del cliente informar todas las condiciones y/o restricciones que pueda impedir realizar la entrega de la mercancía en el día, hora o lugar acordado.</p>
+      <p>Por motivos de seguridad las transacciones pueden tardar hasta 72 horas en ser procesados por su banco. Entendiendo que estas se realizan por un sistema independiente, Kairos Brewing procesa el pedido cuando este pago es confirmado o recepcionado y no antes.</p>
+      <p>Los pedidos dentro de la Región Metropolitana se entregarán en las próximas 24 horas hábiles después de confirmar el pedido.</p>
+      <p>Al momento de la entrega el usuario o persona autorizada deberá revisar el paquete. Al recibirlo y confirmar, terminará el proceso de compra, siendo responsable de la mercancía a partir de ese instante. En caso de que el repartidor confirme haberlo entregado, pasado las 12 hrs de no responder a la confirmación de recepción enviada por Kairos Brewing, terminará el proceso de compra, siendo responsable de la mercancía a partir de ese instante. Cualquier daño, golpe que se sobrevenga con posterioridad a la entrega no serán responsabilidad de Kairos Brewing.</p>
+    </div>
+  </div>
+
+  <div class="kb-view kb-light" id="view-privacidad">
+    <div class="kb-legal">
+      <h1>Privacidad</h1>
+      <p class="kb-legal-eyebrow">Política de privacidad</p>
+      <h2>Privacidad</h2>
+      <p>Kairos (<a href="https://www.kairos-brewing.com" target="_blank" rel="noopener">www.kairos-brewing.com</a>) pertenece a Zatara SpA. (inscrita en el Registro de Empresas y Sociedades), con domicilio en Los Bellotos, Las Condes, Santiago De Chile, RUT 77.412.658-9, le informa a usted como cliente que los datos personales que nos facilite a través de nuestra tienda online son incorporados a un fichero personal e intransferible, de propiedad de este titular, con la única misión de tramitar sus pedidos y realizar la operación de venta online.</p>
+      <p>Existen diferentes formas en las cuales sus datos personales o comerciales pueden pasar a nuestro fichero y por tanto distintas finalidades y usos de sus datos en el futuro, siempre con su consentimiento:</p>
+      <p><strong>FORMULARIO DE CONTACTOS O CONSULTAS:</strong> Si da su consentimiento antes del envío de la consulta o formulario de contacto sus datos formarán parte de nuestro fichero y la finalidad será enviarle cualquier tipo de información acerca de Kairos Brewing, (comercial, nuevos productos, ofertas, suscripciones, promociones, información corporativa, etc).</p>
+      <p><strong>SUSCRIPCIÓN:</strong> Si deja su correo electrónico en la casilla de suscripción habilitada en la web (claramente identificada) sus datos formarán parte de nuestro fichero y la finalidad será enviarle INFORMACIÓN GENERAL acerca de Kairos Brewing.</p>
+      <p><strong>REGISTRO:</strong> Si da su consentimiento antes del envío del formulario de registro como usuario, sus datos formarán parte de nuestro fichero y la finalidad será identificarle en próximos accesos mediante las claves asignadas y enviarle INFORMACIÓN GENERAL acerca de Kairos Brewing.</p>
+      <p><strong>PAGO:</strong> El proceso de pago funciona sobre un servidor seguro que utiliza protocolo SSL (Secure Socket Layer) que transmite información encriptada a las plataformas de pagos de terceros por lo cual Kairos Brewing nunca tendrá acceso a dicha información.</p>
+      <p>Kairos Brewing nunca solicita a través de correo, teléfono ni ningún otro método de comunicación, información relacionada a su tarjeta de crédito ni demás datos personales diferentes a los requeridos en el momento de registro y proceso de compra.</p>
+      <p>En todo momento podrá dirigirse a info@kairos-brewing.com para rectificar sus preferencias respecto a la información a recibir o el deseo de no recibir ningún tipo de información, o cambiar sus datos personales, la dirección de envío de la información, etc.</p>
+      <p>El disfrute de la condición de USUARIO REGISTRADO siempre exigirá la inclusión de sus datos en nuestro fichero, con la finalidad prioritaria de identificarle mediante su claves de acceso personales, el consentimiento a recibir información general de otro tipo será a su elección. Por tanto, si sus datos han sido recogidos para la utilización de algún servicio de información que no requiera registro o suscripción sin su consentimiento para recibir información futura de promociones y noticias de Kairos Brewing, estos serán eliminados de nuestra bases de datos una vez resuelta la consulta o información solicitada.</p>
+      <p><strong>DIVULGACIÓN DE DATOS:</strong> Si nuestro negocio participara en una jointventure, comprara, fuera vendida a, o fusionada con otra entidad mercantil, la información sobre usted podrá ser revelada o transmitida a nuestros nuevos socios comerciales o propietarios o a sus asesores.</p>
+      <p>Podremos utilizar la información que usted nos proporcione si tuviéramos el deber de revelar o compartir su información para cumplir con (y/o creamos tener la obligación de tener que cumplir con) cualquier requerimiento legal; o con el fin de aplicar las Condiciones de nuestra Página Web y de cualquier otro contrato suscrito con usted, o para proteger los derechos de Kairos Brewing o demás colaboradores nuestros. Con ellos nos referimos a cruzar información con otras empresas y organizaciones con el objeto de evitar y proteger el fraude.</p>
+      <p><strong>SEGURIDAD Y RETENCIÓN DE DATOS:</strong> Adoptaremos las medidas de protección de datos necesarias para evitar accesos no autorizados y tratamientos ilegales, pérdidas accidentales, destrucción y daños. Conservaremos su información por el plazo que resulte legalmente exigible.</p>
+      <p>En el supuesto de que hubiera escogido una contraseña que le permita acceder a determinadas partes de la Página Web, será responsable de mantener la confidencialidad de dicha contraseña. Le recomendamos no compartir su contraseña con nadie.</p>
+      <p>Desafortunadamente, la transmisión de información a través de internet no es completamente segura. A pesar de que adoptaremos las medidas para proteger sus datos, no podemos garantizar la seguridad de los datos que transmita a la Página Web; toda transmisión se realizará a su propio riesgo. Una vez recibida la información, utilizaremos procedimientos estrictos y medidas de seguridad para trata de evitar los accesos no autorizados.</p>
+      <h2>Uso de cookies</h2>
+      <p>Las cookies son fragmentos de información que las páginas web almacenan en la computadora del usuario para recordar sus preferencias, de esta manera Kairos Brewing puede ofrecer una experiencia más personalizada.</p>
+      <p>Kairos Brewing utiliza las cookies, entre otras cosas, para:</p>
+      <ul>
+        <li>Recordar preferencias (de pago, de compra, etc.) y así poder ofrecer un servicio personalizado. No obstante, el proceso de pago funciona sobre un servidor seguro utilizando el protocolo SSL (Secure Socket Layer) que transmite la información encriptada a la que Kairos Brewing no puede acceder.</li>
+        <li>Analizar el comportamiento de navegación (qué secciones se visitan, dónde se hace clic, etc.).</li>
+        <li>La posibilidad de compartir contenidos (como productos y campañas) en redes sociales.</li>
+        <li>Conocer las fuentes de tráficos de nuestros clientes.</li>
+        <li>Impedir actividades fraudulentas.</li>
+        <li>Maximizar la seguridad en nuestro sitio web.</li>
+      </ul>
+      <p>Algunas cookies del sitio web son fijadas por terceros, estas compañías externas procesan la información y nos facilitan datos referentes a la publicidad de nuestras promociones, etc. En ningún momento recaban información personal con la que se pueda identificar a un usuario en específico. Ninguna cookie tiene un periodo de validez superior a los dos años.</p>
+      <p>Si no se desea que se guarden estas cookies, puede cambiarse la configuración del navegador en cualquier momento. Sin embargo, recomendamos que no se desactiven ya que se puede dejar de disfrutar de ciertos servicios de nuestra web.</p>
+      <p>Si aun así se prefiere desactivar las cookies de terceros, puede solicitarse desde los siguientes links:</p>
+      <ul>
+        <li>Google Analytics: <a href="https://tools.google.com/dlpage/gaoptout?hl=es" target="_blank" rel="noopener">https://tools.google.com/dlpage/gaoptout?hl=es</a></li>
+        <li>Addthis: <a href="http://www.addthis.com/privacy/opt-out" target="_blank" rel="noopener">http://www.addthis.com/privacy/opt-out</a></li>
+        <li>Google remarketing: <a href="https://support.google.com/adwords/answer/2549116?hl=es" target="_blank" rel="noopener">https://support.google.com/adwords/answer/2549116?hl=es</a></li>
+        <li>ComScore: <a href="http://www.scorecardresearch.com/privacy.aspx" target="_blank" rel="noopener">http://www.scorecardresearch.com/privacy.aspx</a></li>
+      </ul>
+      <h2>Cambios</h2>
+      <p>Kairos Brewing podría realizar modificaciones en su Política de Privacidad y Cookies, estas modificaciones estarán disponibles en nuestra página web www.kairos-brewing.com. Si estos cambios afectaran a los derechos del usuario, se informará de los mismos por email (a la última dirección que nos haya sido facilitada). En cualquier caso, la Política de Privacidad y Cookies revisada estará siempre disponible en la web.</p>
+      <h2>Aceptación de las condiciones de uso</h2>
+      <p>Esta declaración de confidencialidad está sujeta a las Condiciones de uso de <a href="https://www.kairos-brewing.com" target="_blank" rel="noopener">www.kairos-brewing.com</a>, lo cual constituye un acuerdo legal entre el usuario y Kairos Brewing. Si el usuario utiliza nuestros servicios, significa que ha leído, entendido y acordado las condiciones antes expuestas.</p>
+      <p>Todos los comentarios, consultas y solicitudes relativas a nuestra utilización de la información sobre usted serán bienvenidos y deberán remitirse a info@kairos-brewing.com</p>
+    </div>
+  </div>
 </main>
 
 <footer class="kb-footer">
@@ -1016,8 +1087,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       <h4>Conócenos</h4>
       <ul>
         <li><a data-route="/nosotros" onclick="go(event)">Nosotros</a></li>
-        <li><a href="https://kairos-brewing.com/pages/politicas-de-uso" target="_blank" rel="noopener">Términos y condiciones</a></li>
-        <li><a href="https://kairos-brewing.com/pages/privacidad" target="_blank" rel="noopener">Configuración de privacidad</a></li>
+        <li><a data-route="/politicas-de-uso" onclick="go(event)">Términos y condiciones</a></li>
+        <li><a data-route="/privacidad" onclick="go(event)">Configuración de privacidad</a></li>
       </ul>
     </div>
     <div>
@@ -1079,6 +1150,8 @@ const ROUTES = {
   '/eventos':       'eventos',
   '/nosotros':      'nosotros',
   '/arma-tu-pack':  'armar',
+  '/politicas-de-uso': 'terminos',
+  '/privacidad':    'privacidad',
 };
 function viewFromPath(path){
   const p = path.replace(/\/+$/,'') || '/';
@@ -1209,7 +1282,7 @@ function buildCard(p){
   const compareAt = parseFloat(v0.compareAtPrice || 0);
   const oldP = (compareAt && compareAt > price) ? `<span class="old">${fmtPrice(compareAt)}</span>` : '';
   const img1 = p.image || (p.images && p.images[0]) || null;
-  const img2 = hasZorbo(p) ? null : ((p.images && p.images[1]) || null);
+  const img2 = (hasZorbo(p) || isPack(p)) ? null : ((p.images && p.images[1]) || null);
   const visual = img1
     ? `<div class="kb-card-img"><img class="img1" src="${img1}" alt="${escapeHtml(p.title)}" loading="lazy">${img2 ? `<img class="img2" src="${img2}" alt="" loading="lazy">` : ''}</div>`
     : `<div class="kb-card-img"></div>`;
