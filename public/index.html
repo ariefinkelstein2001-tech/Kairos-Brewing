@@ -457,6 +457,19 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-gd-hero-h{position:relative;font-family:'Rigeko','Oswald',sans-serif;color:#fff;font-size:clamp(40px,8vw,72px);line-height:1.02;text-transform:uppercase;max-width:1100px;margin:0 auto;width:100%}
 .kb-garden .kb-bd-welcome-txt h1,.kb-garden .kb-bd-sec h2{font-family:'Rigeko','Oswald',sans-serif}
 
+/* ── Eventos (cotización) ── */
+.kb-ev-contact{max-width:1100px;margin:0 auto;padding:60px clamp(1rem,4vw,3rem);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:820px){.kb-ev-contact{grid-template-columns:1fr;gap:28px}}
+.kb-ev-img img{width:100%;border-radius:12px;display:block}
+.kb-ev-form h2{font-family:var(--font-display);font-size:clamp(28px,4vw,40px);color:#1f1f1f;text-transform:uppercase;margin-bottom:18px}
+.kb-ev-form label{display:block;font-size:14px;color:#333;margin:16px 0 6px;font-weight:500}
+.kb-ev-form label .req{color:#e23}
+.kb-ev-field{width:100%;background:#fff;border:1px solid #cfcabb;border-radius:8px;padding:12px 14px;font-family:inherit;font-size:15px;color:#1f1f1f;outline:none}
+.kb-ev-field:focus{border-color:var(--orange)}
+textarea.kb-ev-field{min-height:120px;resize:vertical}
+.kb-ev-send{margin-top:22px;background:var(--orange);color:#000;border-radius:8px;padding:14px 44px;font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:15px;cursor:pointer;transition:background .15s}
+.kb-ev-send:hover{background:var(--orange-l)}
+
 /* ── Cart drawer ── */
 .kb-cart-panel{position:fixed;inset:0;z-index:500;opacity:0;pointer-events:none;transition:opacity .3s}
 .kb-cart-panel.open{opacity:1;pointer-events:all}
@@ -845,30 +858,31 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 
   <!-- ═════ EVENTOS ═════ -->
   <div class="kb-view kb-light" id="view-eventos">
-    <div class="kb-page-head">
-      <h1 class="kb-page-title">Eventos</h1>
-      <p class="kb-page-sub">Catas · lanzamientos · activaciones</p>
-    </div>
-    <div class="kb-info">
-      <p>Mantente al día con nuestros próximos eventos: <strong>catas guiadas, lanzamientos de la Colección Artistas, festivales craft y mucho más.</strong></p>
-      <p>¿Quieres que organicemos algo para tu empresa, cumpleaños o evento privado? Escríbenos.</p>
-      <div class="kb-info-grid">
-        <div class="kb-info-card">
-          <h3>Catas Mensuales</h3>
-          <p>Cada último jueves del mes, cata guiada con cervecero. Cupos limitados.</p>
-          <a class="cta" href="mailto:eventos@kairos-brewing.com">RESERVAR</a>
-        </div>
-        <div class="kb-info-card">
-          <h3>Colección Artistas</h3>
-          <p>Lanzamientos limitados todos los meses. Sigue la colección en nuestras redes.</p>
-          <a class="cta" data-route="/cervezas" onclick="go(event)">VER CERVEZAS</a>
-        </div>
-        <div class="kb-info-card">
-          <h3>Eventos Privados</h3>
-          <p>Cervezas para tu evento corporativo, fiesta o cumpleaños. Atención a medida.</p>
-          <a class="cta" href="mailto:eventos@kairos-brewing.com">COTIZAR</a>
-        </div>
+    <section class="kb-gd-hero" style="background-image:url('https://cdn.shopify.com/s/files/1/0668/0081/2327/files/kairose-29_1.jpg?v=1752606001&width=2048')">
+      <h1 class="kb-gd-hero-h">Cotiza para tu evento</h1>
+    </section>
+    <section class="kb-ev-contact">
+      <div class="kb-ev-img">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/2024-05-03_1.jpg?v=1722879531&width=1200" alt="Bar móvil Kairos" loading="lazy">
       </div>
+      <form class="kb-ev-form" onsubmit="return kbEventForm(event)">
+        <h2>¡Contáctanos hoy!</h2>
+        <label for="evNombre">Nombre Completo</label>
+        <input class="kb-ev-field" id="evNombre" name="nombre" placeholder="Nombre" required>
+        <label for="evTel">Número</label>
+        <input class="kb-ev-field" id="evTel" name="telefono" placeholder="Teléfono">
+        <label for="evEmail">Email <span class="req">*</span></label>
+        <input class="kb-ev-field" id="evEmail" type="email" name="email" placeholder="Mail" required>
+        <label for="evDesc">Descripción <span class="req">*</span></label>
+        <textarea class="kb-ev-field" id="evDesc" name="descripcion" placeholder="Descripción del evento" required></textarea>
+        <button type="submit" class="kb-ev-send">Enviar</button>
+      </form>
+    </section>
+    <div class="kb-bd-gallery" style="padding-top:0">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/FOT08259.jpg?v=1750866179&width=1200" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/FOT05270_c869653d-8d99-4a25-a8bd-a63c90a6dbbb.jpg?v=1739644818&width=1600" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/kairose-17_converted_316fac41-c50a-4074-b63c-7e187281d52d-pfti.jpg?v=1755548746&width=1200" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/kairose-23_f570997b-dfe2-480e-9498-90c6f0c89d7a.jpg?v=1752605966&width=1200" alt="" loading="lazy">
     </div>
   </div>
 
@@ -1304,6 +1318,17 @@ function armarCheckout(){
   saveCart(); updateCart();
   armarSel = []; armarRender();
   if (!cartOpen) toggleCart();
+}
+
+// ─── EVENTOS (cotización por correo) ───────────────────────────────────────────
+function kbEventForm(e){
+  e.preventDefault();
+  const f = e.target;
+  const body = encodeURIComponent(
+    `Nombre: ${f.nombre.value}\nTeléfono: ${f.telefono.value}\nEmail: ${f.email.value}\n\nEvento:\n${f.descripcion.value}`
+  );
+  window.location.href = `mailto:eventos@kairos-brewing.com?subject=${encodeURIComponent('Cotización de evento')}&body=${body}`;
+  return false;
 }
 
 // ─── NEWSLETTER (visual) ───────────────────────────────────────────────────────
