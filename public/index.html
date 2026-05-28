@@ -3,41 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kairos Brewing — Craft beer artesanal</title>
-<meta name="description" content="Kairos Brewing · cerveza artesanal con carácter · sin filtrar · sin aditivos">
+<title>Kairos Brewing: Cerveza artesanal para momentos únicos e irrepetibles</title>
+<meta name="description" content="Vive la pasión cervecera de Kairos Brewing y disfruta de momentos únicos e irrepetibles con nuestra cerveza artesanal de calidad. ¡Descúbrela ahora!">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Dela+Gothic+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
+/* Fuentes propias de Kairos (mismas que el sitio original en PageFly) */
+@font-face{font-family:'Rigeko';src:url("https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Rigeko_42dc2729-db72-4867-b240-0bddd82a9bc1.woff2?v=1739802873") format("woff2");font-display:swap}
+@font-face{font-family:'Albertus Bold';src:url("https://cdn.shopify.com/s/files/1/0668/0081/2327/files/albertusbold_regular.woff2?v=1752760491") format("woff2");font-display:swap}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#000;--card:#0c0c0c;--bdr:#1a1a1a;--bdr-h:#2a2a2a;
-  --orange:#f5a623;--orange-d:#d88f15;--orange-l:#ffb840;
+  --orange:#f5a623;--orange-d:#d88f15;--orange-l:#ffb840;--amber2:#fac056;
+  --marquee:#f8be56;--marquee-tx:#0b2b3a;--cream:#f0f0ea;
   --text:#fff;--mut:#9a9a9a;--dim:#5a5a5a;
+  --font-body:'Oswald',sans-serif;
+  --font-display:'Rigeko','Oswald',sans-serif;
+  --font-heavy:'Dela Gothic One','Oswald',sans-serif;
 }
-html,body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font-body);-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh;letter-spacing:.02em}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 
-/* ── PROMO BAR (notice arriba) ── */
-.kb-promo{
-  background:var(--orange);color:#1a1408;
-  text-align:center;padding:8px 12px;font-size:13px;font-weight:600;
-  font-family:'Barlow',sans-serif;letter-spacing:.01em;
+/* ── MARQUEE (notice arriba, animado) ── */
+.kb-marquee{
+  background:var(--marquee);color:var(--marquee-tx);
+  overflow:hidden;white-space:nowrap;padding:10px 0;font-size:13px;line-height:1;
+  position:relative;z-index:50;
 }
+.kb-marquee-track{display:inline-flex;align-items:center;will-change:transform;animation:kb-marquee 30s linear infinite}
+.kb-marquee-track span{padding-right:24px;font-weight:500}
+@keyframes kb-marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.kb-marquee-track{animation:none}}
 
 /* ── HEADER ── */
 .kb-header{
   position:sticky;top:0;z-index:100;
-  background:rgba(0,0,0,.94);backdrop-filter:blur(10px);
+  background:rgba(3,3,3,.96);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--bdr);
-  padding:12px clamp(1rem,3vw,2rem);
+  padding:10px clamp(1rem,3vw,3rem);
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1rem;
 }
-.kb-header-l{display:flex;align-items:center;gap:14px}
-.kb-header-r{display:flex;align-items:center;gap:10px;justify-content:flex-end}
-.kb-logo{height:62px;width:auto;display:block;margin:0 auto}
+.kb-header-l{display:flex;align-items:center;gap:14px;justify-content:flex-start}
+.kb-header-r{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.kb-logo{height:70px;width:auto;display:block;margin:0 auto}
 .kb-burger{
   width:42px;height:42px;border-radius:50%;
   background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
@@ -52,15 +65,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-iconbtn{
   width:42px;height:42px;border-radius:50%;
   background:transparent;display:flex;align-items:center;justify-content:center;
-  font-size:18px;cursor:pointer;transition:background .2s,color .2s;color:var(--text);
+  cursor:pointer;transition:background .2s,color .2s;color:var(--text);
 }
+.kb-iconbtn svg{width:20px;height:20px}
 .kb-iconbtn:hover{background:var(--card);color:var(--orange)}
 .kb-cart{position:relative}
 .kb-cart-badge{
   position:absolute;top:2px;right:0;
   background:var(--orange);color:#1a1408;
   border-radius:50%;width:20px;height:20px;
-  font-size:11px;font-weight:800;font-family:'Barlow',sans-serif;
+  font-size:11px;font-weight:700;font-family:var(--font-body);
   display:flex;align-items:center;justify-content:center;
   opacity:0;transform:scale(0);transition:all .2s;
 }
@@ -68,17 +82,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 /* ── NAV (desktop) ── */
 .kb-nav-desktop{
-  display:none;align-items:center;gap:24px;
-  font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.1em;
+  display:none;align-items:center;gap:22px;
+  font-family:var(--font-body);font-size:15px;letter-spacing:.08em;font-weight:500;text-transform:uppercase;
 }
 .kb-nav-desktop a{cursor:pointer;transition:color .2s;color:var(--text)}
 .kb-nav-desktop a:hover,.kb-nav-desktop a.active{color:var(--orange)}
-@media(min-width:900px){
+@media(min-width:1000px){
   .kb-nav-desktop{display:flex}
   .kb-burger{display:none}
+  .kb-header{grid-template-columns:auto 1fr auto}
+  .kb-logo{margin:0}
 }
 
-/* ── MENU OVERLAY (mobile + desktop) ── */
+/* ── MENU OVERLAY (mobile) ── */
 .kb-menu{
   position:fixed;inset:0;z-index:200;background:#000;
   display:none;flex-direction:column;
@@ -89,11 +105,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
   padding-bottom:24px;border-bottom:1px solid var(--bdr);margin-bottom:24px;
 }
-.kb-menu-logo{height:62px;width:auto;margin:0 auto;display:block}
+.kb-menu-logo{height:64px;width:auto;margin:0 auto;display:block}
 .kb-menu-list{display:flex;flex-direction:column;gap:14px;margin-top:8px}
 .kb-menu-list a{
-  font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.08em;
-  color:var(--text);cursor:pointer;padding:8px 0;
+  font-family:var(--font-display);font-size:26px;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--text);cursor:pointer;padding:6px 0;
   transition:color .2s,padding-left .2s;
 }
 .kb-menu-list a:hover{color:var(--orange);padding-left:8px}
@@ -103,72 +119,84 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-hero{position:relative;width:100%;overflow:hidden;background:#000;line-height:0}
 .kb-hero-track{display:flex;transition:transform .7s cubic-bezier(.4,0,.2,1)}
 .kb-hero-slide{flex:0 0 100%;line-height:0;position:relative}
-.kb-hero-slide img{width:100%;display:block;max-height:520px;object-fit:cover;object-position:center}
+.kb-hero-slide img{width:100%;height:auto;display:block}
 .kb-hero-arr{
   position:absolute;top:50%;transform:translateY(-50%);z-index:5;
-  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);
-  color:#fff;width:48px;height:48px;border-radius:50%;
-  font-size:24px;display:flex;align-items:center;justify-content:center;
-  transition:background .2s,border-color .2s;cursor:pointer;
+  background:rgba(0,0,0,.4);border:none;
+  color:#fff;width:40px;height:40px;border-radius:50%;
+  font-size:22px;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;cursor:pointer;
 }
-.kb-hero-arr:hover{background:rgba(245,166,35,.6);border-color:var(--orange)}
-.kb-hero-arr.prev{left:18px}
-.kb-hero-arr.next{right:18px}
-.kb-hero-dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
-.kb-hero-dots .d{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .25s;cursor:pointer;border:none}
-.kb-hero-dots .d.on{background:var(--orange);width:24px;border-radius:5px}
+.kb-hero-arr:hover{background:rgba(0,0,0,.8)}
+.kb-hero-arr.prev{left:20px}
+.kb-hero-arr.next{right:20px}
+.kb-hero-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
+.kb-hero-dots .d{width:20px;height:5px;border-radius:0;background:rgba(0,0,0,.4);transition:all .25s;cursor:pointer;border:none}
+.kb-hero-dots .d.on{background:#000}
 
 /* ── Section base ── */
-.kb-section{padding:64px clamp(1rem,4vw,3rem) 56px;max-width:1500px;margin:0 auto}
+.kb-section{padding:48px clamp(1rem,4vw,3rem) 44px;max-width:1140px;margin:0 auto}
 .kb-page-head{padding:48px clamp(1rem,4vw,3rem) 32px;text-align:center;border-bottom:1px solid var(--bdr)}
 .kb-page-title{
-  font-family:'Lalezar','Bebas Neue',sans-serif;
-  font-size:clamp(44px,7vw,80px);font-weight:400;letter-spacing:.02em;
+  font-family:var(--font-display);
+  font-size:clamp(40px,7vw,72px);font-weight:400;letter-spacing:.01em;
   color:var(--text);line-height:1;text-transform:uppercase;
 }
 .kb-page-sub{
-  font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--orange);margin-top:14px;font-weight:600;
+  font-family:var(--font-body);font-size:14px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--orange);margin-top:14px;font-weight:500;
 }
+/* Título de sección (home) — Rigeko, sin subrayado, igual que el original */
 .kb-section-t{
-  font-family:'Lalezar','Bebas Neue',sans-serif;
-  font-size:clamp(40px,5.5vw,64px);font-weight:400;letter-spacing:.02em;
-  text-align:center;color:var(--text);line-height:1;margin-bottom:48px;text-transform:uppercase;
+  font-family:var(--font-display);
+  font-size:clamp(26px,4.5vw,40px);font-weight:400;letter-spacing:.01em;
+  text-align:center;color:var(--text);line-height:1.2;margin-bottom:34px;text-transform:uppercase;
 }
-.kb-section-t::after{
-  content:'';display:block;width:64px;height:3px;background:var(--orange);
-  margin:18px auto 0;border-radius:2px;
+.kb-heavy-t{
+  font-family:var(--font-heavy);
+  font-size:clamp(24px,4vw,40px);font-weight:400;letter-spacing:.005em;
+  text-align:center;color:var(--text);line-height:1.4;margin-bottom:40px;text-transform:uppercase;
 }
 
-/* ── Product grid ── */
-.kb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+/* ── Slider horizontal (chelitas / packs en home) ── */
+.kb-hscroll{
+  display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding-bottom:14px;scrollbar-width:thin;scrollbar-color:var(--orange) #111;
+}
+.kb-hscroll::-webkit-scrollbar{height:6px}
+.kb-hscroll::-webkit-scrollbar-track{background:#111}
+.kb-hscroll::-webkit-scrollbar-thumb{background:var(--orange);border-radius:3px}
+.kb-hscroll .kb-card{flex:0 0 240px;scroll-snap-align:start}
+
+/* ── Product grid (otras vistas) ── */
+.kb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
 .kb-card{
   background:var(--card);border:1px solid var(--bdr);
   display:flex;flex-direction:column;
   transition:border-color .2s,transform .2s;position:relative;
-  border-radius:4px;overflow:hidden;
+  border-radius:18px;overflow:hidden;
 }
 .kb-card:hover{border-color:var(--orange);transform:translateY(-4px)}
 .kb-card-img{
-  aspect-ratio:1;background:#000;
+  aspect-ratio:.78;background:#000;
   display:flex;align-items:center;justify-content:center;
-  padding:20px;position:relative;overflow:hidden;
+  padding:14px;position:relative;overflow:hidden;
 }
 .kb-card-img img{
   max-height:100%;max-width:100%;object-fit:contain;
   transition:transform .3s,opacity .3s;
-  position:absolute;inset:0;width:100%;height:100%;padding:20px;
+  position:absolute;inset:0;width:100%;height:100%;padding:14px;
 }
 .kb-card-img img.img2{opacity:0}
 .kb-card:hover .kb-card-img img.img1{opacity:0;transform:scale(1.05)}
 .kb-card:hover .kb-card-img img.img2{opacity:1}
-.kb-card-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.kb-card-body{padding:14px 16px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
 .kb-card-name{
-  font-family:'Barlow',sans-serif;font-size:15px;font-weight:600;
+  font-family:var(--font-body);font-size:15px;font-weight:500;
   color:var(--text);text-align:center;line-height:1.3;min-height:40px;
 }
 .kb-card-price{
-  font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;
+  font-family:var(--font-body);font-size:20px;font-weight:600;
   color:var(--text);text-align:center;letter-spacing:.02em;
 }
 .kb-card-price .old{
@@ -182,78 +210,77 @@ select.kb-sel{
   appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23f5a623' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center;
-  cursor:pointer;width:100%;border-radius:3px;
+  cursor:pointer;width:100%;border-radius:6px;
 }
-.kb-qty{display:flex;align-items:stretch;border-radius:3px;overflow:hidden}
+.kb-qty{display:flex;align-items:stretch;border-radius:6px;overflow:hidden}
 .kb-qty button{
-  background:#3a2f1f;color:var(--orange);
+  background:var(--orange);color:#000;
   width:38px;height:42px;font-size:20px;font-weight:700;
   transition:background .15s;cursor:pointer;
 }
-.kb-qty button:hover{background:#4a3a25}
+.kb-qty button:hover{background:var(--orange-l)}
 .kb-qty .v{
   flex:1;background:#fff;color:#000;height:42px;line-height:42px;
-  text-align:center;font-weight:700;font-family:'Barlow',sans-serif;
+  text-align:center;font-weight:700;font-family:var(--font-body);
   font-size:15px;min-width:42px;user-select:none;
 }
 button.kb-add{
-  background:var(--orange);color:#1a1408;
-  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.12em;
-  height:42px;border-radius:3px;font-weight:600;
+  background:var(--orange);color:#000;
+  font-family:var(--font-body);font-size:14px;letter-spacing:.06em;text-transform:uppercase;
+  height:44px;border-radius:6px;font-weight:600;
   transition:background .15s,transform .12s;
 }
 button.kb-add:hover{background:var(--orange-l)}
 button.kb-add:active{transform:scale(.97)}
 button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-events:none}
 
-/* ── Pack builder cards ── */
-.kb-pack-builder{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
-.kb-pack-card{
-  background:var(--card);border:1px solid var(--bdr);border-radius:4px;
-  overflow:hidden;display:flex;flex-direction:column;
-  transition:border-color .2s,transform .2s;cursor:pointer;
-}
-.kb-pack-card:hover{border-color:var(--orange);transform:translateY(-4px)}
-.kb-pack-card-img{aspect-ratio:1.2;background:#000;position:relative;overflow:hidden}
-.kb-pack-card-img img{width:100%;height:100%;object-fit:cover}
-.kb-pack-card-tag{
-  position:absolute;top:14px;left:14px;
-  background:var(--orange);color:#1a1408;
-  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;
-  padding:5px 12px;border-radius:3px;
-}
+/* ── Pack builder (ARMA EL PACK A TU PINTA) ── */
+.kb-pack-builder{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:760px){.kb-pack-builder{grid-template-columns:1fr}}
+.kb-pack-card{display:flex;flex-direction:column;align-items:center;gap:14px}
+.kb-pack-card-img{width:100%;border-radius:18px;overflow:hidden}
+.kb-pack-card-img img{width:100%;height:auto;display:block;transition:transform .35s}
+.kb-pack-card:hover .kb-pack-card-img img{transform:scale(1.04)}
 .kb-pack-card-name{
-  padding:18px;text-align:center;
-  font-family:'Lalezar','Bebas Neue',sans-serif;font-size:24px;letter-spacing:.04em;
+  font-family:var(--font-display);font-size:26px;letter-spacing:.03em;
   color:var(--text);text-transform:uppercase;
 }
-.kb-pack-card-cta{
-  background:var(--orange);color:#1a1408;text-align:center;
-  padding:14px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.14em;
-  font-weight:600;transition:background .15s;
+.kb-pill{
+  background:var(--orange);color:#000;text-align:center;
+  padding:12px 30px;border-radius:32px;font-family:var(--font-body);
+  font-size:15px;letter-spacing:.04em;font-weight:600;text-transform:uppercase;
+  transition:background .15s,transform .15s;display:inline-block;
 }
-.kb-pack-card:hover .kb-pack-card-cta{background:var(--orange-l)}
+.kb-pill:hover{background:var(--orange-l);transform:translateY(-2px)}
 
-/* ── Brand circles ── */
-.kb-brands{padding:72px clamp(1rem,4vw,3rem);background:#000;border-top:1px solid var(--bdr);text-align:center}
-.kb-brands-t{
-  font-family:'Lalezar','Bebas Neue',sans-serif;
-  font-size:clamp(36px,5vw,52px);letter-spacing:.03em;
-  margin-bottom:48px;color:var(--text);text-transform:uppercase;
+/* ── Botones de marca (CERVECERÍA ARTESANAL INDEPENDIENTE) ── */
+.kb-brandbtns{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:center}
+.kb-brandbtn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:#000;color:#fff;border:1px solid #2a2a2a;
+  padding:13px 26px;border-radius:28px;
+  font-family:var(--font-body);font-size:16px;letter-spacing:.04em;text-transform:uppercase;font-weight:500;
+  transition:background .2s,transform .2s;cursor:pointer;
 }
-.kb-brand-circles{display:flex;gap:48px;justify-content:center;flex-wrap:wrap}
-.kb-brand-circle{display:flex;flex-direction:column;align-items:center;gap:14px;cursor:pointer}
-.kb-brand-circle .c{
-  width:150px;height:150px;border-radius:50%;
-  overflow:hidden;display:flex;align-items:center;justify-content:center;
-  border:3px solid var(--bdr);transition:transform .2s,border-color .2s;
+.kb-brandbtn:hover{background:#2f3740;transform:translateY(-2px)}
+.kb-brandbtn svg{width:20px;height:20px;fill:currentColor}
+
+/* ── Nuestras marcas ── */
+.kb-marcas{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;align-items:center}
+.kb-marca{
+  width:200px;height:150px;border-radius:16px;overflow:hidden;background:#0a0a0a;
+  display:flex;align-items:center;justify-content:center;border:1px solid var(--bdr);
+  transition:transform .2s,border-color .2s;
 }
-.kb-brand-circle:hover .c{transform:scale(1.06);border-color:var(--orange)}
-.kb-brand-circle .c img{width:100%;height:100%;object-fit:cover}
-.kb-brand-circle .nm{
-  font-family:'Lalezar','Bebas Neue',sans-serif;
-  font-size:22px;letter-spacing:.05em;color:var(--text);text-transform:uppercase;
-}
+.kb-marca:hover{transform:translateY(-4px);border-color:var(--orange)}
+.kb-marca img,.kb-marca video{width:100%;height:100%;object-fit:cover}
+
+/* ── Instagram ── */
+.kb-ig{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:760px){.kb-ig{grid-template-columns:1fr}}
+.kb-ig a{display:block;border-radius:16px;overflow:hidden}
+.kb-ig img{width:100%;height:auto;display:block;transition:transform .35s}
+.kb-ig a:hover img{transform:scale(1.05)}
 
 /* ── Info pages (Restaurantes / Eventos / Nosotros) ── */
 .kb-info{padding:48px clamp(1rem,4vw,3rem) 72px;max-width:1100px;margin:0 auto}
@@ -261,31 +288,54 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-info p strong{color:var(--orange)}
 .kb-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:32px}
 .kb-info-card{
-  background:var(--card);border:1px solid var(--bdr);border-radius:4px;
+  background:var(--card);border:1px solid var(--bdr);border-radius:12px;
   padding:24px;display:flex;flex-direction:column;gap:12px;
   transition:border-color .2s,transform .2s;
 }
 .kb-info-card:hover{border-color:var(--orange);transform:translateY(-3px)}
 .kb-info-card h3{
-  font-family:'Lalezar','Bebas Neue',sans-serif;font-size:24px;letter-spacing:.04em;
+  font-family:var(--font-display);font-size:24px;letter-spacing:.03em;
   color:var(--text);text-transform:uppercase;
 }
 .kb-info-card p{font-size:14px;line-height:1.6;color:var(--mut);margin:0}
 .kb-info-card a.cta{
   align-self:flex-start;margin-top:8px;
-  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.14em;
-  background:var(--orange);color:#1a1408;padding:8px 14px;border-radius:3px;
+  font-family:var(--font-body);font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--orange);color:#000;padding:9px 16px;border-radius:24px;font-weight:600;
   transition:background .15s;
 }
 .kb-info-card a.cta:hover{background:var(--orange-l)}
 
 /* ── Footer ── */
-.kb-footer{
-  background:#000;color:var(--mut);
-  padding:48px clamp(1rem,4vw,3rem);text-align:center;
-  border-top:1px solid var(--bdr);font-size:13px;
+.kb-footer{background:#030303;color:var(--mut);border-top:1px solid var(--bdr)}
+.kb-footer-top{
+  max-width:1140px;margin:0 auto;padding:48px clamp(1rem,4vw,3rem) 32px;
+  display:grid;grid-template-columns:1fr 1.4fr;gap:40px;
 }
-.kb-footer a{color:var(--orange)}
+@media(max-width:760px){.kb-footer-top{grid-template-columns:1fr;gap:28px}}
+.kb-footer h4{
+  font-family:var(--font-body);font-size:17px;font-weight:500;color:#fff;
+  margin-bottom:16px;letter-spacing:.03em;
+}
+.kb-footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.kb-footer ul a{color:var(--mut);font-size:14px;transition:color .15s}
+.kb-footer ul a:hover{color:var(--orange)}
+.kb-news{display:flex;border-bottom:1px solid #3a3a3a;max-width:380px}
+.kb-news input{
+  flex:1;background:transparent;border:none;color:#fff;
+  font-family:inherit;font-size:14px;padding:12px 4px;outline:none;
+}
+.kb-news input::placeholder{color:var(--mut)}
+.kb-news button{padding:0 10px;color:#fff;font-size:20px}
+.kb-news button:hover{color:var(--orange)}
+.kb-social{display:flex;gap:14px;margin-top:22px}
+.kb-social a{color:#fff;transition:color .15s}
+.kb-social a:hover{color:var(--orange)}
+.kb-social svg{width:24px;height:24px}
+.kb-footer-bottom{
+  border-top:1px solid var(--bdr);padding:20px clamp(1rem,4vw,3rem);
+  text-align:center;font-size:12px;color:var(--dim);
+}
 
 /* ── Cart drawer ── */
 .kb-cart-panel{position:fixed;inset:0;z-index:500;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -302,7 +352,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   padding:18px 22px;border-bottom:1px solid var(--bdr);
   display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
-.kb-cart-head h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;text-transform:uppercase}
+.kb-cart-head h2{font-family:var(--font-display);font-size:22px;letter-spacing:.04em;text-transform:uppercase}
 .kb-cart-x{font-size:20px;color:var(--mut);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .15s;cursor:pointer}
 .kb-cart-x:hover{background:var(--bdr);color:var(--text)}
 .kb-cart-body{flex:1;overflow-y:auto;padding:14px}
@@ -311,56 +361,63 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   display:grid;grid-template-columns:60px 1fr auto;gap:12px;
   padding:12px;border-bottom:1px solid var(--bdr);align-items:center;
 }
-.kb-ci-img{width:60px;height:60px;background:#000;border-radius:3px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.kb-ci-img{width:60px;height:60px;background:#000;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .kb-ci-img img{max-width:100%;max-height:100%;object-fit:contain}
 .kb-ci-info{min-width:0}
-.kb-ci-name{font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+.kb-ci-name{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
 .kb-ci-unit{font-size:12px;color:var(--mut);margin-top:3px}
 .kb-ci-qty{display:flex;align-items:center;gap:4px;margin-top:6px}
 .kb-ci-qty button{
-  width:22px;height:22px;border-radius:3px;background:#2a1f12;color:var(--orange);
+  width:22px;height:22px;border-radius:4px;background:var(--orange);color:#000;
   font-size:13px;font-weight:700;cursor:pointer;
 }
 .kb-ci-qty span{min-width:24px;text-align:center;font-size:13px;font-weight:700}
-.kb-ci-price{font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;color:var(--orange)}
+.kb-ci-price{font-family:var(--font-body);font-size:14px;font-weight:600;color:var(--orange)}
 .kb-cart-foot{padding:18px 22px;border-top:1px solid var(--bdr);flex-shrink:0}
-.kb-cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:'Bebas Neue',sans-serif}
-.kb-cart-total span:first-child{font-size:14px;letter-spacing:.1em;color:var(--mut);text-transform:uppercase}
+.kb-cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:var(--font-display)}
+.kb-cart-total span:first-child{font-size:14px;letter-spacing:.08em;color:var(--mut);text-transform:uppercase}
 .kb-cart-total span:last-child{font-size:24px;color:var(--orange)}
 .kb-checkout-btn{
-  width:100%;background:var(--orange);color:#1a1408;cursor:pointer;
-  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.12em;
-  padding:14px;border-radius:3px;font-weight:600;transition:background .15s;
+  width:100%;background:var(--orange);color:#000;cursor:pointer;
+  font-family:var(--font-body);font-size:16px;letter-spacing:.06em;text-transform:uppercase;
+  padding:14px;border-radius:32px;font-weight:600;transition:background .15s;
 }
 .kb-checkout-btn:hover{background:var(--orange-l)}
 .kb-checkout-btn:disabled{opacity:.4;cursor:not-allowed}
 
-.kb-loading{padding:80px 20px;text-align:center;color:var(--mut);font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+.kb-loading{padding:60px 20px;text-align:center;color:var(--mut);font-size:14px;letter-spacing:.08em;text-transform:uppercase}
 .kb-view{display:none}
 .kb-view.active{display:block}
 </style>
 </head>
 <body>
 
-<div class="kb-promo">📍 Envío gratis sobre $50.000 a RM y Antofagasta · 📍 Retiro en Badass Parque Arauco</div>
+<div class="kb-marquee" aria-label="Anuncios">
+  <div class="kb-marquee-track" aria-hidden="true">
+    <span>🚚 Envíos GRATIS sobre los 50 mil. A toda RM y Antofagasta • 📍 Retiro GRATIS en: Badass Parque Arauco, Kairos Garden Vespucio y Kairos Garden Antofagasta •</span>
+    <span>🚚 Envíos GRATIS sobre los 50 mil. A toda RM y Antofagasta • 📍 Retiro GRATIS en: Badass Parque Arauco, Kairos Garden Vespucio y Kairos Garden Antofagasta •</span>
+  </div>
+</div>
 
 <header class="kb-header">
   <div class="kb-header-l">
     <button class="kb-burger" id="kbBurger" onclick="toggleMenu()" aria-label="Menú"><span></span><span></span><span></span></button>
-    <nav class="kb-nav-desktop">
-      <a data-route="/cervezas" onclick="go(event)">CERVEZAS</a>
-      <a data-route="/packs" onclick="go(event)">PACKS</a>
-      <a data-route="/destileria" onclick="go(event)">DESTILERÍA</a>
-      <a data-route="/merch" onclick="go(event)">MERCH</a>
-    </nav>
+    <a data-route="/" onclick="go(event)" aria-label="Inicio"><img class="kb-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING.png?v=1769017156&width=300" alt="Kairos Brewing"></a>
   </div>
-  <a data-route="/" onclick="go(event)"><img class="kb-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING_b42351c9-1e32-4cfd-8712-4ce6bf1114f5.png?v=1772805913" alt="Kairos Brewing"></a>
+  <nav class="kb-nav-desktop">
+    <a data-route="/cervezas" onclick="go(event)">Cervezas</a>
+    <a data-route="/packs" onclick="go(event)">Packs</a>
+    <a data-route="/destileria" onclick="go(event)">Destilería</a>
+    <a data-route="/merch" onclick="go(event)">Merch</a>
+    <a data-route="/restaurantes" onclick="go(event)">Restaurantes</a>
+    <a data-route="/eventos" onclick="go(event)">Eventos</a>
+    <a data-route="/nosotros" onclick="go(event)">Nosotros</a>
+  </nav>
   <div class="kb-header-r">
-    <nav class="kb-nav-desktop">
-      <a data-route="/restaurantes" onclick="go(event)">RESTAURANTES</a>
-      <a data-route="/nosotros" onclick="go(event)">NOSOTROS</a>
-    </nav>
-    <button class="kb-iconbtn kb-cart" onclick="toggleCart()" aria-label="Carro">🛒<span class="kb-cart-badge" id="kbCartBadge">0</span></button>
+    <button class="kb-iconbtn kb-cart" onclick="toggleCart()" aria-label="Carrito">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="m15.75 11.8h-3.16l-.77 11.6a5 5 0 0 0 4.99 5.34h7.38a5 5 0 0 0 4.99-5.33l-.78-11.61zm0 1h-2.22l-.71 10.67a4 4 0 0 0 3.99 4.27h7.38a4 4 0 0 0 4-4.27l-.72-10.67h-2.22v.63a4.75 4.75 0 1 1 -9.5 0zm8.5 0h-7.5v.63a3.75 3.75 0 1 0 7.5 0z" fill="currentColor" fill-rule="evenodd"/></svg>
+      <span class="kb-cart-badge" id="kbCartBadge">0</span>
+    </button>
   </div>
 </header>
 
@@ -368,18 +425,17 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 <div class="kb-menu" id="kbMenu">
   <div class="kb-menu-top">
     <button class="kb-burger open" onclick="toggleMenu()" aria-label="Cerrar"><span></span><span></span><span></span></button>
-    <img class="kb-menu-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING_b42351c9-1e32-4cfd-8712-4ce6bf1114f5.png?v=1772805913" alt="Kairos Brewing">
+    <img class="kb-menu-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING.png?v=1769017156&width=300" alt="Kairos Brewing">
     <div></div>
   </div>
   <div class="kb-menu-list">
-    <a data-route="/cervezas" onclick="go(event)">CERVEZAS</a>
-    <a data-route="/packs" onclick="go(event)">PACKS</a>
-    <a data-route="/destileria" onclick="go(event)">DESTILERÍA</a>
-    <a data-route="/merch" onclick="go(event)">MERCH</a>
-    <a data-route="/restaurantes" onclick="go(event)">RESTAURANTES</a>
-    <a data-route="/eventos" onclick="go(event)">EVENTOS</a>
-    <a data-route="/nosotros" onclick="go(event)">NOSOTROS</a>
-    <a href="/" style="margin-top:24px;font-size:16px;color:var(--mut)">← VOLVER A ZORBO</a>
+    <a data-route="/cervezas" onclick="go(event)">Cervezas</a>
+    <a data-route="/packs" onclick="go(event)">Packs</a>
+    <a data-route="/destileria" onclick="go(event)">Destilería</a>
+    <a data-route="/merch" onclick="go(event)">Merch</a>
+    <a data-route="/restaurantes" onclick="go(event)">Restaurantes</a>
+    <a data-route="/eventos" onclick="go(event)">Eventos</a>
+    <a data-route="/nosotros" onclick="go(event)">Nosotros</a>
   </div>
 </div>
 
@@ -388,69 +444,79 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   <div class="kb-view" id="view-home">
     <div class="kb-hero">
       <div class="kb-hero-track" id="kbHeroTrack">
-        <div class="kb-hero-slide"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Banner_Web_-_Kairos_-01.png?v=1775154725&width=1800" alt=""></div>
-        <div class="kb-hero-slide"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Banner_Web_-_Kairos_-02.png?v=1775154766&width=1800" alt=""></div>
-        <div class="kb-hero-slide"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Banner_Web_-_Kairos_-03.png?v=1775154716&width=1800" alt=""></div>
+        <div class="kb-hero-slide"><a data-route="/packs" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/BANNER-_Antofa-_Delivery.png?v=1776363865&width=2048" alt="Delivery Antofagasta"></a></div>
+        <div class="kb-hero-slide"><a data-route="/cervezas" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/BANNER_-_SIXPACK_-_otono.webp?v=1774532484&width=2048" alt="Six Pack"></a></div>
+        <div class="kb-hero-slide"><a data-route="/cervezas" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/2X1-02.webp?v=1774532490&width=2048" alt="2x1"></a></div>
+        <div class="kb-hero-slide"><a data-route="/destileria" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Gin_BANNY-1920X600_px-01_1.png?v=1769548528&width=2048" alt="Gin Banny"></a></div>
       </div>
-      <button class="kb-hero-arr prev" onclick="heroGo(-1)">‹</button>
-      <button class="kb-hero-arr next" onclick="heroGo(1)">›</button>
-      <div class="kb-hero-dots" id="kbHeroDots">
-        <button class="d on" onclick="heroGo(0,true)"></button>
-        <button class="d" onclick="heroGo(1,true)"></button>
-        <button class="d" onclick="heroGo(2,true)"></button>
-      </div>
+      <button class="kb-hero-arr prev" onclick="heroGo(-1)" aria-label="Anterior">‹</button>
+      <button class="kb-hero-arr next" onclick="heroGo(1)" aria-label="Siguiente">›</button>
+      <div class="kb-hero-dots" id="kbHeroDots"></div>
     </div>
 
     <section class="kb-section">
-      <h2 class="kb-section-t">Destacados</h2>
-      <div class="kb-grid" id="gridFeatured"><div class="kb-loading">Cargando…</div></div>
+      <h2 class="kb-section-t">Nuestras Chelitas</h2>
+      <div class="kb-hscroll" id="homeChelitas"><div class="kb-loading">Cargando…</div></div>
     </section>
 
     <section class="kb-section">
       <h2 class="kb-section-t">Arma el Pack a tu Pinta</h2>
       <div class="kb-pack-builder">
-        <div class="kb-pack-card" data-route="/packs" onclick="go(event)">
-          <div class="kb-pack-card-img">
-            <span class="kb-pack-card-tag">6 PACK</span>
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/6-pack-variado-5833798.png?v=1758768342" alt="6 Pack" onerror="this.style.display='none'">
-          </div>
+        <div class="kb-pack-card">
+          <a class="kb-pack-card-img" href="https://kairos-brewing.com/a/bundles/arma-tu-six-pack-gb6s" target="_blank" rel="noopener">
+            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Captura_de_pantalla_2026-01-30_a_la_s_17.44.12.png?v=1769805985&width=900" alt="6 Pack" loading="lazy">
+          </a>
           <div class="kb-pack-card-name">6 Pack</div>
-          <div class="kb-pack-card-cta">Ver Packs</div>
+          <a class="kb-pill" href="https://kairos-brewing.com/a/bundles/arma-tu-six-pack-gb6s" target="_blank" rel="noopener">Ármalo aquí</a>
         </div>
-        <div class="kb-pack-card" data-route="/packs" onclick="go(event)">
-          <div class="kb-pack-card-img">
-            <span class="kb-pack-card-tag">12 PACK</span>
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/12-pack-variado-3764880.png?v=1758768343" alt="12 Pack" onerror="this.style.display='none'">
-          </div>
+        <div class="kb-pack-card">
+          <a class="kb-pack-card-img" href="https://kairos-brewing.com/a/bundles/arma-tu-doce-pack-gb7q" target="_blank" rel="noopener">
+            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Captura_de_pantalla_2026-01-30_a_la_s_17.43.50_d184e72b-bf3e-4ac9-8c71-6e5925b2f63a.png?v=1769806094&width=900" alt="12 Pack" loading="lazy">
+          </a>
           <div class="kb-pack-card-name">12 Pack</div>
-          <div class="kb-pack-card-cta">Ver Packs</div>
+          <a class="kb-pill" href="https://kairos-brewing.com/a/bundles/arma-tu-doce-pack-gb7q" target="_blank" rel="noopener">Ármalo aquí</a>
         </div>
-        <div class="kb-pack-card" data-route="/packs" onclick="go(event)">
-          <div class="kb-pack-card-img">
-            <span class="kb-pack-card-tag">24 PACK</span>
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/24-pack-variado-2216659.png?v=1758768343" alt="24 Pack" onerror="this.style.display='none'">
-          </div>
+        <div class="kb-pack-card">
+          <a class="kb-pack-card-img" href="https://kairos-brewing.com/a/bundles/arma-tu-24-pack-gbm1" target="_blank" rel="noopener">
+            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Captura_de_pantalla_2026-01-30_a_la_s_17.44.02_6c454ef0-5d81-432d-8660-1cddfed36258.png?v=1769806186&width=900" alt="24 Pack" loading="lazy">
+          </a>
           <div class="kb-pack-card-name">24 Pack</div>
-          <div class="kb-pack-card-cta">Ver Packs</div>
+          <a class="kb-pill" href="https://kairos-brewing.com/a/bundles/arma-tu-24-pack-gbm1" target="_blank" rel="noopener">Ármalo aquí</a>
         </div>
       </div>
     </section>
 
-    <section class="kb-brands">
-      <h3 class="kb-brands-t">Nuestras Marcas</h3>
-      <div class="kb-brand-circles">
-        <a class="kb-brand-circle" data-route="/restaurantes" onclick="go(event)">
-          <span class="c" style="background:linear-gradient(135deg,#7ba84a,#3d6f25)"><img src="/brands/kairos.png" alt="Kairos Garden" onerror="this.style.display='none'"></span>
-          <span class="nm">Kairos Garden</span>
-        </a>
-        <a class="kb-brand-circle" data-route="/cervezas" onclick="go(event)">
-          <span class="c" style="background:#f5a623"><img src="/brands/kairos.png" alt="Kairos Brewing" onerror="this.style.display='none'"></span>
-          <span class="nm">Kairos Brewing</span>
-        </a>
-        <a class="kb-brand-circle" data-route="/restaurantes" onclick="go(event)">
-          <span class="c" style="background:#e91e63"><img src="/brands/kairos.png" alt="Kairos Badass" onerror="this.style.display='none'"></span>
-          <span class="nm">Kairos Badass</span>
-        </a>
+    <section class="kb-section">
+      <h2 class="kb-section-t">Nuestros Packs</h2>
+      <div class="kb-hscroll" id="homePacks"><div class="kb-loading">Cargando…</div></div>
+    </section>
+
+    <section class="kb-section">
+      <h1 class="kb-section-t">Cervecería Artesanal Independiente</h1>
+      <div class="kb-brandbtns">
+        <a class="kb-brandbtn" data-route="/cervezas" onclick="go(event)"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M32 64c0-17.7 14.3-32 32-32H352c17.7 0 32 14.3 32 32V96h51.2c42.4 0 76.8 34.4 76.8 76.8V274.9c0 30.4-17.9 57.9-45.6 70.2L384 381.7V416c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V64zM384 311.6l56.4-25.1c4.6-2.1 7.6-6.6 7.6-11.7V172.8c0-7.1-5.7-12.8-12.8-12.8H384V311.6zM160 144c0-8.8-7.2-16-16-16s-16 7.2-16 16V368c0 8.8 7.2 16 16 16s16-7.2 16-16V144zm64 0c0-8.8-7.2-16-16-16s-16 7.2-16 16V368c0 8.8 7.2 16 16 16s16-7.2 16-16V144zm64 0c0-8.8-7.2-16-16-16s-16 7.2-16 16V368c0 8.8 7.2 16 16 16s16-7.2 16-16V144z"/></svg>Brewing</a>
+        <a class="kb-brandbtn" data-route="/restaurantes" onclick="go(event)"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M32 0C19.1 0 7.4 7.8 2.4 19.8s-2.2 25.7 6.9 34.9L224 269.3V448H160c-17.7 0-32 14.3-32 32s14.3 32 32 32h96 96c17.7 0 32-14.3 32-32s-14.3-32-32-32H288V269.3L502.6 54.6c9.2-9.2 11.9-22.9 6.9-34.9S492.9 0 480 0H32z"/></svg>Badass</a>
+        <a class="kb-brandbtn" data-route="/restaurantes" onclick="go(event)"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M210.6 5.9L62 169.4c-3.9 4.2-6 9.8-6 15.5C56 197.7 66.3 208 79.1 208H104L30.6 281.4c-4.2 4.2-6.6 10-6.6 16C24 309.9 34.1 320 46.6 320H80L5.4 409.5C1.9 413.7 0 419 0 424.5c0 13 10.5 23.5 23.5 23.5H192v32c0 17.7 14.3 32 32 32s32-14.3 32-32V448H424.5c13 0 23.5-10.5 23.5-23.5c0-5.5-1.9-10.8-5.4-15L368 320h33.4c12.5 0 22.6-10.1 22.6-22.6c0-6-2.4-11.8-6.6-16L344 208h24.9c12.7 0 23.1-10.3 23.1-23.1c0-5.7-2.1-11.3-6-15.5L237.4 5.9C234 2.1 229.1 0 224 0s-10 2.1-13.4 5.9z"/></svg>Garden</a>
+        <a class="kb-brandbtn" data-route="/merch" onclick="go(event)"><svg viewBox="0 0 640 512" aria-hidden="true"><path d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0h12.6c22.5 0 44.2 7.9 61.5 22.3L628.5 127.4c6.6 5.5 10.7 13.5 11.4 22.1s-2.1 17.1-7.8 23.6l-56 64c-11.4 13.1-31.2 14.6-44.6 3.5L480 197.7V448c0 35.3-28.7 64-64 64H224c-35.3 0-64-28.7-64-64V197.7l-51.5 42.9c-13.3 11.1-33.1 9.6-44.6-3.5l-56-64c-5.7-6.5-8.5-15-7.8-23.6s4.8-16.6 11.4-22.1L137.7 22.3C155 7.9 176.7 0 199.2 0h12.6z"/></svg>Merch</a>
+      </div>
+    </section>
+
+    <section class="kb-section">
+      <h2 class="kb-heavy-t">Nuestras Marcas</h2>
+      <div class="kb-marcas">
+        <div class="kb-marca"><img src="/brands/kairos.png" alt="Kairos" loading="lazy" onerror="this.parentNode.style.display='none'"></div>
+        <div class="kb-marca"><img src="/brands/firulais.png" alt="Firulais" loading="lazy" onerror="this.parentNode.style.display='none'"></div>
+        <div class="kb-marca"><img src="/brands/banny.png" alt="Banny" loading="lazy" onerror="this.parentNode.style.display='none'"></div>
+        <div class="kb-marca"><video src="/brands/perroca.mp4" autoplay muted loop playsinline onerror="this.parentNode.style.display='none'"></video></div>
+      </div>
+    </section>
+
+    <section class="kb-section">
+      <h2 class="kb-section-t">Síguenos en Instagram</h2>
+      <div class="kb-ig">
+        <a href="https://www.instagram.com/kairosgarden.cl/" target="_blank" rel="noopener"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/3_4_2d11dfa0-cb9b-43fd-9bde-defcf8d92bff.png?v=1769623152&width=700" alt="Kairos Garden" loading="lazy"></a>
+        <a href="https://www.instagram.com/kairosbrewing.cl/" target="_blank" rel="noopener"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/1_7_0e3ffc2f-79e5-463f-b476-5fa3de48b4c0.png?v=1769623152&width=700" alt="Kairos Brewing" loading="lazy"></a>
+        <a href="https://www.instagram.com/kairosbadass.cl/" target="_blank" rel="noopener"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/2_6_c5f6298e-530b-4805-a2f7-e0771c713794.png?v=1769623152&width=700" alt="Kairos Badass" loading="lazy"></a>
       </div>
     </section>
   </div>
@@ -585,8 +651,32 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 </main>
 
 <footer class="kb-footer">
-  Kairos Brewing · craft beer artesanal · sin filtrar · sin aditivos<br>
-  Powered by <a href="/">Zorbo Marketplace</a>
+  <div class="kb-footer-top">
+    <div>
+      <h4>Conócenos</h4>
+      <ul>
+        <li><a data-route="/nosotros" onclick="go(event)">Nosotros</a></li>
+        <li><a href="https://kairos-brewing.com/pages/politicas-de-uso" target="_blank" rel="noopener">Términos y condiciones</a></li>
+        <li><a href="https://kairos-brewing.com/pages/privacidad" target="_blank" rel="noopener">Configuración de privacidad</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Entérate qué trama Kairos</h4>
+      <form class="kb-news" onsubmit="return kbNewsletter(event)">
+        <input type="email" placeholder="Correo electrónico" aria-label="Correo electrónico" required>
+        <button type="submit" aria-label="Suscribirse">→</button>
+      </form>
+      <div class="kb-social">
+        <a href="https://www.instagram.com/kairosbrewing.cl/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M13.23 3.492c-.84-.037-1.096-.046-3.23-.046-2.144 0-2.39.01-3.238.055-.776.027-1.195.164-1.487.273a2.43 2.43 0 0 0-.912.593 2.486 2.486 0 0 0-.602.922c-.11.282-.238.702-.274 1.486-.046.84-.046 1.095-.046 3.23 0 2.134.01 2.39.046 3.229.004.51.097 1.016.274 1.495.145.365.319.639.602.913.282.282.538.456.92.602.474.176.974.268 1.479.273.848.046 1.103.046 3.238.046 2.134 0 2.39-.01 3.23-.046.784-.036 1.203-.164 1.486-.273.374-.146.648-.329.921-.602.283-.283.447-.548.602-.922.177-.476.27-.979.274-1.486.037-.84.046-1.095.046-3.23 0-2.134-.01-2.39-.055-3.229-.027-.784-.164-1.204-.274-1.495a2.43 2.43 0 0 0-.593-.913 2.604 2.604 0 0 0-.92-.602c-.284-.11-.703-.237-1.488-.273ZM6.697 2.05c.857-.036 1.131-.045 3.302-.045 1.1-.014 2.202.001 3.302.045.664.014 1.321.14 1.943.374a3.968 3.968 0 0 1 1.414.922c.41.397.728.88.93 1.414.23.622.354 1.279.365 1.942C18 7.56 18 7.824 18 10.005c0 2.17-.01 2.444-.046 3.292-.036.858-.173 1.442-.374 1.943-.2.53-.474.976-.92 1.423a3.896 3.896 0 0 1-1.415.922c-.51.191-1.095.337-1.943.374-.857.036-1.122.045-3.302.045-2.171 0-2.445-.009-3.302-.055-.849-.027-1.432-.164-1.943-.364a4.152 4.152 0 0 1-1.414-.922 4.128 4.128 0 0 1-.93-1.423c-.183-.51-.329-1.085-.365-1.943C2.009 12.45 2 12.167 2 10.004c0-2.161 0-2.435.055-3.302.027-.848.164-1.432.365-1.942a4.44 4.44 0 0 1 .92-1.414 4.18 4.18 0 0 1 1.415-.93c.51-.183 1.094-.33 1.943-.366Zm.427 4.806a4.105 4.105 0 1 1 5.805 5.805 4.105 4.105 0 0 1-5.805-5.805Zm1.882 5.371a2.668 2.668 0 1 0 2.042-4.93 2.668 2.668 0 0 0-2.042 4.93Zm5.922-5.942a.958.958 0 1 1-1.355-1.355.958.958 0 0 1 1.355 1.355Z" clip-rule="evenodd"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@clubkairoscl" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M18.16 5.87c.34 1.309.34 4.08.34 4.08s0 2.771-.34 4.08a2.125 2.125 0 0 1-1.53 1.53c-1.309.34-6.63.34-6.63.34s-5.321 0-6.63-.34a2.125 2.125 0 0 1-1.53-1.53c-.34-1.309-.34-4.08-.34-4.08s0-2.771.34-4.08a2.173 2.173 0 0 1 1.53-1.53C4.679 4 10 4 10 4s5.321 0 6.63.34a2.173 2.173 0 0 1 1.53 1.53ZM8.3 12.5l4.42-2.55L8.3 7.4v5.1Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="kb-footer-bottom">© 2026, Kairos Brewing</div>
 </footer>
 
 <!-- CART DRAWER -->
@@ -631,7 +721,6 @@ const ROUTES = {
   '/nosotros':      'nosotros',
 };
 function viewFromPath(path){
-  // normaliza: quita el trailing slash salvo en la raíz
   const p = path.replace(/\/+$/,'') || '/';
   return ROUTES[p] || ROUTES[path] || 'home';
 }
@@ -639,14 +728,11 @@ function showView(name){
   document.querySelectorAll('.kb-view').forEach(v => v.classList.remove('active'));
   const v = document.getElementById('view-' + name);
   if (v) v.classList.add('active');
-  // active state en los links de navegación
   const currentPath = location.pathname;
   document.querySelectorAll('[data-route]').forEach(a => {
     a.classList.toggle('active', a.getAttribute('data-route') === currentPath);
   });
-  // scroll al top
   window.scrollTo({ top:0, behavior:'instant' });
-  // populate si tiene grid
   populateGridFor(name);
 }
 function go(e){
@@ -669,6 +755,13 @@ function toggleMenu(){
 }
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
+function buildHeroDots(){
+  const track = document.getElementById('kbHeroTrack');
+  const dotsWrap = document.getElementById('kbHeroDots');
+  if (!track || !dotsWrap) return;
+  dotsWrap.innerHTML = Array.from(track.children).map((_,i) =>
+    `<button class="d${i===0?' on':''}" onclick="heroGo(${i},true)" aria-label="Slide ${i+1}"></button>`).join('');
+}
 function heroGo(n, absolute){
   const track = document.getElementById('kbHeroTrack');
   if (!track) return;
@@ -710,10 +803,6 @@ function isDestilado(p){
 function isMerch(p){
   const t = (p.title || '').toLowerCase();
   return /vaso|jockey|jarra|copa|growler|pin|gorr/.test(t);
-}
-function isKairosBeer(p){
-  // Cerveza Kairos = lata o pack, no destilado, no merch, no chelada
-  return (isChelita(p) || isPack(p)) && !isDestilado(p) && !/chelada|firulais/i.test(p.title||'');
 }
 function cleanTitle(s){return String(s||'').replace(/24\s*pack\s*473\s*cc?\s*mayorista\s*/gi,'24 Pack ').replace(/\s+/g,' ').trim()}
 
@@ -784,25 +873,33 @@ function kbAddToCart(btn){
 // ─── POPULATE per view ───────────────────────────────────────────────────────
 async function populateGridFor(view){
   const products = await loadCatalog();
+  const beers = p => isChelita(p) && !isDestilado(p) && !/chelada|firulais/i.test(p.title||'');
+  const packs = p => isPack(p) && !/chelada|firulais/i.test(p.title||'');
   if (view === 'home') {
-    const el = document.getElementById('gridFeatured');
-    if (!el || el.dataset.done) return;
-    const featured = ['neipa-473cc','apa-american-pale','golden-golden-ale','samba-ipa','obertura-stout','whisky-bavaro-dcto-black-rabbit-20']
-      .map(h => products.find(p => p.handle === h)).filter(Boolean);
-    el.innerHTML = featured.length ? featured.map(buildCard).join('') : '<div class="kb-loading">Sin destacados</div>';
-    el.dataset.done = '1';
+    const ch = document.getElementById('homeChelitas');
+    if (ch && !ch.dataset.done) {
+      const list = products.filter(beers);
+      ch.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin cervezas disponibles</div>';
+      ch.dataset.done = '1';
+    }
+    const pk = document.getElementById('homePacks');
+    if (pk && !pk.dataset.done) {
+      const list = products.filter(packs);
+      pk.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin packs disponibles</div>';
+      pk.dataset.done = '1';
+    }
   }
   if (view === 'cervezas') {
     const el = document.getElementById('gridCervezas');
     if (!el || el.dataset.done) return;
-    const list = products.filter(p => isChelita(p) && !isDestilado(p) && !/chelada|firulais/i.test(p.title||''));
+    const list = products.filter(beers);
     el.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin cervezas disponibles</div>';
     el.dataset.done = '1';
   }
   if (view === 'packs') {
     const el = document.getElementById('gridPacks');
     if (!el || el.dataset.done) return;
-    const list = products.filter(p => isPack(p) && !/chelada|firulais/i.test(p.title||''));
+    const list = products.filter(packs);
     el.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin packs disponibles</div>';
     el.dataset.done = '1';
   }
@@ -820,6 +917,14 @@ async function populateGridFor(view){
     el.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin merch disponible</div>';
     el.dataset.done = '1';
   }
+}
+
+// ─── NEWSLETTER (visual) ───────────────────────────────────────────────────────
+function kbNewsletter(e){
+  e.preventDefault();
+  const input = e.target.querySelector('input');
+  if (input){ input.value=''; input.placeholder='¡Gracias! 🍻'; }
+  return false;
 }
 
 // ─── CART ────────────────────────────────────────────────────────────────────
@@ -873,6 +978,7 @@ function doKbCheckout(){
 // ─── BOOT ────────────────────────────────────────────────────────────────────
 (async function(){
   updateCart();
+  buildHeroDots();
   showView(viewFromPath(location.pathname));
   resetHeroTimer();
 })();
