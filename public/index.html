@@ -928,10 +928,13 @@ function isMerch(p){
   const t = (p.title || '').toLowerCase();
   return /vaso|jockey|jarra|copa|growler|pin|gorr/.test(t);
 }
-// Cerveza individual (lata): no pack, no destilado, no merch. Detecta por
-// tipo, formato (xxxcc en título o SKU) o colección, para no depender del título.
+function hasZorbo(p){ return (p.tags || []).map(t => String(t).toUpperCase()).includes('ZORBO'); }
+function isSubscription(p){ return /suscrip|subscription/i.test(p.title || ''); }
+// Cerveza individual (lata): no pack, no destilado, no merch, no ZORBO, no suscripción.
+// Detecta por tipo, formato (xxxcc en título o SKU) o colección, para no depender del título.
 function isBeer(p){
   if (isPack(p) || isDestilado(p) || isMerch(p)) return false;
+  if (hasZorbo(p) || isSubscription(p)) return false;
   if (/chelada|firulais/i.test(p.title || '')) return false;
   if (KNOWN_GROUP[p.handle]) return true;
   const t = (p.title || '').toLowerCase();
@@ -1028,7 +1031,7 @@ async function populateGridFor(view){
   if (view === 'armar') return populateArmar();
   const products = await loadCatalog();
   const beers = isBeer;
-  const packs = p => isPack(p) && !/chelada|firulais/i.test(p.title||'');
+  const packs = p => (isPack(p) || hasZorbo(p)) && !isSubscription(p) && !/chelada|firulais/i.test(p.title||'');
   if (view === 'home') {
     const ch = document.getElementById('homeChelitas');
     if (ch && !ch.dataset.done) {

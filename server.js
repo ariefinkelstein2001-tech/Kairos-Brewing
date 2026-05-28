@@ -108,8 +108,7 @@ async function loadKairosProducts(force = false) {
     .filter(p => (p.vendor || '').trim().toLowerCase() === VENDOR.toLowerCase())
     .filter(p => !HIDE_HANDLES.has(p.handle))
     .filter(p => !HIDE_TITLE_RX.test(p.title || ''))
-    .filter(p => !isMayorista(p))
-    .filter(p => !(p.tags || []).map(t => String(t).toUpperCase()).includes('ZORBO'));
+    .filter(p => !isMayorista(p));
 
   cache = { products, fetchedAt: new Date().toISOString() };
   cacheAt = Date.now();
