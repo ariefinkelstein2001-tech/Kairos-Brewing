@@ -1262,7 +1262,7 @@ function isDestilado(p){
   const type = (p.type || '').toLowerCase();
   if (/destil|licor|spirit|gin/.test(type)) return true;
   if ((p.collections || []).some(c => /destil|licor|spirit|gin/i.test((c.handle||'')+' '+(c.title||'')))) return true;
-  return /\bgin\b|banny|whisky|whiskey|\bron\b|\brum\b|vermut|mojito|tonic|rtd/.test(t);
+  return /\bgin\b|banny|london dry|whisky|whiskey|\bron\b|\brum\b|vermut|mojito|tonic|rtd/.test(t);
 }
 function isMerch(p){
   const t = (p.title || '').toLowerCase();
