@@ -211,6 +211,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 /* ── Product grid (otras vistas) ── */
 .kb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+@media(max-width:640px){.kb-grid{grid-template-columns:repeat(2,1fr);gap:12px}}
 .kb-card{
   background:var(--card);border:1px solid var(--bdr);
   display:flex;flex-direction:column;
@@ -277,7 +278,12 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 
 /* ── Pack builder (ARMA EL PACK A TU PINTA) ── */
 .kb-pack-builder{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media(max-width:760px){.kb-pack-builder{grid-template-columns:1fr}}
+@media(max-width:600px){
+  .kb-pack-builder{gap:8px}
+  .kb-pack-card{gap:8px}
+  .kb-pack-card-name{font-size:16px}
+  .kb-pill{padding:9px 8px;font-size:11px;letter-spacing:.02em;width:100%}
+}
 .kb-pack-card{display:flex;flex-direction:column;align-items:center;gap:14px}
 .kb-pack-card-img{width:100%;border-radius:18px;overflow:hidden}
 .kb-pack-card-img img{width:100%;height:auto;display:block;transition:transform .35s}
@@ -321,7 +327,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-armar-plus:disabled{opacity:.3;pointer-events:none}
 
 .kb-armar-bar-sticky{position:fixed;left:0;right:0;bottom:0;z-index:300;background:#f3f1e7;border-top:2px solid var(--orange);padding:14px clamp(1rem,4vw,3rem) 16px;box-shadow:0 -8px 26px rgba(0,0,0,.16)}
-.kb-armar-slots{display:flex;gap:10px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end}
+.kb-armar-slots{display:flex;gap:10px;justify-content:flex-start;margin-bottom:14px;flex-wrap:nowrap;overflow-x:auto;align-items:flex-end;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .kb-slot{width:50px;height:122px;border-radius:8px;background:#13110d;border:1px solid #d9d6c8;position:relative;flex-shrink:0;transition:width .2s}
 .kb-slot.filled{width:88px;background:transparent;border-color:transparent;display:flex;align-items:flex-end;justify-content:center}
 .kb-slot.filled img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.3))}
@@ -334,7 +340,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-armar-cta.ready{background:var(--orange);color:#000;cursor:pointer}
 .kb-armar-cta.ready:hover{background:var(--orange-l)}
 @media(max-width:680px){
-  .kb-armar{padding-bottom:280px}
+  .kb-armar{padding-bottom:240px}
   .kb-armar-foot{flex-direction:column;align-items:stretch}
   .kb-armar-cta{width:100%}
   .kb-slot{width:34px;height:92px}
@@ -1235,7 +1241,10 @@ function isPack(p){
 }
 function isDestilado(p){
   const t = (p.title || '').toLowerCase();
-  return /\bgin\b|whisky|whiskey|\bron\b|\brum\b|vermut|mojito|tonic|rtd/.test(t);
+  const type = (p.type || '').toLowerCase();
+  if (/destil|licor|spirit|gin/.test(type)) return true;
+  if ((p.collections || []).some(c => /destil|licor|spirit|gin/i.test((c.handle||'')+' '+(c.title||'')))) return true;
+  return /\bgin\b|banny|whisky|whiskey|\bron\b|\brum\b|vermut|mojito|tonic|rtd/.test(t);
 }
 function isMerch(p){
   const t = (p.title || '').toLowerCase();
