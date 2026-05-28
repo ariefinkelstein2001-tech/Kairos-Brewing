@@ -1299,14 +1299,14 @@ function buildCard(p){
   const img1 = p.image || (p.images && p.images[0]) || null;
   const img2 = (hasZorbo(p) || isPack(p)) ? null : ((p.images && p.images[1]) || null);
   const visual = img1
-    ? `<div class="kb-card-img${img2 ? ' has2' : ''}"><img class="img1" src="${img1}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">${img2 ? `<img class="img2" src="${img2}" alt="" loading="lazy" decoding="async">` : ''}</div>`
+    ? `<div class="kb-card-img${img2 ? ' has2' : ''}"><img class="img1" src="${cdnImg(img1,600)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">${img2 ? `<img class="img2" src="${cdnImg(img2,600)}" alt="" loading="lazy" decoding="async">` : ''}</div>`
     : `<div class="kb-card-img"></div>`;
   const variantSelect = variants.length > 1
     ? `<select class="kb-sel" onchange="onVariantChange(this)">${variants.map(v => `<option value="${v.id}" data-price="${v.price}">${escapeHtml(v.title)} — ${fmtPrice(parseFloat(v.price))}</option>`).join('')}</select>`
     : '';
   const productData = {
     name: cleanTitle(p.title),
-    image: img1,
+    image: cdnImg(img1,200),
     price,
     variantId: v0.id,
   };
