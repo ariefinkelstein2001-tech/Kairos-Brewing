@@ -4,11 +4,13 @@
 // /cart/{variantId}:{qty} → checkout nativo de Shopify (Transbank, etc.).
 
 import express from 'express';
+import compression from 'compression';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
+app.use(compression());
 const PORT = process.env.PORT || 3000;
 
 const SHOPIFY_API_VERSION = '2026-04';
@@ -43,9 +45,9 @@ const PRODUCTS_QUERY = `{
   products(first: 250, query: "status:active") {
     edges {
       node {
-        id title handle description productType vendor tags
+        id title handle productType vendor tags
         featuredImage { url altText }
-        images(first: 5) { edges { node { url altText } } }
+        images(first: 2) { edges { node { url altText } } }
         collections(first: 10) { edges { node { handle title } } }
         variants(first: 25) {
           edges {
@@ -87,7 +89,6 @@ async function loadKairosProducts(force = false) {
       id:          stripGid(p.id, 'Product'),
       handle:      p.handle,
       title:       p.title,
-      description: p.description,
       type:        p.productType,
       vendor:      p.vendor,
       tags:        p.tags,
@@ -121,7 +122,7 @@ app.get('/api/products', async (req, res) => {
   }
   try {
     const products = await loadKairosProducts(req.query.refresh === '1');
-    res.set('Cache-Control', 'public, max-age=120');
+    res.set('Cache-Control', 'public, max-age=300');
     res.json({ count: products.length, products, fetchedAt: cache?.fetchedAt });
   } catch (e) {
     console.error('Shopify products error:', e.message);
@@ -154,5 +155,8 @@ app.listen(PORT, () => {
   console.log(`Kairos storefront en http://localhost:${PORT}`);
   if (!SHOP || !TOKEN) {
     console.warn('⚠️  Falta SHOPIFY_STORE_DOMAIN o SHOPIFY_ADMIN_TOKEN — el catálogo no cargará.');
+  } else {
+    // Precalienta el caché para que la primera visita no espere a Shopify.
+    loadKairosProducts().then(p => console.log(`Catálogo precargado: ${p.length} productos`)).catch(e => console.warn('Precarga falló:', e.message));
   }
 });

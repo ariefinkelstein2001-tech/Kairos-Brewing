@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+<script>window.__catalog=fetch('/api/products?mode=b2c').then(r=>r.json()).then(d=>d.products||[]).catch(()=>[]);</script>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Dela+Gothic+One&family=Roboto:wght@400;700&family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* Fuentes propias de Kairos (mismas que el sitio original en PageFly) */
@@ -1230,10 +1231,13 @@ function resetHeroTimer(){
 async function loadCatalog(){
   if (PRODUCTS) return PRODUCTS;
   try {
-    const r = await fetch('/api/products?mode=b2c');
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const data = await r.json();
-    PRODUCTS = data.products || [];
+    if (window.__catalog) {
+      PRODUCTS = await window.__catalog;
+    } else {
+      const r = await fetch('/api/products?mode=b2c');
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      PRODUCTS = (await r.json()).products || [];
+    }
   } catch (e) { console.error('catalog', e); PRODUCTS = []; }
   return PRODUCTS;
 }
