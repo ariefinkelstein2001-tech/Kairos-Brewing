@@ -287,6 +287,48 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 }
 .kb-pill:hover{background:var(--orange-l);transform:translateY(-2px)}
 
+/* ── Arma tu pack (estilo Mad Charlie's) ── */
+.kb-armar{max-width:1140px;margin:0 auto;padding:40px clamp(1rem,4vw,3rem) 240px}
+.kb-armar-head{text-align:center;max-width:760px;margin:0 auto 34px}
+.kb-armar-pill{display:inline-flex;align-items:center;gap:8px;background:#111;color:#fff;border-radius:30px;padding:7px 16px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
+.kb-armar-pill .kb-dot{width:8px;height:8px;border-radius:50%;background:#3ddc6e;box-shadow:0 0 0 3px rgba(61,220,110,.25)}
+.kb-armar-title{font-family:var(--font-heavy);font-size:clamp(34px,6vw,60px);color:#1f1f1f;line-height:1.05;text-transform:none;margin-bottom:14px;letter-spacing:0}
+.kb-armar-sub{color:#555;font-size:15px;max-width:560px;margin:0 auto 26px;line-height:1.55}
+.kb-armar-progress{max-width:620px;margin:0 auto}
+.kb-armar-progress-row{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:#555;margin-bottom:8px}
+.kb-armar-progress-row b{font-size:18px;color:#1f1f1f}
+.kb-armar-bar{height:6px;border-radius:6px;background:#dad8cf;overflow:hidden}
+.kb-armar-bar-fill{height:100%;width:0;background:var(--orange);transition:width .35s}
+.kb-armar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:24px 14px}
+.kb-armar-card{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.kb-armar-card-img{height:180px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.kb-armar-card-img img{max-height:100%;width:auto;object-fit:contain}
+.kb-armar-card-name{font-size:14px;font-weight:600;color:#1f1f1f;line-height:1.25}
+.kb-armar-card-price{font-weight:700;color:#1f1f1f}
+.kb-armar-plus{width:42px;height:42px;border-radius:50%;background:#111;color:#fff;font-size:24px;line-height:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:transform .15s,background .15s}
+.kb-armar-plus:hover{background:var(--orange);color:#000;transform:scale(1.08)}
+.kb-armar-plus:disabled{opacity:.35;pointer-events:none}
+
+.kb-armar-bar-sticky{position:fixed;left:0;right:0;bottom:0;z-index:300;background:#f3f1e7;border-top:1px solid #d9d6c8;padding:14px clamp(1rem,4vw,3rem);box-shadow:0 -8px 26px rgba(0,0,0,.14)}
+.kb-armar-slots{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.kb-slot{width:44px;height:118px;border-radius:7px 7px 4px 4px;background:#0a0a0a;position:relative;flex-shrink:0}
+.kb-slot.filled{background:transparent}
+.kb-slot.filled img{width:100%;height:100%;object-fit:contain}
+.kb-slot-x{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:#111;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.kb-armar-foot{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.kb-armar-foot-l{display:flex;flex-direction:column}
+.kb-armar-foot-l span:first-child{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#777}
+.kb-armar-total{font-family:var(--font-display);font-size:30px;color:#1f1f1f;line-height:1.1}
+.kb-armar-cta{background:#bdbdb4;color:#fff;padding:16px 30px;border-radius:32px;font-family:var(--font-body);font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;min-width:240px;transition:background .15s}
+.kb-armar-cta.ready{background:var(--orange);color:#000;cursor:pointer}
+.kb-armar-cta.ready:hover{background:var(--orange-l)}
+@media(max-width:680px){
+  .kb-armar{padding-bottom:260px}
+  .kb-armar-foot{flex-direction:column;align-items:stretch}
+  .kb-armar-cta{width:100%}
+  .kb-slot{width:30px;height:84px}
+}
+
 /* ── Cervecería artesanal independiente (mosaico de fotos + botón) ── */
 .kb-indep{display:flex;flex-direction:column;gap:16px}
 .kb-indep-row{display:flex;gap:16px}
@@ -507,25 +549,25 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
       <h2 class="kb-section-t">Arma el Pack a tu Pinta</h2>
       <div class="kb-pack-builder">
         <div class="kb-pack-card">
-          <a class="kb-pack-card-img" href="https://kairos-brewing.com/a/bundles/arma-tu-six-pack-gb6s" target="_blank" rel="noopener">
+          <a class="kb-pack-card-img" data-route="/arma-tu-pack/6" onclick="go(event)">
             <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Captura_de_pantalla_2026-01-30_a_la_s_17.44.12.png?v=1769805985&width=900" alt="6 Pack" loading="lazy">
           </a>
           <div class="kb-pack-card-name">6 Pack</div>
-          <a class="kb-pill" href="https://kairos-brewing.com/a/bundles/arma-tu-six-pack-gb6s" target="_blank" rel="noopener">Ármalo aquí</a>
+          <a class="kb-pill" data-route="/arma-tu-pack/6" onclick="go(event)">Ármalo aquí</a>
         </div>
         <div class="kb-pack-card">
-          <a class="kb-pack-card-img" href="https://kairos-brewing.com/a/bundles/arma-tu-doce-pack-gb7q" target="_blank" rel="noopener">
+          <a class="kb-pack-card-img" data-route="/arma-tu-pack/12" onclick="go(event)">
             <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Captura_de_pantalla_2026-01-30_a_la_s_17.43.50_d184e72b-bf3e-4ac9-8c71-6e5925b2f63a.png?v=1769806094&width=900" alt="12 Pack" loading="lazy">
           </a>
           <div class="kb-pack-card-name">12 Pack</div>
-          <a class="kb-pill" href="https://kairos-brewing.com/a/bundles/arma-tu-doce-pack-gb7q" target="_blank" rel="noopener">Ármalo aquí</a>
+          <a class="kb-pill" data-route="/arma-tu-pack/12" onclick="go(event)">Ármalo aquí</a>
         </div>
         <div class="kb-pack-card">
-          <a class="kb-pack-card-img" href="https://kairos-brewing.com/a/bundles/arma-tu-24-pack-gbm1" target="_blank" rel="noopener">
+          <a class="kb-pack-card-img" data-route="/arma-tu-pack/24" onclick="go(event)">
             <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Captura_de_pantalla_2026-01-30_a_la_s_17.44.02_6c454ef0-5d81-432d-8660-1cddfed36258.png?v=1769806186&width=900" alt="24 Pack" loading="lazy">
           </a>
           <div class="kb-pack-card-name">24 Pack</div>
-          <a class="kb-pill" href="https://kairos-brewing.com/a/bundles/arma-tu-24-pack-gbm1" target="_blank" rel="noopener">Ármalo aquí</a>
+          <a class="kb-pill" data-route="/arma-tu-pack/24" onclick="go(event)">Ármalo aquí</a>
         </div>
       </div>
     </section>
@@ -570,6 +612,32 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   <!-- ═════ CERVEZAS ═════ -->
   <div class="kb-view kb-light" id="view-cervezas">
     <div class="kb-collwrap" id="cervezasContent"><div class="kb-loading">Cargando cervezas…</div></div>
+  </div>
+
+  <!-- ═════ ARMA TU PACK ═════ -->
+  <div class="kb-view kb-light" id="view-armar">
+    <div class="kb-armar">
+      <div class="kb-armar-head">
+        <div class="kb-armar-pill"><span class="kb-dot"></span><span id="armarStylesCount">0</span> estilos disponibles</div>
+        <h1 class="kb-armar-title">Arma tu pack a tu pinta.</h1>
+        <p class="kb-armar-sub">Elige los estilos que más te representan, llena el pack y nosotros te lo dejamos en la puerta. Cervezas frescas, lúpulo serio, locura intacta.</p>
+        <div class="kb-armar-progress">
+          <div class="kb-armar-progress-row"><span><b id="armarCount">0</b> / <span id="armarTarget">6</span> elegidas</span><span id="armarHint">Empieza eligiendo tu estilo favorito</span></div>
+          <div class="kb-armar-bar"><div class="kb-armar-bar-fill" id="armarBarFill"></div></div>
+        </div>
+      </div>
+      <div class="kb-armar-grid" id="armarGrid"><div class="kb-loading">Cargando…</div></div>
+    </div>
+    <div class="kb-armar-bar-sticky" id="armarSticky">
+      <div class="kb-armar-slots" id="armarSlots"></div>
+      <div class="kb-armar-foot">
+        <div class="kb-armar-foot-l">
+          <span>Tu pack en tiempo real</span>
+          <span class="kb-armar-total" id="armarTotal">$0</span>
+        </div>
+        <button class="kb-armar-cta" id="armarCta" disabled onclick="armarCheckout()">Falta completar el pack</button>
+      </div>
+    </div>
   </div>
 
   <!-- ═════ PACKS ═════ -->
@@ -759,10 +827,12 @@ const ROUTES = {
   '/restaurantes':  'restaurantes',
   '/eventos':       'eventos',
   '/nosotros':      'nosotros',
+  '/arma-tu-pack':  'armar',
 };
 function viewFromPath(path){
   const p = path.replace(/\/+$/,'') || '/';
   if (p.indexOf('/cervezas') === 0) return 'cervezas';
+  if (p.indexOf('/arma-tu-pack') === 0) return 'armar';
   return ROUTES[p] || ROUTES[path] || 'home';
 }
 function showView(name){
@@ -942,6 +1012,7 @@ function kbAddToCart(btn){
 
 // ─── POPULATE per view ───────────────────────────────────────────────────────
 async function populateGridFor(view){
+  if (view === 'armar') return populateArmar();
   const products = await loadCatalog();
   const beers = isBeer;
   const packs = p => isPack(p) && !/chelada|firulais/i.test(p.title||'');
@@ -1000,6 +1071,87 @@ async function populateGridFor(view){
     el.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin merch disponible</div>';
     el.dataset.done = '1';
   }
+}
+
+// ─── ARMA TU PACK ──────────────────────────────────────────────────────────────
+let armarTarget = 6, armarSel = [], armarList = [];
+function armarParseTarget(){
+  const m = location.pathname.match(/arma-tu-pack\/(\d+)/);
+  const n = m ? parseInt(m[1],10) : 6;
+  return [6,12,24].includes(n) ? n : 6;
+}
+async function populateArmar(){
+  const grid = document.getElementById('armarGrid');
+  if (!grid) return;
+  const target = armarParseTarget();
+  if (armarTarget !== target){ armarTarget = target; armarSel = []; }
+  const products = await loadCatalog();
+  if (grid.dataset.done !== '1'){
+    armarList = products.filter(isBeer);
+    const sc = document.getElementById('armarStylesCount');
+    if (sc) sc.textContent = armarList.length;
+    grid.innerHTML = armarList.length
+      ? armarList.map((p,i) => {
+          const v0 = (p.variants||[])[0] || {};
+          const img = p.image || (p.images&&p.images[0]) || '';
+          return `<div class="kb-armar-card">
+            <div class="kb-armar-card-img">${img?`<img src="${img}" alt="${escapeHtml(p.title)}" loading="lazy">`:''}</div>
+            <div class="kb-armar-card-name">${escapeHtml(cleanTitle(p.title))}</div>
+            <div class="kb-armar-card-price">${fmtPrice(parseFloat(v0.price||0))}</div>
+            <button class="kb-armar-plus" aria-label="Agregar" onclick="armarAdd(${i})">+</button>
+          </div>`;
+        }).join('')
+      : '<div class="kb-loading">Sin cervezas disponibles</div>';
+    grid.dataset.done = '1';
+  }
+  armarRender();
+}
+function armarAdd(i){
+  if (armarSel.length >= armarTarget) return;
+  const p = armarList[i]; if (!p) return;
+  const v0 = (p.variants||[])[0] || {};
+  if (!v0.id) return;
+  armarSel.push({ variantId:v0.id, name:cleanTitle(p.title), image:p.image||(p.images&&p.images[0])||null, price:parseFloat(v0.price||0) });
+  armarRender();
+}
+function armarRemove(idx){ armarSel.splice(idx,1); armarRender(); }
+function armarRender(){
+  const target = armarTarget;
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('armarTarget', target);
+  set('armarCount', armarSel.length);
+  const slots = document.getElementById('armarSlots');
+  if (slots){
+    let s='';
+    for (let i=0;i<target;i++){
+      const it = armarSel[i];
+      s += it
+        ? `<div class="kb-slot filled"><img src="${it.image||''}" alt=""><button class="kb-slot-x" aria-label="Quitar" onclick="armarRemove(${i})">✕</button></div>`
+        : '<div class="kb-slot"></div>';
+    }
+    slots.innerHTML = s;
+  }
+  set('armarTotal', fmtPrice(armarSel.reduce((a,b)=>a+b.price,0)));
+  const fill = document.getElementById('armarBarFill');
+  if (fill) fill.style.width = Math.min(100, armarSel.length/target*100) + '%';
+  const left = target - armarSel.length;
+  const cta = document.getElementById('armarCta');
+  const hint = document.getElementById('armarHint');
+  if (cta){
+    if (left <= 0){ cta.disabled=false; cta.classList.add('ready'); cta.textContent='Ir al carrito →'; }
+    else { cta.disabled=true; cta.classList.remove('ready'); cta.textContent='Falta completar el pack'; }
+  }
+  if (hint) hint.textContent = left<=0 ? '¡Pack completo!' : (armarSel.length ? `Te faltan ${left} para completar` : 'Empieza eligiendo tu estilo favorito');
+}
+function armarCheckout(){
+  if (armarSel.length < armarTarget) return;
+  armarSel.forEach(it => {
+    const ex = CART.find(i => i.variantId === it.variantId);
+    if (ex) ex.qty += 1; else CART.push({ name:it.name, image:it.image, price:it.price, variantId:it.variantId, qty:1 });
+  });
+  saveCart(); updateCart();
+  armarSel = []; armarRender();
+  if (!cartOpen) toggleCart();
 }
 
 // ─── NEWSLETTER (visual) ───────────────────────────────────────────────────────
