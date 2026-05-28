@@ -343,8 +343,9 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   .kb-armar{padding-bottom:240px}
   .kb-armar-foot{flex-direction:column;align-items:stretch}
   .kb-armar-cta{width:100%}
-  .kb-slot{width:34px;height:92px}
-  .kb-slot.filled{width:64px}
+  .kb-slot{width:22px;height:60px;border-radius:5px}
+  .kb-slot.filled{width:44px}
+  .kb-armar-slots{gap:7px}
 }
 
 /* ── Cervecería artesanal independiente (mosaico de fotos + botón) ── */
@@ -358,7 +359,11 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-indep-tile:hover{transform:translateY(-3px)}
 .kb-indep-sm{flex:0 0 42%}
 .kb-indep-lg{flex:1}
-@media(max-width:760px){.kb-indep-row{flex-direction:column}.kb-indep-sm,.kb-indep-lg{flex:1 1 auto;min-height:300px}}
+@media(max-width:760px){
+  .kb-indep{flex-direction:row;overflow-x:auto;gap:14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+  .kb-indep-row{display:contents}
+  .kb-indep-sm,.kb-indep-lg{flex:0 0 82%;min-height:320px;scroll-snap-align:start}
+}
 .kb-brandbtn{
   display:inline-flex;align-items:center;gap:12px;
   background:#000;color:#fff;padding:13px 26px;border-radius:28px;
@@ -1143,6 +1148,7 @@ let PRODUCTS = null;
 
 function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function fmtPrice(n){return '$'+Math.round(n).toLocaleString('es-CL')}
+function cdnImg(u,w){ if(!u) return u; return u.includes('width=') ? u : u + (u.includes('?')?'&':'?') + 'width=' + w; }
 function loadCart(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{return[]}}
 function saveCart(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(CART))}catch{}}
 
@@ -1433,7 +1439,7 @@ async function populateArmar(){
           const v0 = (p.variants||[])[0] || {};
           const img = p.image || (p.images&&p.images[0]) || '';
           return `<div class="kb-armar-card">
-            <div class="kb-armar-card-img">${img?`<img src="${img}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">`:''}</div>
+            <div class="kb-armar-card-img">${img?`<img src="${cdnImg(img,400)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">`:''}</div>
             <div class="kb-armar-card-name">${escapeHtml(cleanTitle(p.title))}</div>
             <div class="kb-armar-card-price">${fmtPrice(parseFloat(v0.price||0))}</div>
             <button class="kb-armar-plus" aria-label="Agregar" onclick="armarAdd(${i})">+</button>
@@ -1470,7 +1476,7 @@ function armarRender(){
     for (let i=0;i<target;i++){
       const it = armarSel[i];
       s += it
-        ? `<div class="kb-slot filled"><img src="${it.image||''}" alt=""><button class="kb-slot-x" aria-label="Quitar" onclick="armarRemove(${i})">✕</button></div>`
+        ? `<div class="kb-slot filled"><img src="${cdnImg(it.image||'',300)}" alt=""><button class="kb-slot-x" aria-label="Quitar" onclick="armarRemove(${i})">✕</button></div>`
         : '<div class="kb-slot"></div>';
     }
     slots.innerHTML = s;
