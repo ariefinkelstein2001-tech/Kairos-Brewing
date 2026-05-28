@@ -845,6 +845,20 @@ function isMerch(p){
   const t = (p.title || '').toLowerCase();
   return /vaso|jockey|jarra|copa|growler|pin|gorr/.test(t);
 }
+// Cerveza individual (lata): no pack, no destilado, no merch. Detecta por
+// tipo, formato (xxxcc en título o SKU) o colección, para no depender del título.
+function isBeer(p){
+  if (isPack(p) || isDestilado(p) || isMerch(p)) return false;
+  if (/chelada|firulais/i.test(p.title || '')) return false;
+  if (KNOWN_GROUP[p.handle]) return true;
+  const t = (p.title || '').toLowerCase();
+  const type = (p.type || '').toLowerCase();
+  const sku = ((p.variants && p.variants[0] && p.variants[0].sku) || '').toLowerCase();
+  if (type.includes('cerveza')) return true;
+  if (/\d{3}\s*cc/.test(t) || /\d{3}\s*cc/.test(sku)) return true;
+  if ((p.collections || []).some(c => /casa|temporada|artist|chelita/i.test((c.handle||'')+' '+(c.title||'')))) return true;
+  return false;
+}
 function cleanTitle(s){return String(s||'').replace(/24\s*pack\s*473\s*cc?\s*mayorista\s*/gi,'24 Pack ').replace(/\s+/g,' ').trim()}
 
 // Colección de cada cerveza: usa las colecciones de Shopify; si no, mapa conocido.
@@ -929,7 +943,7 @@ function kbAddToCart(btn){
 // ─── POPULATE per view ───────────────────────────────────────────────────────
 async function populateGridFor(view){
   const products = await loadCatalog();
-  const beers = p => isChelita(p) && !isDestilado(p) && !/chelada|firulais/i.test(p.title||'');
+  const beers = isBeer;
   const packs = p => isPack(p) && !/chelada|firulais/i.test(p.title||'');
   if (view === 'home') {
     const ch = document.getElementById('homeChelitas');
