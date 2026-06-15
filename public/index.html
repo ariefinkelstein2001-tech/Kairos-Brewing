@@ -1508,7 +1508,26 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           var plus=t.classList.contains('km-plus'), minus=t.classList.contains('km-minus');
           if(plus||minus){ var inp=t.parentNode.querySelector('.km-qty'); if(inp){ var v=clamp(inp)+(plus?1:-1); if(v<0)v=0; if(v>12)v=12; inp.value=v; window.kmSum(); } }
         });
-        form.addEventListener('submit',function(e){ if(window.kmSum()!==12){ e.preventDefault(); alert('Tu pack tiene que sumar 12 cervezas 🍺'); } });
+        form.addEventListener('submit',function(e){
+          e.preventDefault();
+          if(window.kmSum()!==12){ alert('Tu pack tiene que sumar 12 cervezas 🍺'); return; }
+          var campeon=val('properties[1° Campeón]'), sub=val('properties[2° Subcampeón]'), tercero=val('properties[3° Tercer lugar]'), gol=val('properties[4° Goleador]');
+          if(!campeon||!sub||!tercero||!gol){ alert('Completa tu pronóstico: 1°, 2°, 3° + goleador 🏆'); return; }
+          var styles=[];
+          for(var k=0;k<qtys.length;k++){
+            var v=parseInt(qtys[k].value,10)||0;
+            if(v>0){ var label=qtys[k].name.replace('properties[','').replace(']',''); styles.push(v+'× '+label); }
+          }
+          var attrs={'Mundial 23 - Campeón':campeon,'Mundial 23 - Subcampeón':sub,'Mundial 23 - Tercer lugar':tercero,'Mundial 23 - Goleador':gol,'Mundial 23 - 12 Pack':styles.join(' · ')};
+          var vid=form.elements['id'].value;
+          var ex=null;
+          for(var i=0;i<CART.length;i++){ if(CART[i].variantId===vid){ ex=CART[i]; break; } }
+          if(ex){ ex.qty+=1; ex.attributes=attrs; } else {
+            CART.push({ variantId:vid, name:'Pack Mundialero', image:'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111', price:23000, qty:1, attributes:attrs });
+          }
+          saveCart(); updateCart();
+          if(!cartOpen) toggleCart();
+        });
         window.kmSum();
 
         var fin=new Date('2026-06-27T23:59:59-04:00').getTime();
@@ -2025,8 +2044,12 @@ function doKbCheckout(){
   if (!CART.length) return;
   const items = CART.filter(i => i.variantId).map(i => `${i.variantId}:${i.qty}`).join(',');
   if (!items) { alert('Ningún producto del carro está disponible online'); return; }
-  const url = `https://${SHOPIFY_DOMAIN}/cart/${items}?attributes[source]=kairos-clone`;
-  window.location.href = url;
+  const extra = {};
+  CART.forEach(i => { if (i.attributes) Object.assign(extra, i.attributes); });
+  const params = ['attributes[source]=kairos-clone']
+    .concat(Object.entries(extra).map(([k,v]) => `attributes[${encodeURIComponent(k)}]=${encodeURIComponent(v)}`))
+    .join('&');
+  window.location.href = `https://${SHOPIFY_DOMAIN}/cart/${items}?${params}`;
 }
 
 // ─── BOOT ────────────────────────────────────────────────────────────────────
