@@ -1499,7 +1499,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           if(totalBox){ var msg=s===12?'¡Listo! 🍺':(s<12?('Te faltan '+(12-s)):('Te sobran '+(s-12)));
             totalBox.className='km-total'+(s===12?' ok':(s>12?' bad':''));
             totalBox.innerHTML='Total: <b>'+s+'</b> / 12 · '+msg; }
-          if(buy){ buy.disabled=(s!==12); }
           return s;
         };
         for(var k=0;k<qtys.length;k++){ qtys[k].addEventListener('input',window.kmSum); qtys[k].addEventListener('change',window.kmSum); }
