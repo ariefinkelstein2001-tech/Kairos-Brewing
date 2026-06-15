@@ -88,6 +88,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 .kb-nav-desktop a{cursor:pointer;transition:color .2s;color:var(--text)}
 .kb-nav-desktop a:hover,.kb-nav-desktop a.active{color:var(--orange)}
+.kb-nav-mundial{color:#ffce1f!important;font-weight:700;letter-spacing:.12em}
+.kb-nav-mundial:hover{color:#fff!important}
+.kb-menu-list .kb-nav-mundial{color:#ffce1f}
 .kb-navitem{position:relative;display:flex;align-items:center}
 .kb-caret{font-size:9px;margin-left:5px;opacity:.8}
 .kb-submenu{
@@ -591,6 +594,9 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
   </div>
   <nav class="kb-nav-desktop">
     <div class="kb-navitem">
+      <a href="https://kairos-brewing.com/pages/mundial" class="kb-nav-mundial">MUNDIAL</a>
+    </div>
+    <div class="kb-navitem">
       <a data-route="/cervezas" onclick="go(event)">Cervezas<span class="kb-caret">▼</span></a>
       <div class="kb-submenu">
         <a data-route="/cervezas" onclick="go(event)">Todas</a>
@@ -635,6 +641,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     <div></div>
   </div>
   <div class="kb-menu-list">
+    <a href="https://kairos-brewing.com/pages/mundial" class="kb-nav-mundial">MUNDIAL ⚽</a>
     <a data-route="/cervezas" onclick="go(event)">Cervezas</a>
     <a data-route="/cervezas/de-la-casa" onclick="go(event)" class="kb-sub">De la Casa</a>
     <a data-route="/cervezas/de-temporada" onclick="go(event)" class="kb-sub">De Temporada</a>
@@ -658,6 +665,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
   <div class="kb-view" id="view-home">
     <div class="kb-hero">
       <div class="kb-hero-track" id="kbHeroTrack">
+        <div class="kb-hero-slide"><a href="https://kairos-brewing.com/pages/mundial"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_9_jun_2026_11_32_35_a.m..png?v=1781019490&width=2048" alt="Mundial 23 - Polla Kairos"></a></div>
         <div class="kb-hero-slide"><a data-route="/packs" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/BANNER-_Antofa-_Delivery.png?v=1776363865&width=2048" alt="Delivery Antofagasta"></a></div>
         <div class="kb-hero-slide"><a data-route="/cervezas" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/BANNER_-_SIXPACK_-_otono.webp?v=1774532484&width=2048" alt="Six Pack"></a></div>
         <div class="kb-hero-slide"><a data-route="/cervezas" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/2X1-02.webp?v=1774532490&width=2048" alt="2x1"></a></div>
@@ -1589,6 +1597,46 @@ function doKbCheckout(){
   buildHeroDots();
   showView(viewFromPath(location.pathname));
   resetHeroTimer();
+})();
+</script>
+
+<!-- ===== Popup MUNDIAL ===== -->
+<div id="km-pop-overlay" class="km-pop-overlay" role="dialog" aria-modal="true" aria-label="Polla Mundial Kairos">
+  <div class="km-pop">
+    <button class="km-pop-x" id="km-pop-x" aria-label="Cerrar">✕</button>
+    <a href="https://kairos-brewing.com/pages/mundial" id="km-pop-link" class="km-pop-link">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111" alt="Polla Mundial Kairos - Participa">
+    </a>
+  </div>
+</div>
+<style>
+.km-pop-overlay{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,7,10,.78);backdrop-filter:blur(3px)}
+.km-pop-overlay.km-show{display:flex;animation:kmPopFade .3s ease}
+@keyframes kmPopFade{from{opacity:0}to{opacity:1}}
+.km-pop{position:relative;width:100%;max-width:440px;animation:kmPopIn .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes kmPopIn{from{transform:translateY(30px) scale(.95);opacity:0}to{transform:none;opacity:1}}
+.km-pop-link{display:block;line-height:0}
+.km-pop-link img{width:100%;height:auto;display:block;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+.km-pop-x{position:absolute;top:-14px;right:-14px;z-index:3;width:36px;height:36px;border-radius:50%;cursor:pointer;border:2px solid #fff;background:#06131a;color:#fff;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.5);transition:transform .15s}
+.km-pop-x:hover{transform:scale(1.1);background:#ffce1f;color:#06131a}
+@media(max-width:480px){.km-pop-x{top:-10px;right:-10px}}
+</style>
+<script>
+(function(){
+  var KEY='km_pop_polla_img_v1';
+  var DIAS=2;
+  function seen(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } }
+  function mark(){ try{ localStorage.setItem(KEY, String(Date.now())); }catch(e){} }
+  function fresh(){ var t=seen(); if(!t) return false; return (Date.now()-parseInt(t,10)) < DIAS*86400000; }
+  var ov=document.getElementById('km-pop-overlay');
+  if(!ov || fresh()){ if(ov) ov.remove(); return; }
+  if(document.body && ov.parentNode!==document.body){ document.body.appendChild(ov); }
+  function close(){ mark(); ov.remove(); }
+  document.getElementById('km-pop-x').addEventListener('click', function(e){ e.preventDefault(); close(); });
+  ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+  document.getElementById('km-pop-link').addEventListener('click', mark);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  ov.classList.add('km-show');
 })();
 </script>
 </body>
