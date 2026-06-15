@@ -2099,5 +2099,41 @@ function doKbCheckout(){
   ov.classList.add('km-show');
 })();
 </script>
+
+<!-- ===== Age Gate (+18) ===== -->
+<div id="kbAgeGate" class="kb-age-gate" role="dialog" aria-modal="true" aria-label="Verificación de edad">
+  <div class="kb-age-card">
+    <img class="kb-age-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING.png?v=1769017156&width=300" alt="Kairos Brewing">
+    <p class="kb-age-txt">Estás por ingresar a un mundo de cerveza artesanal. Debes ser mayor de 18 años.</p>
+    <button type="button" class="kb-age-yes" id="kbAgeYes">SOY MAYOR DE 18</button>
+    <a class="kb-age-no" href="https://www.google.com">Salir</a>
+  </div>
+</div>
+<style>
+.kb-age-gate{position:fixed;inset:0;z-index:100000;background:#000;display:flex;align-items:center;justify-content:center;padding:18px}
+.kb-age-card{width:100%;max-width:440px;background:#0a0a0a;border:1px solid var(--orange);border-radius:18px;padding:42px 32px 30px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.kb-age-logo{width:170px;height:auto;display:block;margin:0 auto 28px}
+.kb-age-txt{color:#fff;font-family:var(--font-body);font-size:16px;line-height:1.55;max-width:340px;margin:0 auto 26px}
+.kb-age-yes{width:100%;background:var(--orange);color:#000;border:none;border-radius:8px;padding:16px;font-family:var(--font-body);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;transition:background .15s}
+.kb-age-yes:hover{background:var(--orange-l)}
+.kb-age-no{display:inline-block;margin-top:18px;color:#fff;font-size:14px;text-decoration:underline;opacity:.85}
+.kb-age-no:hover{opacity:1}
+</style>
+<script>
+(function(){
+  var KEY='kb_age_18_v1';
+  var TTL=30*86400000; // 30 días
+  var ok; try{ ok=parseInt(localStorage.getItem(KEY),10); }catch(e){ ok=0; }
+  var gate=document.getElementById('kbAgeGate');
+  if(!gate) return;
+  if(ok && (Date.now()-ok) < TTL){ gate.remove(); return; }
+  document.documentElement.style.overflow='hidden';
+  document.getElementById('kbAgeYes').addEventListener('click', function(){
+    try{ localStorage.setItem(KEY, String(Date.now())); }catch(e){}
+    document.documentElement.style.overflow='';
+    gate.remove();
+  });
+})();
+</script>
 </body>
 </html>
