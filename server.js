@@ -199,6 +199,30 @@ app.get('/api/cart-link', (req, res) => {
 
 app.get('/healthz', (_req, res) => res.json({ ok: true }));
 
+// POST /api/newsletter — suscribe el email a la lista Kairos de Klaviyo (Tc9EC9).
+app.post('/api/newsletter', express.json(), async (req, res) => {
+  try {
+    const { name, email } = req.body || {};
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ success: false, error: 'Email inválido' });
+    }
+    const params = new URLSearchParams();
+    params.set('g', 'Tc9EC9');
+    params.set('email', email);
+    if (name) params.set('$first_name', name);
+    const r = await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+    });
+    const data = await r.json().catch(() => ({}));
+    res.json({ success: !!data.success, data });
+  } catch (e) {
+    console.error('newsletter error:', e.message);
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 // ─── Front estático + SPA ──────────────────────────────────────────────────────
 app.use(express.static(join(__dirname, 'public')));
 

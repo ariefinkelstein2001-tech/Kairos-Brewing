@@ -2373,6 +2373,98 @@ function doKbCheckout(){
 })();
 </script>
 
+<!-- ===== Newsletter popup (Klaviyo · 10% off) ===== -->
+<div id="kbNewsPop" class="kb-news-pop" role="dialog" aria-modal="true" aria-label="Suscríbete">
+  <div class="kb-news-card">
+    <button class="kb-news-x" id="kbNewsX" aria-label="Cerrar">✕</button>
+    <div class="kb-news-img" style="background-image:url('https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Q4A8018.jpg?v=1768830371&width=900')"></div>
+    <div class="kb-news-body">
+      <h2 class="kb-news-h">¿QUIERES RECIBIR 10% EN TU PRIMERA COMPRA?</h2>
+      <p class="kb-news-p">Regístrate para recibir acceso a 10% DE DCTO, nuestras últimas novedades y mejores ofertas.</p>
+      <form id="kbNewsForm" class="kb-news-form">
+        <input class="kb-news-field" name="name" placeholder="Nombre completo" required autocomplete="name">
+        <input class="kb-news-field" name="email" type="email" placeholder="Email" required autocomplete="email">
+        <button type="submit" class="kb-news-btn">INSCRIBIRSE</button>
+      </form>
+      <div class="kb-news-thanks" id="kbNewsThanks">¡Listo! 🍺 Te enviamos tu código del 10% al email.</div>
+      <a class="kb-news-no" id="kbNewsNo">NO, GRACIAS</a>
+    </div>
+  </div>
+</div>
+<style>
+.kb-news-pop{position:fixed;inset:0;z-index:99998;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(3,7,10,.65);backdrop-filter:blur(3px)}
+.kb-news-pop.open{display:flex;animation:kbNewsFade .25s ease}
+@keyframes kbNewsFade{from{opacity:0}to{opacity:1}}
+.kb-news-card{position:relative;display:flex;width:100%;max-width:780px;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55);animation:kbNewsIn .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes kbNewsIn{from{transform:translateY(28px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.kb-news-img{flex:1;min-height:440px;background-size:cover;background-position:center}
+.kb-news-body{flex:1;padding:42px 36px 28px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.kb-news-x{position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:transparent;cursor:pointer;font-size:18px;color:#444;line-height:1;transition:background .15s;z-index:2}
+.kb-news-x:hover{background:#f0eee5}
+.kb-news-h{font-family:var(--font-display);font-size:clamp(22px,2.6vw,28px);color:#1f1f1f;line-height:1.15;letter-spacing:.01em;margin-bottom:14px;text-transform:uppercase}
+.kb-news-p{font-family:var(--font-body);font-size:13px;color:#555;line-height:1.55;margin-bottom:22px}
+.kb-news-form{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.kb-news-field{padding:13px 14px;border:1px solid #d4cfbf;border-radius:6px;font-size:14px;font-family:inherit;color:#1f1f1f;background:#fff;outline:none;transition:border-color .15s}
+.kb-news-field::placeholder{color:#999}
+.kb-news-field:focus{border-color:#1f1f1f}
+.kb-news-btn{background:#1f1f1f;color:#fff;border:none;border-radius:6px;padding:14px;font-family:var(--font-body);font-weight:700;letter-spacing:.18em;font-size:13px;cursor:pointer;transition:background .15s,opacity .15s}
+.kb-news-btn:hover{background:#000}
+.kb-news-btn:disabled{opacity:.6;cursor:wait}
+.kb-news-no{display:inline-block;margin-top:10px;font-family:var(--font-body);font-size:11px;letter-spacing:.18em;font-weight:600;color:#1f1f1f;cursor:pointer;text-decoration:none;text-transform:uppercase}
+.kb-news-no:hover{color:#666}
+.kb-news-thanks{display:none;background:#eaf6ec;color:#1d6a32;padding:14px 16px;border-radius:6px;font-size:14px;line-height:1.4;font-weight:500;margin-bottom:8px}
+@media(max-width:640px){
+  .kb-news-img{display:none}
+  .kb-news-card{max-width:380px}
+  .kb-news-body{padding:36px 26px 24px}
+}
+</style>
+<script>
+(function(){
+  var KEY='kb_news_v1';
+  var DAYS=14;
+  var DELAY=5000;
+  function seen(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } }
+  function mark(){ try{ localStorage.setItem(KEY, String(Date.now())); }catch(e){} }
+  function fresh(){ var t=seen(); if(!t) return false; return (Date.now()-parseInt(t,10)) < DAYS*86400000; }
+  if(fresh()) return;
+  setTimeout(function(){
+    var ov=document.getElementById('kbNewsPop'); if(!ov) return;
+    ov.classList.add('open');
+    function close(){ mark(); ov.classList.remove('open'); setTimeout(function(){ if(ov.parentNode) ov.remove(); }, 250); }
+    document.getElementById('kbNewsX').addEventListener('click', close);
+    document.getElementById('kbNewsNo').addEventListener('click', function(e){ e.preventDefault(); close(); });
+    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && ov.classList.contains('open')) close(); });
+    var form=document.getElementById('kbNewsForm');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var name=form.elements.name.value.trim();
+      var email=form.elements.email.value.trim();
+      var btn=form.querySelector('.kb-news-btn');
+      btn.disabled=true; btn.textContent='ENVIANDO...';
+      fetch('/api/newsletter', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ name:name, email:email }),
+      }).then(function(r){ return r.json(); }).then(function(data){
+        if(data && data.success){
+          form.style.display='none';
+          document.getElementById('kbNewsThanks').style.display='block';
+          setTimeout(close, 3500);
+        } else {
+          btn.disabled=false; btn.textContent='INSCRIBIRSE';
+          alert('No pudimos suscribirte. Revisa el email e intenta de nuevo.');
+        }
+      }).catch(function(){
+        btn.disabled=false; btn.textContent='INSCRIBIRSE';
+        alert('No pudimos suscribirte. Revisa tu conexión e intenta de nuevo.');
+      });
+    });
+  }, DELAY);
+})();
+</script>
+
 <!-- ===== Age Gate (+18) ===== -->
 <div id="kbAgeGate" class="kb-age-gate" role="dialog" aria-modal="true" aria-label="Verificación de edad">
   <div class="kb-age-card">
