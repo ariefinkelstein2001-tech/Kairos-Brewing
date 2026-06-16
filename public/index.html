@@ -2421,22 +2421,35 @@ function doKbCheckout(){
 </style>
 <script>
 (function(){
-  var KEY='kb_news_v1';
-  var DAYS=14;
+  var SUB_KEY='kb_news_subscribed_v1';   // permanente
+  var DIS_KEY='kb_news_dismissed_v1';     // expira a los 14 días
+  var DIS_DAYS=14;
   var DELAY=5000;
-  function seen(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } }
-  function mark(){ try{ localStorage.setItem(KEY, String(Date.now())); }catch(e){} }
-  function fresh(){ var t=seen(); if(!t) return false; return (Date.now()-parseInt(t,10)) < DAYS*86400000; }
-  if(fresh()) return;
+  function isSubscribed(){ try{ return !!localStorage.getItem(SUB_KEY); }catch(e){ return false; } }
+  function isDismissed(){
+    try{
+      var t=localStorage.getItem(DIS_KEY);
+      if(!t) return false;
+      return (Date.now()-parseInt(t,10)) < DIS_DAYS*86400000;
+    } catch(e){ return false; }
+  }
+  function markSubscribed(){ try{ localStorage.setItem(SUB_KEY,'1'); localStorage.removeItem(DIS_KEY); }catch(e){} }
+  function markDismissed(){ try{ localStorage.setItem(DIS_KEY, String(Date.now())); }catch(e){} }
+  if(isSubscribed() || isDismissed()) return;
   setTimeout(function(){
     var ov=document.getElementById('kbNewsPop'); if(!ov) return;
     ov.classList.add('open');
-    function close(){ mark(); ov.classList.remove('open'); setTimeout(function(){ if(ov.parentNode) ov.remove(); }, 250); }
-    document.getElementById('kbNewsX').addEventListener('click', close);
+    function close(opts){
+      if(opts && opts.subscribed) markSubscribed(); else markDismissed();
+      ov.classList.remove('open');
+      setTimeout(function(){ if(ov.parentNode) ov.remove(); }, 250);
+    }
+    document.getElementById('kbNewsX').addEventListener('click', function(){ close(); });
     document.getElementById('kbNewsNo').addEventListener('click', function(e){ e.preventDefault(); close(); });
     ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape' && ov.classList.contains('open')) close(); });
     var form=document.getElementById('kbNewsForm');
+    var thanks=document.getElementById('kbNewsThanks');
     form.addEventListener('submit', function(e){
       e.preventDefault();
       var name=form.elements.name.value.trim();
@@ -2450,8 +2463,13 @@ function doKbCheckout(){
       }).then(function(r){ return r.json(); }).then(function(data){
         if(data && data.success){
           form.style.display='none';
-          document.getElementById('kbNewsThanks').style.display='block';
-          setTimeout(close, 3500);
+          if(data.already_subscribed){
+            thanks.textContent='Ya estás suscrito a nuestras novedades 🍺 No te enviaremos esto de nuevo.';
+          } else {
+            thanks.textContent='¡Listo! 🍺 Te enviamos tu código del 10% al email.';
+          }
+          thanks.style.display='block';
+          setTimeout(function(){ close({subscribed:true}); }, 3500);
         } else {
           btn.disabled=false; btn.textContent='INSCRIBIRSE';
           alert('No pudimos suscribirte. Revisa el email e intenta de nuevo.');

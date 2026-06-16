@@ -200,14 +200,56 @@ app.get('/api/cart-link', (req, res) => {
 app.get('/healthz', (_req, res) => res.json({ ok: true }));
 
 // POST /api/newsletter — suscribe el email a la lista Kairos de Klaviyo (Tc9EC9).
+// Si KLAVIYO_PRIVATE_KEY está seteada en el entorno, primero verifica si el email
+// ya está en la lista y devuelve already_subscribed:true sin re-suscribir.
+const KLAVIYO_LIST_ID = 'Tc9EC9';
+const KLAVIYO_PRIVATE_KEY = process.env.KLAVIYO_PRIVATE_KEY || '';
+const KLAVIYO_REVISION = '2024-10-15';
+
+async function klaviyoFetch(path) {
+  if (!KLAVIYO_PRIVATE_KEY) return null;
+  const r = await fetch(`https://a.klaviyo.com/api${path}`, {
+    headers: {
+      'Authorization': `Klaviyo-API-Key ${KLAVIYO_PRIVATE_KEY}`,
+      'Accept': 'application/vnd.api+json',
+      'revision': KLAVIYO_REVISION,
+    },
+  });
+  if (!r.ok) return null;
+  return r.json().catch(() => null);
+}
+
+async function isAlreadyInList(email) {
+  if (!KLAVIYO_PRIVATE_KEY) return null; // sin private key, no podemos chequear
+  try {
+    const filter = `equals(email,"${email.replace(/"/g, '\\"')}")`;
+    const search = await klaviyoFetch(`/profiles/?filter=${encodeURIComponent(filter)}`);
+    const profiles = search?.data || [];
+    if (!profiles.length) return false;
+    const profileId = profiles[0].id;
+    const memberships = await klaviyoFetch(`/profiles/${profileId}/lists/`);
+    const lists = memberships?.data || [];
+    return lists.some(l => l.id === KLAVIYO_LIST_ID);
+  } catch (e) {
+    console.warn('Klaviyo dedupe check failed:', e.message);
+    return null;
+  }
+}
+
 app.post('/api/newsletter', express.json(), async (req, res) => {
   try {
     const { name, email } = req.body || {};
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ success: false, error: 'Email inválido' });
     }
+    // 1) Si tenemos private key, chequear si ya está en la lista.
+    const inList = await isAlreadyInList(email);
+    if (inList === true) {
+      return res.json({ success: true, already_subscribed: true });
+    }
+    // 2) Suscribir vía endpoint público (legacy, sin auth).
     const params = new URLSearchParams();
-    params.set('g', 'Tc9EC9');
+    params.set('g', KLAVIYO_LIST_ID);
     params.set('email', email);
     if (name) params.set('$first_name', name);
     const r = await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', {
