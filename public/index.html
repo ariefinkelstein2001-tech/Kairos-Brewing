@@ -285,11 +285,22 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 
 /* ── Pack builder (ARMA EL PACK A TU PINTA) ── */
 .kb-pack-builder{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kb-pack-card{justify-content:flex-start}
+.kb-pack-card .kb-pill{margin-top:auto}
 @media(max-width:600px){
-  .kb-pack-builder{gap:8px}
-  .kb-pack-card{gap:8px}
-  .kb-pack-card-name{font-size:16px}
-  .kb-pill{padding:9px 8px;font-size:11px;letter-spacing:.02em;width:100%}
+  .kb-pack-builder{
+    display:flex;grid-template-columns:none;
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    gap:14px;
+    margin:0 calc(-1 * clamp(1rem,4vw,3rem));
+    padding:0 clamp(1rem,4vw,3rem) 8px;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .kb-pack-builder::-webkit-scrollbar{display:none}
+  .kb-pack-card{flex:0 0 72%;scroll-snap-align:start;gap:14px}
+  .kb-pack-card-img{aspect-ratio:1/1;border-radius:22px}
+  .kb-pack-card-name{font-size:22px;white-space:nowrap;letter-spacing:.04em}
+  .kb-pill{padding:13px 18px;font-size:12px;letter-spacing:.06em;width:100%}
 }
 .kb-pack-card{display:flex;flex-direction:column;align-items:center;gap:14px}
 .kb-pack-card-img{width:100%;border-radius:18px;overflow:hidden}
