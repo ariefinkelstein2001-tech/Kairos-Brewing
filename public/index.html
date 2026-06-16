@@ -519,6 +519,31 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-card-name{cursor:pointer;text-decoration:none}
 .kb-card-name:hover{color:var(--orange)}
 
+/* ── Sold out (card) ── */
+.kb-card.sold-out{position:relative}
+.kb-card.sold-out .kb-card-img{opacity:.55;filter:grayscale(.6)}
+.kb-card-soldout{position:absolute;top:12px;left:12px;background:#1f1f1f;color:#fff;font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;padding:6px 12px;border-radius:4px;z-index:2;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.kb-add-out{background:#bdb6a3!important;color:#5a5446!important;cursor:not-allowed}
+
+/* ── Modal disponibilidad por local (PDP) ── */
+.kb-pdp-locs-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--orange-d);cursor:pointer;text-decoration:underline;margin-bottom:18px;font-weight:500}
+.kb-pdp-locs-link:hover{color:#1f1f1f}
+.kb-locs-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:18px;animation:kbLocsFade .2s ease}
+@keyframes kbLocsFade{from{opacity:0}to{opacity:1}}
+.kb-locs-modal{position:relative;width:100%;max-width:420px;background:#fff;border-radius:14px;padding:28px 24px 22px;box-shadow:0 22px 60px rgba(0,0,0,.4);animation:kbLocsIn .25s cubic-bezier(.2,.8,.2,1)}
+@keyframes kbLocsIn{from{transform:translateY(20px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.kb-locs-x{position:absolute;top:10px;right:12px;width:32px;height:32px;border-radius:50%;border:none;background:transparent;cursor:pointer;font-size:16px;color:#666;transition:background .15s}
+.kb-locs-x:hover{background:#f0eee5}
+.kb-locs-modal h3{font-family:var(--font-display);color:#1f1f1f;font-size:22px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:4px}
+.kb-locs-sub{font-size:13px;color:#777;margin-bottom:18px}
+.kb-locs-list{list-style:none;margin:0;padding:0;border-top:1px solid #eee5d5}
+.kb-locs-item{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;border-bottom:1px solid #eee5d5;gap:14px}
+.kb-locs-name{font-family:var(--font-body);font-size:14px;font-weight:600;color:#1f1f1f;letter-spacing:.02em}
+.kb-locs-stock{font-size:13px;font-weight:600;letter-spacing:.02em}
+.kb-locs-item.ok .kb-locs-stock{color:#1d8943}
+.kb-locs-item.no .kb-locs-stock{color:#c4392a}
+.kb-locs-note{font-size:11px;color:#999;margin-top:14px;line-height:1.4;text-align:center}
+
 /* ── Product Page (PDP) ── */
 .kb-pdp{max-width:1180px;margin:0 auto;padding:40px clamp(1rem,4vw,3rem) 80px}
 .kb-pdp-crumbs{display:inline-block;font-size:13px;color:#666;text-decoration:none;margin-bottom:24px;letter-spacing:.04em;text-transform:uppercase;font-weight:500;cursor:pointer}
@@ -1616,6 +1641,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           function toggle(){ if(on){ a.pause(); on=false; icon(); } else { play(); } }
           b.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
           icon();
+          // Autoplay al entrar a la vista Mundial (el click en el link nav cuenta como user gesture).
+          window.kmEnterMundial = function(){ if(!on) play(); };
         }
       }
       if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',init); } else { init(); }
@@ -1726,6 +1753,9 @@ function showView(name){
     document.querySelectorAll('#view-nosotros video').forEach(vid => {
       if (vid.preload !== 'metadata') { vid.preload = 'metadata'; vid.load(); }
     });
+  }
+  if (name === 'mundial' && typeof window.kmEnterMundial === 'function') {
+    window.kmEnterMundial();
   }
   populateGridFor(name);
 }
@@ -1859,15 +1889,20 @@ function buildCard(p){
     variantId: v0.id,
   };
   const phref = `/products/${p.handle}`;
-  return `<div class="kb-card">
-    <a class="kb-card-link" data-route="${phref}" onclick="go(event)" aria-label="${escapeHtml(p.title)}">${visual}</a>
+  const soldOut = (variants||[]).length > 0 && (variants||[]).every(v => !v.available);
+  return `<div class="kb-card${soldOut?' sold-out':''}">
+    <a class="kb-card-link" data-route="${phref}" onclick="go(event)" aria-label="${escapeHtml(p.title)}">
+      ${visual}${soldOut ? '<span class="kb-card-soldout">Agotado</span>' : ''}
+    </a>
     <div class="kb-card-body">
       <a class="kb-card-name" data-route="${phref}" onclick="go(event)">${escapeHtml(cleanTitle(p.title))}</a>
       <div class="kb-card-price">${oldP}${fmtPrice(price)}</div>
       <div class="kb-card-acts">
         ${variantSelect}
-        <div class="kb-qty"><button onclick="cardQty(this,-1)">−</button><span class="v">1</span><button onclick="cardQty(this,1)">+</button></div>
-        <button class="kb-add" data-product='${JSON.stringify(productData).replace(/'/g,"&#39;")}' onclick="kbAddToCart(this)">Añadir al carrito</button>
+        ${soldOut
+          ? `<button class="kb-add kb-add-out" disabled>Sin stock</button>`
+          : `<div class="kb-qty"><button onclick="cardQty(this,-1)">−</button><span class="v">1</span><button onclick="cardQty(this,1)">+</button></div>
+             <button class="kb-add" data-product='${JSON.stringify(productData).replace(/'/g,"&#39;")}' onclick="kbAddToCart(this)">Añadir al carrito</button>`}
       </div>
     </div>
   </div>`;
@@ -2014,6 +2049,7 @@ function renderProductPage(products){
             ${hasSale ? `<span class="kb-pdp-off">Oferta -${off}%</span>` : ''}
           </div>
           <div class="kb-pdp-stock ${inStock?'ok':'no'}" id="pdpStock">${inStock ? `✓ En stock · Despacho RM y Antofagasta` : '✗ Agotado por ahora'}</div>
+          <a class="kb-pdp-locs-link" onclick="pdpShowLocations()">📍 Ver disponibilidad por local</a>
           ${variantOpts}
           <div class="kb-pdp-qty">
             <label>Cantidad</label>
@@ -2031,6 +2067,34 @@ function renderProductPage(products){
       </div>
     </div>`;
   window.__pdpProduct = p;
+}
+function pdpShowLocations(){
+  const p = window.__pdpProduct; if (!p) return;
+  const v = pdpCurrentVariant(); if (!v) return;
+  const locs = v.locations || [];
+  const list = locs.length
+    ? locs.map(l => {
+        const s = parseInt(l.stock,10) || 0;
+        const cls = s > 0 ? 'ok' : 'no';
+        const status = s > 0 ? (s + ' disponibles') : 'Sin stock';
+        return `<li class="kb-locs-item ${cls}"><span class="kb-locs-name">${escapeHtml(l.name)}</span><span class="kb-locs-stock">${status}</span></li>`;
+      }).join('')
+    : '<li class="kb-locs-item"><span>Sin información de locales por ahora.</span></li>';
+  const html = `
+    <div class="kb-locs-overlay" id="kbLocsOverlay" onclick="if(event.target===this) pdpHideLocations()">
+      <div class="kb-locs-modal" role="dialog" aria-modal="true" aria-label="Disponibilidad por local">
+        <button class="kb-locs-x" onclick="pdpHideLocations()" aria-label="Cerrar">✕</button>
+        <h3>Disponibilidad por local</h3>
+        <p class="kb-locs-sub">${escapeHtml(p.title)}${v.title && v.title !== 'Default Title' ? ' · ' + escapeHtml(v.title) : ''}</p>
+        <ul class="kb-locs-list">${list}</ul>
+        <p class="kb-locs-note">Stock en tiempo real. Sujeto a cambios durante el día.</p>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+function pdpHideLocations(){
+  const ov = document.getElementById('kbLocsOverlay');
+  if (ov) ov.remove();
 }
 function pdpSelectImg(btn, url){
   document.querySelectorAll('.kb-pdp-thumb').forEach(b => b.classList.remove('on'));

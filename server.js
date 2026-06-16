@@ -41,6 +41,13 @@ const HIDE_HANDLES = new Set([
 ]);
 const HIDE_TITLE_RX = /^(pago factura|reservas?|recarga)/i;
 
+// Ubicaciones cuyo stock se muestra en la PDP (solo estos 3 locales).
+const SHOW_LOCATIONS = new Set([
+  'kairos garden',
+  'kairos badass',
+  'kairos garden antofagasta',
+]);
+
 // Mayorista = no se muestra en la tienda B2C de Kairos.
 function isMayorista(p) {
   const tags = (p.tags || []).map(t => t.toUpperCase());
@@ -67,6 +74,16 @@ const PRODUCTS_QUERY = `{
               id title price compareAtPrice sku
               availableForSale inventoryQuantity
               image { url }
+              inventoryItem {
+                inventoryLevels(first: 20) {
+                  edges {
+                    node {
+                      location { name }
+                      quantities(names: ["available"]) { name quantity }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -123,6 +140,12 @@ async function loadKairosProducts(force = false) {
         available:      v.availableForSale,
         stock:          v.inventoryQuantity,
         image:          v.image?.url || null,
+        locations: (v.inventoryItem?.inventoryLevels?.edges || [])
+          .map(({ node: lvl }) => ({
+            name: lvl.location?.name || '',
+            stock: (lvl.quantities || []).find(q => q.name === 'available')?.quantity ?? 0,
+          }))
+          .filter(l => SHOW_LOCATIONS.has(l.name.trim().toLowerCase())),
       })),
     }))
     .filter(p => (p.vendor || '').trim().toLowerCase() === VENDOR.toLowerCase())
