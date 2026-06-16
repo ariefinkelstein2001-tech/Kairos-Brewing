@@ -183,6 +183,21 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-hero-dots .d.on{background:#000}
 
 /* ── Section base ── */
+/* ── Mundial strip (home, entre hero y chelitas) ── */
+.kb-mundial-strip{position:relative;overflow:hidden;background:linear-gradient(135deg,#08161f 0%,#102a39 50%,#08161f 100%);border-top:1px solid rgba(255,206,31,.18);border-bottom:1px solid rgba(255,206,31,.18);padding:20px 0}
+.kb-mundial-strip-track{display:flex;width:max-content;gap:14px;padding:0 7px;animation:kb-mstrip-scroll 28s linear infinite;will-change:transform}
+.kb-mundial-strip-track img{flex:0 0 auto;height:190px;width:190px;border-radius:14px;object-fit:cover;display:block;box-shadow:0 6px 18px rgba(0,0,0,.55)}
+@keyframes kb-mstrip-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.kb-mundial-strip-cta{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;background:linear-gradient(180deg,#ffe27a,#ffce1f);color:#06131a;font-family:'Anton','Bebas Neue','Oswald',sans-serif;font-weight:400;letter-spacing:.06em;font-size:clamp(22px,3vw,32px);padding:18px 44px;border-radius:14px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:3px solid #fff;box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,31,.22);transition:transform .15s,box-shadow .15s;white-space:nowrap;animation:kb-mstrip-pulse 2s ease-in-out infinite}
+.kb-mundial-strip-cta:hover{transform:translate(-50%,-50%) scale(1.05);box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 0 6px rgba(255,206,31,.3)}
+@keyframes kb-mstrip-pulse{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,31,.22),0 0 0 rgba(255,206,31,0)}50%{box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,31,.22),0 0 26px rgba(255,206,31,.5)}}
+@media(max-width:640px){
+  .kb-mundial-strip{padding:14px 0}
+  .kb-mundial-strip-track{gap:10px;padding:0 5px}
+  .kb-mundial-strip-track img{height:130px;width:130px;border-radius:12px}
+  .kb-mundial-strip-cta{font-size:17px;padding:12px 22px;border-width:2px}
+}
+
 .kb-section{padding:48px clamp(1rem,4vw,3rem) 44px;max-width:1140px;margin:0 auto}
 .kb-page-head{padding:48px clamp(1rem,4vw,3rem) 32px;text-align:center;border-bottom:1px solid var(--bdr)}
 .kb-page-title{
@@ -774,6 +789,32 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       <button class="kb-hero-arr prev" onclick="heroGo(-1)" aria-label="Anterior">‹</button>
       <button class="kb-hero-arr next" onclick="heroGo(1)" aria-label="Siguiente">›</button>
       <div class="kb-hero-dots" id="kbHeroDots"></div>
+    </div>
+
+    <div class="kb-mundial-strip">
+      <div class="kb-mundial-strip-track" aria-hidden="true">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/91103641-81D7-41A2-8151-A3A1C732FFA5.png?v=1781285166&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2179.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2180.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2181.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2182.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2183.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2184.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2185.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2186.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2188.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/91103641-81D7-41A2-8151-A3A1C732FFA5.png?v=1781285166&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2179.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2180.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2181.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2182.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2183.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2184.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2185.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2186.png?v=1781282235&width=400" alt="">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2188.png?v=1781282235&width=400" alt="">
+      </div>
+      <a class="kb-mundial-strip-cta" data-route="/pages/mundial" onclick="go(event)">⚽ Pack Mundialero</a>
     </div>
 
     <section class="kb-section">
