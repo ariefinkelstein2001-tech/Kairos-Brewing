@@ -2025,7 +2025,6 @@ function renderProductPage(products){
           </div>
           <div class="kb-pdp-acts">
             <button class="kb-pdp-add" id="pdpAdd" onclick="pdpAdd('${p.handle}')" ${inStock?'':'disabled'}>Agregar al carrito</button>
-            <button class="kb-pdp-buy" id="pdpBuy" onclick="pdpBuy('${p.handle}')" ${inStock?'':'disabled'}>Comprar ahora</button>
           </div>
           ${p.descriptionHtml ? `<div class="kb-pdp-desc">${p.descriptionHtml}</div>` : ''}
         </div>
