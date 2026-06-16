@@ -10,7 +10,19 @@ import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
+app.set('trust proxy', true);
 app.use(compression());
+
+// Apex → www (preserva el path). El forwarding de GoDaddy bota la ruta, así
+// que cuando el apex apunte directo a Railway, este middleware se encarga.
+app.use((req, res, next) => {
+  const host = (req.headers.host || '').replace(/:.*$/, '').toLowerCase();
+  if (host === 'kairos-brewing.com') {
+    return res.redirect(301, `https://www.kairos-brewing.com${req.originalUrl}`);
+  }
+  next();
+});
+
 const PORT = process.env.PORT || 3000;
 
 const SHOPIFY_API_VERSION = '2026-04';
