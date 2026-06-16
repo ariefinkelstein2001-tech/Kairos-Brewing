@@ -45,9 +45,9 @@ const PRODUCTS_QUERY = `{
   products(first: 250, query: "status:active") {
     edges {
       node {
-        id title handle productType vendor tags
+        id title handle productType vendor tags descriptionHtml
         featuredImage { url altText }
-        images(first: 2) { edges { node { url altText } } }
+        images(first: 6) { edges { node { url altText } } }
         collections(first: 10) { edges { node { handle title } } }
         variants(first: 25) {
           edges {
@@ -60,6 +60,12 @@ const PRODUCTS_QUERY = `{
         }
       }
     }
+  }
+}`;
+
+const PAGES_QUERY = `{
+  pages(first: 100) {
+    edges { node { id title handle body bodySummary updatedAt } }
   }
 }`;
 
@@ -92,6 +98,7 @@ async function loadKairosProducts(force = false) {
       type:        p.productType,
       vendor:      p.vendor,
       tags:        p.tags,
+      descriptionHtml: p.descriptionHtml || '',
       image:       p.featuredImage?.url || null,
       images:      (p.images?.edges || []).map(e => e.node.url),
       collections: (p.collections?.edges || []).map(e => ({ handle: e.node.handle, title: e.node.title })),
@@ -115,6 +122,38 @@ async function loadKairosProducts(force = false) {
   cacheAt = Date.now();
   return products;
 }
+
+// ─── Páginas de contenido (/pages/{handle}) ──────────────────────────────────
+let pagesCache = null;
+let pagesAt = 0;
+async function loadPages(force = false) {
+  if (!force && pagesCache && Date.now() - pagesAt < TTL_MS) return pagesCache;
+  const resp = await shopifyGraphQL(PAGES_QUERY);
+  if (resp.errors) throw new Error(JSON.stringify(resp.errors));
+  const pages = (resp.data.pages?.edges || []).map(({ node: p }) => ({
+    id:      stripGid(p.id, 'OnlineStorePage'),
+    title:   p.title,
+    handle:  p.handle,
+    body:    p.body || '',
+    summary: p.bodySummary || '',
+    updatedAt: p.updatedAt,
+  }));
+  pagesCache = pages;
+  pagesAt = Date.now();
+  return pages;
+}
+
+app.get('/api/pages', async (req, res) => {
+  if (!TOKEN) return res.status(503).json({ error: 'Shopify no está conectado.' });
+  try {
+    const pages = await loadPages(req.query.refresh === '1');
+    res.set('Cache-Control', 'public, max-age=600');
+    res.json({ count: pages.length, pages });
+  } catch (e) {
+    console.error('Shopify pages error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
 
 app.get('/api/products', async (req, res) => {
   if (!TOKEN) {
@@ -156,7 +195,8 @@ app.listen(PORT, () => {
   if (!SHOP || !TOKEN) {
     console.warn('⚠️  Falta SHOPIFY_STORE_DOMAIN o SHOPIFY_ADMIN_TOKEN — el catálogo no cargará.');
   } else {
-    // Precalienta el caché para que la primera visita no espere a Shopify.
-    loadKairosProducts().then(p => console.log(`Catálogo precargado: ${p.length} productos`)).catch(e => console.warn('Precarga falló:', e.message));
+    // Precalienta los cachés.
+    loadKairosProducts().then(p => console.log(`Catálogo precargado: ${p.length} productos`)).catch(e => console.warn('Precarga productos falló:', e.message));
+    loadPages().then(p => console.log(`Páginas precargadas: ${p.length}`)).catch(e => console.warn('Precarga páginas falló:', e.message));
   }
 });
