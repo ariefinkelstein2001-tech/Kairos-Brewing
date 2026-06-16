@@ -41,12 +41,10 @@ const HIDE_HANDLES = new Set([
 ]);
 const HIDE_TITLE_RX = /^(pago factura|reservas?|recarga)/i;
 
-// Ubicaciones cuyo stock se muestra en la PDP (solo estos 3 locales).
-const SHOW_LOCATIONS = new Set([
-  'kairos garden',
-  'kairos badass',
-  'kairos garden antofagasta',
-]);
+// Ubicaciones cuyo stock se muestra en la PDP (solo los locales de venta).
+// Usamos keywords flexibles porque Shopify puede tenerlos con / sin "Kairos"
+// y con distintos nombres (Garden Vespucio, etc.).
+const SHOW_LOCATION_RX = /garden|badass|antofagasta|vespucio/i;
 
 // Mayorista = no se muestra en la tienda B2C de Kairos.
 function isMayorista(p) {
@@ -145,7 +143,7 @@ async function loadKairosProducts(force = false) {
             name: lvl.location?.name || '',
             stock: (lvl.quantities || []).find(q => q.name === 'available')?.quantity ?? 0,
           }))
-          .filter(l => SHOW_LOCATIONS.has(l.name.trim().toLowerCase())),
+          .filter(l => SHOW_LOCATION_RX.test(l.name)),
       })),
     }))
     .filter(p => (p.vendor || '').trim().toLowerCase() === VENDOR.toLowerCase())
