@@ -1694,7 +1694,23 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           b.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
           icon();
           // Autoplay al entrar a la vista Mundial (el click en el link nav cuenta como user gesture).
-          window.kmEnterMundial = function(){ if(!on) play(); };
+          // En mobile (sobre todo iOS) a veces el navegador bloquea el play; ahí lo
+          // disparamos en el próximo touch/click del usuario.
+          window.kmEnterMundial = function(){
+            if(on) return;
+            var p=a.play();
+            if(p&&p.then){
+              p.then(function(){on=true;icon();}).catch(function(){
+                var trigger=function(){
+                  document.removeEventListener('touchend',trigger,true);
+                  document.removeEventListener('click',trigger,true);
+                  if(!on) play();
+                };
+                document.addEventListener('touchend',trigger,{once:true,capture:true});
+                document.addEventListener('click',trigger,{once:true,capture:true});
+              });
+            } else { on=true; icon(); }
+          };
         }
       }
       if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',init); } else { init(); }
