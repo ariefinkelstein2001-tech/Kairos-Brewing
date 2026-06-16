@@ -677,6 +677,9 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 }
 .kb-ci-qty span{min-width:24px;text-align:center;font-size:13px;font-weight:700}
 .kb-ci-price{font-family:var(--font-body);font-size:14px;font-weight:600;color:var(--orange)}
+.kb-ci-tag{display:inline-block;background:#ffce1f;color:#06131a;font-size:10px;font-weight:800;letter-spacing:.06em;padding:2px 7px;border-radius:9px;margin-left:6px;vertical-align:middle}
+.kb-ci-rm{background:transparent;border:1px solid var(--bdr);color:var(--mut);padding:5px 12px;border-radius:6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-top:6px;transition:color .15s,border-color .15s}
+.kb-ci-rm:hover{color:#fff;border-color:#e23}
 .kb-cart-foot{padding:18px 22px;border-top:1px solid var(--bdr);flex-shrink:0}
 .kb-cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:var(--font-display)}
 .kb-cart-total span:first-child{font-size:14px;letter-spacing:.08em;color:var(--mut);text-transform:uppercase}
@@ -1661,11 +1664,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           }
           var attrs={'Mundial 23 - Campeón':campeon,'Mundial 23 - Subcampeón':sub,'Mundial 23 - Tercer lugar':tercero,'Mundial 23 - Goleador':gol,'Mundial 23 - 12 Pack':styles.join(' · ')};
           var vid=form.elements['id'].value;
-          var ex=null;
-          for(var i=0;i<CART.length;i++){ if(CART[i].variantId===vid){ ex=CART[i]; break; } }
-          if(ex){ ex.qty+=1; ex.attributes=attrs; } else {
-            CART.push({ variantId:vid, name:'Pack Mundialero', image:'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111', price:23000, qty:1, attributes:attrs });
-          }
+          // Cada Pack Mundialero se agrega como línea SEPARADA (no se fusiona) para preservar su pronóstico propio.
+          CART.push({ variantId:vid, name:'Pack Mundialero', image:'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111', price:23000, qty:1, attributes:attrs, isMundial:true });
           saveCart(); updateCart();
           if(!cartOpen) toggleCart();
         });
@@ -2344,20 +2344,31 @@ function updateCart(){
     body.innerHTML = '<div class="kb-cart-empty">Tu carro está vacío.<br>Explora las cervezas para empezar.</div>';
     return;
   }
-  body.innerHTML = CART.map((i,idx) => `
+  let mundialCount = 0;
+  body.innerHTML = CART.map((i,idx) => {
+    if (i.isMundial) mundialCount++;
+    const label = i.isMundial ? `${escapeHtml(i.name)} <span class="kb-ci-tag">#${mundialCount}</span>` : escapeHtml(i.name);
+    const qtyCtrl = i.isMundial
+      ? `<button class="kb-ci-rm" onclick="removeCartItem(${idx})">Quitar</button>`
+      : `<div class="kb-ci-qty">
+           <button onclick="changeCartQty(${idx},-1)">−</button>
+           <span>${i.qty}</span>
+           <button onclick="changeCartQty(${idx},1)">+</button>
+         </div>`;
+    return `
     <div class="kb-ci">
       <div class="kb-ci-img">${i.image ? `<img src="${i.image}" alt="">` : ''}</div>
       <div class="kb-ci-info">
-        <div class="kb-ci-name">${escapeHtml(i.name)}</div>
+        <div class="kb-ci-name">${label}</div>
         <div class="kb-ci-unit">${fmtPrice(i.price)} c/u</div>
-        <div class="kb-ci-qty">
-          <button onclick="changeCartQty(${idx},-1)">−</button>
-          <span>${i.qty}</span>
-          <button onclick="changeCartQty(${idx},1)">+</button>
-        </div>
+        ${qtyCtrl}
       </div>
       <div class="kb-ci-price">${fmtPrice(i.qty * i.price)}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+function removeCartItem(idx){
+  CART.splice(idx,1); saveCart(); updateCart();
 }
 function changeCartQty(idx, delta){
   CART[idx].qty += delta;
@@ -2369,7 +2380,16 @@ function doKbCheckout(){
   const items = CART.filter(i => i.variantId).map(i => `${i.variantId}:${i.qty}`).join(',');
   if (!items) { alert('Ningún producto del carro está disponible online'); return; }
   const extra = {};
-  CART.forEach(i => { if (i.attributes) Object.assign(extra, i.attributes); });
+  let mundialN = 0;
+  CART.forEach(i => {
+    if (!i.attributes) return;
+    if (i.isMundial) {
+      mundialN++;
+      Object.entries(i.attributes).forEach(([k,v]) => { extra[`${k} (Pack ${mundialN})`] = v; });
+    } else {
+      Object.assign(extra, i.attributes);
+    }
+  });
   const params = ['attributes[source]=kairos-clone']
     .concat(Object.entries(extra).map(([k,v]) => `attributes[${encodeURIComponent(k)}]=${encodeURIComponent(v)}`))
     .join('&');
