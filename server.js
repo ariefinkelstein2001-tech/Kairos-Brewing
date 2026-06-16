@@ -72,16 +72,6 @@ const PRODUCTS_QUERY = `{
               id title price compareAtPrice sku
               availableForSale inventoryQuantity
               image { url }
-              inventoryItem {
-                inventoryLevels(first: 20) {
-                  edges {
-                    node {
-                      location { name }
-                      quantities(names: ["available"]) { name quantity }
-                    }
-                  }
-                }
-              }
             }
           }
         }
@@ -138,12 +128,7 @@ async function loadKairosProducts(force = false) {
         available:      v.availableForSale,
         stock:          v.inventoryQuantity,
         image:          v.image?.url || null,
-        locations: (v.inventoryItem?.inventoryLevels?.edges || [])
-          .map(({ node: lvl }) => ({
-            name: lvl.location?.name || '',
-            stock: (lvl.quantities || []).find(q => q.name === 'available')?.quantity ?? 0,
-          }))
-          .filter(l => SHOW_LOCATION_RX.test(l.name)),
+        locations: [],
       })),
     }))
     .filter(p => (p.vendor || '').trim().toLowerCase() === VENDOR.toLowerCase())
