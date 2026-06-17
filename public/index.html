@@ -2509,20 +2509,13 @@ function doKbCheckout(){
 </style>
 <script>
 (function(){
-  var SUB_KEY='kb_news_subscribed_v1';   // permanente
-  var DIS_KEY='kb_news_dismissed_v1';     // expira a los 14 días
-  var DIS_DAYS=14;
+  var SUB_KEY='kb_news_subscribed_v1';   // permanente — se suscribió
+  var DIS_KEY='kb_news_dismissed_v1';     // permanente — cerró sin suscribirse
   var DELAY=5000;
   function isSubscribed(){ try{ return !!localStorage.getItem(SUB_KEY); }catch(e){ return false; } }
-  function isDismissed(){
-    try{
-      var t=localStorage.getItem(DIS_KEY);
-      if(!t) return false;
-      return (Date.now()-parseInt(t,10)) < DIS_DAYS*86400000;
-    } catch(e){ return false; }
-  }
+  function isDismissed(){ try{ return !!localStorage.getItem(DIS_KEY); }catch(e){ return false; } }
   function markSubscribed(){ try{ localStorage.setItem(SUB_KEY,'1'); localStorage.removeItem(DIS_KEY); }catch(e){} }
-  function markDismissed(){ try{ localStorage.setItem(DIS_KEY, String(Date.now())); }catch(e){} }
+  function markDismissed(){ try{ localStorage.setItem(DIS_KEY,'1'); }catch(e){} }
   if(isSubscribed() || isDismissed()) return;
   setTimeout(function(){
     var ov=document.getElementById('kbNewsPop'); if(!ov) return;
