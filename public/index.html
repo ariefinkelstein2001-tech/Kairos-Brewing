@@ -595,8 +595,11 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-wt-was{font-size:18px;text-decoration:line-through;opacity:.55}
 .kb-wt-now{font-family:var(--font-display);font-size:clamp(28px,4vw,38px);font-weight:700}
 .kb-wt-off{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:#e8462e;color:#fff}
-.kb-wt-acts{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.kb-wt-add{font-family:var(--font-body);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;padding:16px 32px;border:none;border-radius:10px;cursor:pointer;transition:transform .15s,opacity .15s,background .15s}
+.kb-wt-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.kb-wt-qty{height:44px;border-radius:10px;overflow:hidden;flex-shrink:0;box-shadow:0 6px 18px rgba(0,0,0,.22)}
+.kb-wt-qty button{width:42px;height:44px;font-size:18px;font-weight:700;border:none;cursor:pointer;transition:background .15s}
+.kb-wt-qty .v{height:44px;line-height:44px;background:#fff;color:#1f1f1f;min-width:48px;flex:0 0 auto;text-align:center;font-weight:700;font-size:15px}
+.kb-wt-add{font-family:var(--font-body);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;padding:0 28px;height:44px;border:none;border-radius:10px;cursor:pointer;transition:transform .15s,opacity .15s,background .15s}
 .kb-wt-add:hover{transform:translateY(-2px)}
 .kb-wt-add:disabled{opacity:.45;cursor:not-allowed}
 .kb-wt-more{font-family:var(--font-body);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:12px;opacity:.8;cursor:pointer;text-decoration:none;color:inherit;border-bottom:1px solid currentColor;padding-bottom:2px}
@@ -611,6 +614,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-wt-arg .kb-wt-add{background:#0d2849;color:#f6b40e}
 .kb-wt-arg .kb-wt-add:hover{background:#1a3a5c}
 .kb-wt-arg .kb-wt-style{border-color:#0d2849;color:#0d2849}
+.kb-wt-arg .kb-wt-qty button{background:#0d2849;color:#f6b40e}
+.kb-wt-arg .kb-wt-qty button:hover{background:#1a3a5c}
 
 /* ── Japón (Osagui) ── */
 .kb-wt-jpn{background:linear-gradient(160deg,#fbf6ed 0%,#ffffff 60%,#fbf6ed 100%);color:#1a1a1a;border:1px solid rgba(188,0,45,.1)}
@@ -621,6 +626,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-wt-jpn .kb-wt-add{background:#bc002d;color:#fff}
 .kb-wt-jpn .kb-wt-add:hover{background:#9c0024}
 .kb-wt-jpn .kb-wt-style{border-color:#bc002d;color:#bc002d}
+.kb-wt-jpn .kb-wt-qty button{background:#bc002d;color:#fff}
+.kb-wt-jpn .kb-wt-qty button:hover{background:#9c0024}
 
 /* ── Perú (Acholada) ── */
 .kb-wt-per{background:linear-gradient(160deg,#c91020 0%,#9b0a18 50%,#c91020 100%);color:#fff}
@@ -631,6 +638,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-wt-per .kb-wt-add{background:#f4c44c;color:#1a1a1a}
 .kb-wt-per .kb-wt-add:hover{background:#ffd66b}
 .kb-wt-per .kb-wt-style{border-color:#f4c44c;color:#f4c44c}
+.kb-wt-per .kb-wt-qty button{background:#f4c44c;color:#1a1a1a}
+.kb-wt-per .kb-wt-qty button:hover{background:#ffd66b}
 
 /* ── Generic fallback ── */
 .kb-wt-other{background:linear-gradient(160deg,#1f1f1f 0%,#111 50%,#1f1f1f 100%);color:#fff}
@@ -2074,7 +2083,8 @@ function renderWorldTour(beers){
           </div>
           <div class="kb-wt-acts">
             ${inStock
-              ? `<button class="kb-wt-add" data-product='${dataAttr}' onclick="kbAddOne(this)">Añadir al carrito</button>`
+              ? `<div class="kb-qty kb-wt-qty"><button onclick="cardQty(this,-1)">−</button><span class="v">1</span><button onclick="cardQty(this,1)">+</button></div>
+                 <button class="kb-wt-add" data-product='${dataAttr}' onclick="wtAddToCart(this)">Añadir al carrito</button>`
               : `<button class="kb-wt-add" disabled>Agotado</button>`}
             <a class="kb-wt-more" data-route="/products/${p.handle}" onclick="go(event)">Ver detalle →</a>
           </div>
@@ -2088,15 +2098,18 @@ function renderWorldTour(beers){
   return head + sections;
 }
 
-function kbAddOne(btn){
+function wtAddToCart(btn){
   const data = JSON.parse(btn.getAttribute('data-product').replace(/&#39;/g,"'"));
   if (!data.variantId) { alert('Este producto no está disponible online'); return; }
+  const section = btn.closest('.kb-wt-beer');
+  const v = section ? section.querySelector('.kb-qty .v') : null;
+  const qty = v ? Math.max(1, parseInt(v.textContent,10) || 1) : 1;
   const ex = CART.find(i => i.variantId === data.variantId);
-  if (ex) ex.qty += 1; else CART.push({ ...data, qty: 1 });
+  if (ex) ex.qty += qty; else CART.push({ ...data, qty });
   saveCart(); updateCart();
   const txt = btn.textContent;
-  btn.textContent = '✓ Agregada';
-  setTimeout(() => { btn.textContent = txt; }, 1600);
+  btn.textContent = `✓ Agregadas (${qty})`;
+  setTimeout(() => { btn.textContent = txt; }, 1800);
   if (!cartOpen) toggleCart();
 }
 
