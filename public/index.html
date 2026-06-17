@@ -135,6 +135,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-menu-list a.active{color:var(--orange)}
 .kb-menu-list a.kb-sub{font-size:18px;padding-left:18px;opacity:.85;margin-top:-4px}
 
+.kb-mgroup{display:flex;flex-direction:column}
+.kb-mhead{display:flex;align-items:center;justify-content:space-between;user-select:none}
+.kb-mcaret{font-size:14px;opacity:.6;transition:transform .25s,opacity .25s,color .25s;margin-left:12px;font-family:var(--font-body);font-weight:400;letter-spacing:0}
+.kb-mgroup.open .kb-mcaret{transform:rotate(180deg);color:var(--orange);opacity:1}
+.kb-mgroup.open .kb-mhead{color:var(--orange)}
+.kb-msub{max-height:0;overflow:hidden;display:flex;flex-direction:column;gap:14px;transition:max-height .3s ease,margin-top .25s ease}
+.kb-mgroup.open .kb-msub{max-height:520px;margin-top:14px}
+.kb-msub a{font-family:var(--font-display);font-size:19px;letter-spacing:.04em;text-transform:uppercase;color:var(--text);cursor:pointer;padding:4px 0 4px 18px;opacity:.85;transition:color .15s,padding-left .15s}
+.kb-msub a:hover{color:var(--orange);padding-left:26px}
+
 /* ── Tema claro (página de Cervezas / colecciones) ── */
 .kb-light{background:var(--cream);color:#1f1f1f;min-height:70vh}
 .kb-collwrap{max-width:1140px;margin:0 auto;padding:52px clamp(1rem,4vw,3rem) 64px}
@@ -850,20 +860,38 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
   </div>
   <div class="kb-menu-list">
     <a data-route="/pages/mundial" onclick="go(event)" class="kb-nav-mundial">MUNDIAL ⚽</a>
-    <a data-route="/cervezas" onclick="go(event)">Cervezas</a>
-    <a data-route="/cervezas/de-la-casa" onclick="go(event)" class="kb-sub">De la Casa</a>
-    <a data-route="/cervezas/de-temporada" onclick="go(event)" class="kb-sub">De Temporada</a>
-    <a data-route="/cervezas/de-artista" onclick="go(event)" class="kb-sub">De Artista</a>
-    <a data-route="/cervezas/world-tour" onclick="go(event)" class="kb-sub">🌎 World Tour</a>
-    <a data-route="/arma-tu-pack/6" onclick="go(event)">Arma tu Pack</a>
-    <a data-route="/arma-tu-pack/6" onclick="go(event)" class="kb-sub">6 Pack</a>
-    <a data-route="/arma-tu-pack/12" onclick="go(event)" class="kb-sub">12 Pack</a>
-    <a data-route="/arma-tu-pack/24" onclick="go(event)" class="kb-sub">24 Pack</a>
+
+    <div class="kb-mgroup">
+      <a class="kb-mhead" onclick="toggleMgroup(this)">Cervezas<span class="kb-mcaret">▾</span></a>
+      <div class="kb-msub">
+        <a data-route="/cervezas" onclick="go(event)">Todas</a>
+        <a data-route="/cervezas/de-la-casa" onclick="go(event)">De la Casa</a>
+        <a data-route="/cervezas/de-temporada" onclick="go(event)">De Temporada</a>
+        <a data-route="/cervezas/de-artista" onclick="go(event)">De Artista</a>
+        <a data-route="/cervezas/world-tour" onclick="go(event)">🌎 World Tour</a>
+      </div>
+    </div>
+
+    <div class="kb-mgroup">
+      <a class="kb-mhead" onclick="toggleMgroup(this)">Arma tu Pack<span class="kb-mcaret">▾</span></a>
+      <div class="kb-msub">
+        <a data-route="/arma-tu-pack/6" onclick="go(event)">6 Pack</a>
+        <a data-route="/arma-tu-pack/12" onclick="go(event)">12 Pack</a>
+        <a data-route="/arma-tu-pack/24" onclick="go(event)">24 Pack</a>
+      </div>
+    </div>
+
     <a data-route="/packs" onclick="go(event)">Packs</a>
     <a data-route="/merch" onclick="go(event)">Merch</a>
-    <a data-route="/restaurantes/badass" onclick="go(event)">Restaurantes</a>
-    <a data-route="/restaurantes/badass" onclick="go(event)" class="kb-sub">Badass</a>
-    <a data-route="/restaurantes/garden" onclick="go(event)" class="kb-sub">Garden</a>
+
+    <div class="kb-mgroup">
+      <a class="kb-mhead" onclick="toggleMgroup(this)">Restaurantes<span class="kb-mcaret">▾</span></a>
+      <div class="kb-msub">
+        <a data-route="/restaurantes/badass" onclick="go(event)">Badass</a>
+        <a data-route="/restaurantes/garden" onclick="go(event)">Garden</a>
+      </div>
+    </div>
+
     <a data-route="/eventos" onclick="go(event)">Eventos</a>
     <a data-route="/nosotros" onclick="go(event)">Nosotros</a>
   </div>
@@ -1934,6 +1962,12 @@ function toggleMenu(){
   document.getElementById('kbMenu').classList.toggle('open', menuOpen);
   document.getElementById('kbBurger').classList.toggle('open', menuOpen);
   document.body.style.overflow = menuOpen ? 'hidden' : '';
+  if (!menuOpen) document.querySelectorAll('.kb-mgroup.open').forEach(g => g.classList.remove('open'));
+}
+function toggleMgroup(el){
+  const g = el.closest('.kb-mgroup'); if (!g) return;
+  document.querySelectorAll('.kb-mgroup.open').forEach(other => { if (other !== g) other.classList.remove('open'); });
+  g.classList.toggle('open');
 }
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
