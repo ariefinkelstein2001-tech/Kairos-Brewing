@@ -570,6 +570,85 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-locs-item.no .kb-locs-stock{color:#c4392a}
 .kb-locs-note{font-size:11px;color:#999;margin-top:14px;line-height:1.4;text-align:center}
 
+/* ── World Tour (sección Cervezas, /cervezas/world-tour) ── */
+.kb-wt{max-width:1240px;margin:0 auto;padding:0 clamp(0px,2vw,16px) 80px}
+.kb-wt-head{text-align:center;padding:56px clamp(1rem,4vw,3rem) 44px;max-width:760px;margin:0 auto}
+.kb-wt-eyebrow{display:inline-block;font-family:var(--font-body);font-weight:700;letter-spacing:.22em;font-size:11px;color:var(--orange-d);text-transform:uppercase;margin-bottom:18px;padding:8px 18px;border:1.5px solid var(--orange);border-radius:30px;background:#fff}
+.kb-wt-title{font-family:var(--font-display);color:#1f1f1f;font-size:clamp(32px,5.5vw,52px);line-height:1.05;text-transform:uppercase;letter-spacing:.02em;margin-bottom:18px}
+.kb-wt-sub{font-family:var(--font-body);color:#555;font-size:16px;line-height:1.65;max-width:560px;margin:0 auto}
+
+.kb-wt-beer{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:clamp(28px,5vw,72px);padding:70px clamp(1.5rem,4vw,4rem);margin:0 0 26px;border-radius:34px;overflow:hidden;isolation:isolate}
+.kb-wt-bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.kb-wt-content{position:relative;z-index:2;max-width:520px}
+.kb-wt-img{position:relative;z-index:1;display:flex;align-items:center;justify-content:center}
+.kb-wt-img img{width:100%;max-width:360px;height:auto;object-fit:contain;filter:drop-shadow(0 30px 50px rgba(0,0,0,.35));animation:kb-wt-bob 5s ease-in-out infinite}
+@keyframes kb-wt-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+.kb-wt-flag{font-size:46px;line-height:1;margin-bottom:6px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.2))}
+.kb-wt-country{font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}
+.kb-wt-name{font-family:var(--font-display);font-size:clamp(40px,7vw,72px);line-height:1;text-transform:uppercase;letter-spacing:.02em;margin-bottom:10px}
+.kb-wt-tagline{font-family:var(--font-body);font-style:italic;font-size:16px;margin-bottom:16px;opacity:.9}
+.kb-wt-style{display:inline-block;font-family:var(--font-body);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px;padding:5px 12px;border-radius:20px;border:1.5px solid currentColor;opacity:.85}
+.kb-wt-desc{font-family:var(--font-body);font-size:15px;line-height:1.65;margin-bottom:22px;max-width:480px}
+.kb-wt-desc p{margin-bottom:8px}
+.kb-wt-desc img,.kb-wt-desc h1,.kb-wt-desc h2,.kb-wt-desc h3{display:none}
+.kb-wt-price-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.kb-wt-was{font-size:18px;text-decoration:line-through;opacity:.55}
+.kb-wt-now{font-family:var(--font-display);font-size:clamp(28px,4vw,38px);font-weight:700}
+.kb-wt-off{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:#e8462e;color:#fff}
+.kb-wt-acts{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.kb-wt-add{font-family:var(--font-body);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;padding:16px 32px;border:none;border-radius:10px;cursor:pointer;transition:transform .15s,opacity .15s,background .15s}
+.kb-wt-add:hover{transform:translateY(-2px)}
+.kb-wt-add:disabled{opacity:.45;cursor:not-allowed}
+.kb-wt-more{font-family:var(--font-body);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:12px;opacity:.8;cursor:pointer;text-decoration:none;color:inherit;border-bottom:1px solid currentColor;padding-bottom:2px}
+.kb-wt-more:hover{opacity:1}
+
+/* ── Argentina (Lanús) ── */
+.kb-wt-arg{background:linear-gradient(160deg,#7ab8e6 0%,#dceaf5 50%,#7ab8e6 100%);color:#0d2849}
+.kb-wt-arg .kb-wt-name{color:#f6b40e;text-shadow:0 3px 0 rgba(13,40,73,.18)}
+.kb-wt-arg .kb-wt-country{color:#f6b40e}
+.kb-wt-arg .kb-wt-bg::before{content:'';position:absolute;top:-120px;right:-100px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,#f6b40e 0%,#f6b40e 40%,transparent 41%);box-shadow:0 0 100px rgba(246,180,14,.45);opacity:.95}
+.kb-wt-arg .kb-wt-bg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 70px,rgba(255,255,255,.12) 70px 71px)}
+.kb-wt-arg .kb-wt-add{background:#0d2849;color:#f6b40e}
+.kb-wt-arg .kb-wt-add:hover{background:#1a3a5c}
+.kb-wt-arg .kb-wt-style{border-color:#0d2849;color:#0d2849}
+
+/* ── Japón (Osagui) ── */
+.kb-wt-jpn{background:linear-gradient(160deg,#fbf6ed 0%,#ffffff 60%,#fbf6ed 100%);color:#1a1a1a;border:1px solid rgba(188,0,45,.1)}
+.kb-wt-jpn .kb-wt-name{color:#bc002d;font-family:'Anton','Bebas Neue','Oswald',sans-serif;letter-spacing:.04em}
+.kb-wt-jpn .kb-wt-country{color:#bc002d}
+.kb-wt-jpn .kb-wt-bg::before{content:'';position:absolute;top:50%;right:-12%;transform:translateY(-50%);width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,#e63946 0%,#bc002d 55%,transparent 56%);opacity:.16}
+.kb-wt-jpn .kb-wt-bg::after{content:'桜';position:absolute;top:18px;left:24px;font-size:130px;color:rgba(255,183,197,.28);font-family:serif;line-height:1;pointer-events:none}
+.kb-wt-jpn .kb-wt-add{background:#bc002d;color:#fff}
+.kb-wt-jpn .kb-wt-add:hover{background:#9c0024}
+.kb-wt-jpn .kb-wt-style{border-color:#bc002d;color:#bc002d}
+
+/* ── Perú (Acholada) ── */
+.kb-wt-per{background:linear-gradient(160deg,#c91020 0%,#9b0a18 50%,#c91020 100%);color:#fff}
+.kb-wt-per .kb-wt-name{color:#f4c44c;text-shadow:0 3px 12px rgba(0,0,0,.3)}
+.kb-wt-per .kb-wt-country{color:#f4c44c}
+.kb-wt-per .kb-wt-bg::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(244,196,76,.14) 0 22px,transparent 22px 50px,rgba(244,196,76,.07) 50px 95px,transparent 95px 125px)}
+.kb-wt-per .kb-wt-bg::after{content:'';position:absolute;bottom:0;left:0;right:0;height:18px;background:repeating-linear-gradient(90deg,#f4c44c 0 14px,#c91020 14px 28px,#fff 28px 30px);opacity:.7}
+.kb-wt-per .kb-wt-add{background:#f4c44c;color:#1a1a1a}
+.kb-wt-per .kb-wt-add:hover{background:#ffd66b}
+.kb-wt-per .kb-wt-style{border-color:#f4c44c;color:#f4c44c}
+
+/* ── Generic fallback ── */
+.kb-wt-other{background:linear-gradient(160deg,#1f1f1f 0%,#111 50%,#1f1f1f 100%);color:#fff}
+.kb-wt-other .kb-wt-name{color:var(--orange)}
+.kb-wt-other .kb-wt-add{background:var(--orange);color:#000}
+
+@media(max-width:820px){
+  .kb-wt-beer{grid-template-columns:1fr;text-align:center;padding:56px clamp(1.2rem,4vw,3rem);border-radius:28px;margin:0 8px 22px}
+  .kb-wt-content{margin:0 auto;max-width:none}
+  .kb-wt-img{order:-1;margin-bottom:8px}
+  .kb-wt-img img{max-width:220px}
+  .kb-wt-name{font-size:44px}
+  .kb-wt-tagline{font-size:14px}
+  .kb-wt-desc{margin-left:auto;margin-right:auto}
+  .kb-wt-price-row,.kb-wt-acts{justify-content:center}
+  .kb-wt-flag{font-size:38px}
+}
+
 /* ── Product Page (PDP) ── */
 .kb-pdp{max-width:1180px;margin:0 auto;padding:40px clamp(1rem,4vw,3rem) 80px}
 .kb-pdp-crumbs{display:inline-block;font-size:13px;color:#666;text-decoration:none;margin-bottom:24px;letter-spacing:.04em;text-transform:uppercase;font-weight:500;cursor:pointer}
@@ -722,6 +801,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
         <a data-route="/cervezas/de-la-casa" onclick="go(event)">De la Casa</a>
         <a data-route="/cervezas/de-temporada" onclick="go(event)">De Temporada</a>
         <a data-route="/cervezas/de-artista" onclick="go(event)">De Artista</a>
+        <a data-route="/cervezas/world-tour" onclick="go(event)">🌎 World Tour</a>
       </div>
     </div>
     <div class="kb-navitem">
@@ -765,6 +845,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     <a data-route="/cervezas/de-la-casa" onclick="go(event)" class="kb-sub">De la Casa</a>
     <a data-route="/cervezas/de-temporada" onclick="go(event)" class="kb-sub">De Temporada</a>
     <a data-route="/cervezas/de-artista" onclick="go(event)" class="kb-sub">De Artista</a>
+    <a data-route="/cervezas/world-tour" onclick="go(event)" class="kb-sub">🌎 World Tour</a>
     <a data-route="/arma-tu-pack/6" onclick="go(event)">Arma tu Pack</a>
     <a data-route="/arma-tu-pack/6" onclick="go(event)" class="kb-sub">6 Pack</a>
     <a data-route="/arma-tu-pack/12" onclick="go(event)" class="kb-sub">12 Pack</a>
@@ -1930,10 +2011,93 @@ const KNOWN_GROUP = {
 };
 function classifyBeer(p){
   const cols = (p.collections || []).map(c => ((c.handle||'')+' '+(c.title||'')).toLowerCase());
+  const h = (p.handle||'').toLowerCase();
+  if (cols.some(c => /world.?tour/.test(c)) || /lanus|lanús|osagui|acholada/.test(h)) return 'tour';
   if (cols.some(c => /artist/.test(c)))            return 'artista';
   if (cols.some(c => /temporada|season|estaci/.test(c))) return 'temporada';
   if (cols.some(c => /casa/.test(c)))              return 'casa';
   return KNOWN_GROUP[p.handle] || 'casa';
+}
+
+// ─── WORLD TOUR (colección temática por país) ────────────────────────────────
+function wtThemeFor(p){
+  const s = ((p.handle||'')+' '+(p.title||'')).toLowerCase();
+  if (/lan[uú]s|argentin/.test(s)) return 'arg';
+  if (/osagui|jap[oó]n/.test(s))   return 'jpn';
+  if (/acholada|per[uú]/.test(s))  return 'per';
+  return 'other';
+}
+const WT_INFO = {
+  arg:   { flag:'🇦🇷', country:'Argentina', tagline:'Cielo, sol y mate en una lata.' },
+  jpn:   { flag:'🇯🇵', country:'Japón',     tagline:'Tradición milenaria, precisión en cada sorbo.' },
+  per:   { flag:'🇵🇪', country:'Perú',      tagline:'Misticismo andino destilado en cerveza.' },
+  other: { flag:'🌎', country:'Del mundo',  tagline:'Una expedición cervecera.' },
+};
+function renderWorldTour(beers){
+  if (!beers || !beers.length) {
+    return '<div class="kb-loading">Próximamente</div>';
+  }
+  const order = ['arg','jpn','per','other'];
+  const themed = beers.map(p => ({ p, theme: wtThemeFor(p) }))
+    .sort((a,b) => order.indexOf(a.theme) - order.indexOf(b.theme));
+
+  const head = `
+    <div class="kb-wt-head">
+      <div class="kb-wt-eyebrow">🌎 Colección World Tour</div>
+      <h1 class="kb-wt-title">Sabores que cruzan fronteras</h1>
+      <p class="kb-wt-sub">Tres cervezas, tres países, tres tradiciones. Una expedición artesanal por los rincones cerveceros del mundo, hecha en Kairos.</p>
+    </div>`;
+
+  const sections = themed.map(({p, theme}) => {
+    const info = WT_INFO[theme];
+    const v0 = (p.variants||[])[0] || {};
+    const price = parseFloat(v0.price || 0);
+    const compareAt = parseFloat(v0.compareAtPrice || 0);
+    const hasSale = compareAt && compareAt > price;
+    const inStock = !!v0.available;
+    const productData = { name: cleanTitle(p.title), image: cdnImg(p.image,200), price, variantId: v0.id };
+    const dataAttr = JSON.stringify(productData).replace(/'/g,"&#39;");
+    return `
+      <section class="kb-wt-beer kb-wt-${theme}">
+        <div class="kb-wt-bg" aria-hidden="true"></div>
+        <div class="kb-wt-content">
+          <div class="kb-wt-flag" aria-hidden="true">${info.flag}</div>
+          <div class="kb-wt-country">${info.country}</div>
+          <h2 class="kb-wt-name">${escapeHtml(cleanTitle(p.title))}</h2>
+          <div class="kb-wt-tagline">${info.tagline}</div>
+          ${p.type ? `<div class="kb-wt-style">${escapeHtml(p.type)}</div>` : ''}
+          ${p.descriptionHtml ? `<div class="kb-wt-desc">${p.descriptionHtml}</div>` : ''}
+          <div class="kb-wt-price-row">
+            ${hasSale ? `<span class="kb-wt-was">${fmtPrice(compareAt)}</span>` : ''}
+            <span class="kb-wt-now">${fmtPrice(price)}</span>
+            ${hasSale ? `<span class="kb-wt-off">Oferta</span>` : ''}
+          </div>
+          <div class="kb-wt-acts">
+            ${inStock
+              ? `<button class="kb-wt-add" data-product='${dataAttr}' onclick="kbAddOne(this)">Añadir al carrito</button>`
+              : `<button class="kb-wt-add" disabled>Agotado</button>`}
+            <a class="kb-wt-more" data-route="/products/${p.handle}" onclick="go(event)">Ver detalle →</a>
+          </div>
+        </div>
+        <div class="kb-wt-img">
+          ${p.image ? `<img src="${cdnImg(p.image,900)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">` : ''}
+        </div>
+      </section>`;
+  }).join('');
+
+  return head + sections;
+}
+
+function kbAddOne(btn){
+  const data = JSON.parse(btn.getAttribute('data-product').replace(/&#39;/g,"'"));
+  if (!data.variantId) { alert('Este producto no está disponible online'); return; }
+  const ex = CART.find(i => i.variantId === data.variantId);
+  if (ex) ex.qty += 1; else CART.push({ ...data, qty: 1 });
+  saveCart(); updateCart();
+  const txt = btn.textContent;
+  btn.textContent = '✓ Agregada';
+  setTimeout(() => { btn.textContent = txt; }, 1600);
+  if (!cartOpen) toggleCart();
 }
 
 function buildCard(p){
@@ -2033,16 +2197,22 @@ async function populateGridFor(view){
     const mode = path.endsWith('de-la-casa') ? 'casa'
       : path.endsWith('de-temporada') ? 'temporada'
       : path.endsWith('de-artista') ? 'artista'
+      : path.endsWith('world-tour') ? 'tour'
       : 'todas';
     if (host.dataset.mode === mode) return;
-    const groups = {casa:[],temporada:[],artista:[]};
+    const groups = {casa:[],temporada:[],artista:[],tour:[]};
     products.filter(beers).forEach(b => { groups[classifyBeer(b)].push(b); });
     const titles = {casa:'Colección de la Casa',temporada:'Colección de Temporada',artista:'Colección de Artistas'};
     const sectionHTML = k => `<h2 class="kb-coll-t">${titles[k]}</h2><div class="kb-grid">${
       groups[k].length ? groups[k].map(buildCard).join('') : '<div class="kb-loading">Próximamente</div>'}</div>`;
-    const html = mode === 'todas'
-      ? ['casa','temporada','artista'].filter(k => groups[k].length).map(sectionHTML).join('')
-      : sectionHTML(mode);
+    let html;
+    if (mode === 'tour') {
+      html = renderWorldTour(groups.tour);
+    } else if (mode === 'todas') {
+      html = ['casa','temporada','artista'].filter(k => groups[k].length).map(sectionHTML).join('');
+    } else {
+      html = sectionHTML(mode);
+    }
     host.innerHTML = html || '<div class="kb-loading">Sin cervezas disponibles</div>';
     host.dataset.mode = mode;
   }
