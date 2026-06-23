@@ -2014,9 +2014,11 @@ function isChelita(p){
   return /(473cc|433cc|lata\s*47)/.test(t) && !/(6\s*pack|12\s*pack|24\s*pack)/.test(t);
 }
 function isPack(p){
+  if (isHiddenProduct(p)) return false;
   return /(6\s*pack|12\s*pack|24\s*pack)/i.test(p.title || '');
 }
 function isDestilado(p){
+  if (isHiddenProduct(p)) return false;
   const t = (p.title || '').toLowerCase();
   const type = (p.type || '').toLowerCase();
   if (/destil|licor|spirit|gin/.test(type)) return true;
@@ -2024,14 +2026,21 @@ function isDestilado(p){
   return /\bgin\b|banny|london dry|whisky|whiskey|\bron\b|\brum\b|vermut|mojito|tonic|rtd/.test(t);
 }
 function isMerch(p){
+  if (isHiddenProduct(p)) return false;
   const t = (p.title || '').toLowerCase();
   return /vaso|jockey|jarra|copa|growler|pin|gorr/.test(t);
 }
 function hasZorbo(p){ return (p.tags || []).map(t => String(t).toUpperCase()).includes('ZORBO'); }
 function isSubscription(p){ return /suscrip|subscription/i.test(p.title || ''); }
+// Productos privados: tag OCULTO / HIDDEN / PRIVADO / LINK-ONLY en Shopify
+// → no aparecen en grillas ni sliders, pero el link directo /products/{handle} igual funciona.
+function isHiddenProduct(p){
+  return (p.tags || []).some(t => /^(oculto|hidden|privado|link.?only)$/i.test(String(t)));
+}
 // Cerveza individual (lata): no pack, no destilado, no merch, no ZORBO, no suscripción.
 // Detecta por tipo, formato (xxxcc en título o SKU) o colección, para no depender del título.
 function isBeer(p){
+  if (isHiddenProduct(p)) return false;
   if (isPack(p) || isDestilado(p) || isMerch(p)) return false;
   if (hasZorbo(p) || isSubscription(p)) return false;
   if (/chelada|firulais/i.test(p.title || '')) return false;
@@ -2223,7 +2232,7 @@ async function populateGridFor(view){
   if (view === 'armar') return populateArmar();
   const products = await loadCatalog();
   const beers = isBeer;
-  const packs = p => (isPack(p) || hasZorbo(p)) && !isSubscription(p) && !isDestilado(p) && !/chelada|firulais/i.test(p.title||'');
+  const packs = p => !isHiddenProduct(p) && (isPack(p) || hasZorbo(p)) && !isSubscription(p) && !isDestilado(p) && !/chelada|firulais/i.test(p.title||'');
   if (view === 'home') {
     const ch = document.getElementById('homeChelitas');
     if (ch && !ch.dataset.done) {
