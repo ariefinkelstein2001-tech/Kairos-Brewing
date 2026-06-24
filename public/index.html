@@ -208,6 +208,41 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   .kb-mundial-strip-cta{font-size:17px;padding:12px 22px;border-width:2px}
 }
 
+/* ── Promo Samba IPA 24 pack (home, debajo de la franja del Mundial) ── */
+.kb-promo-section{padding:32px clamp(1rem,4vw,3rem)}
+.kb-promo-card{position:relative;display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(24px,4vw,52px);align-items:center;background:linear-gradient(135deg,#f5a623 0%,#e0852b 45%,#a8421f 100%);border-radius:28px;padding:clamp(26px,3.5vw,46px);overflow:hidden;box-shadow:0 28px 60px rgba(168,66,31,.35);isolation:isolate}
+.kb-promo-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 0%,rgba(255,206,31,.35),transparent 45%),repeating-linear-gradient(135deg,transparent 0 50px,rgba(255,255,255,.04) 50px 52px);pointer-events:none}
+.kb-promo-card::after{content:'🍺';position:absolute;bottom:-20px;right:-10px;font-size:140px;opacity:.08;transform:rotate(-15deg);pointer-events:none;z-index:0}
+.kb-promo-img{position:relative;display:flex;justify-content:center;align-items:center;z-index:1}
+.kb-promo-img img{width:100%;max-width:320px;height:auto;object-fit:contain;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5));animation:kbPromoBob 3.8s ease-in-out infinite}
+@keyframes kbPromoBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+.kb-promo-body{position:relative;z-index:1;color:#fff}
+.kb-promo-tag{display:inline-flex;align-items:center;gap:6px;background:#1f1f1f;color:#ffce1f;font-family:var(--font-body);font-weight:700;letter-spacing:.16em;font-size:11px;padding:7px 14px;border-radius:30px;margin-bottom:14px;text-transform:uppercase;animation:kbPromoFlash 1.4s ease-in-out infinite;border:1.5px solid rgba(255,206,31,.35)}
+@keyframes kbPromoFlash{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,206,31,.55)}50%{transform:scale(1.05);box-shadow:0 0 0 8px rgba(255,206,31,0)}}
+.kb-promo-title{font-family:var(--font-display);font-size:clamp(38px,6vw,64px);line-height:.95;text-transform:uppercase;margin-bottom:6px;letter-spacing:.02em;color:#fff;text-shadow:0 4px 14px rgba(0,0,0,.35)}
+.kb-promo-subtitle{font-family:var(--font-body);font-weight:600;font-size:16px;margin-bottom:18px;opacity:.95;letter-spacing:.03em}
+.kb-promo-price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.kb-promo-was{font-family:var(--font-body);font-size:22px;text-decoration:line-through;opacity:.6}
+.kb-promo-now{font-family:var(--font-display);font-size:clamp(46px,8vw,72px);font-weight:700;color:#fff;line-height:1;text-shadow:0 6px 18px rgba(0,0,0,.4)}
+.kb-promo-now small{font-size:.5em;font-weight:500;opacity:.85;margin-left:4px}
+.kb-promo-off{background:#1f1f1f;color:#ffce1f;font-family:var(--font-body);font-weight:800;letter-spacing:.08em;font-size:14px;padding:6px 12px;border-radius:6px;text-transform:uppercase;animation:kbPromoFlash 1.4s ease-in-out infinite}
+.kb-promo-meta{font-family:var(--font-body);font-size:14px;margin-bottom:22px;opacity:.95;display:flex;flex-wrap:wrap;gap:8px 14px}
+.kb-promo-meta b{color:#ffce1f;font-weight:700}
+.kb-promo-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#1f1f1f;color:#fff;font-family:var(--font-body);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;padding:18px 36px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 14px 28px rgba(0,0,0,.45);transition:transform .15s,box-shadow .15s;animation:kbPromoPulse 2s ease-in-out infinite}
+.kb-promo-cta:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(0,0,0,.55)}
+.kb-promo-cta:disabled{opacity:.5;cursor:not-allowed;animation:none}
+@keyframes kbPromoPulse{0%,100%{box-shadow:0 14px 28px rgba(0,0,0,.45),0 0 0 0 rgba(255,206,31,.5)}50%{box-shadow:0 14px 28px rgba(0,0,0,.45),0 0 0 14px rgba(255,206,31,0)}}
+@media(max-width:760px){
+  .kb-promo-section{padding:20px clamp(.8rem,3vw,2rem)}
+  .kb-promo-card{grid-template-columns:1fr;text-align:center;padding:36px 24px}
+  .kb-promo-img{order:-1}
+  .kb-promo-img img{max-width:210px}
+  .kb-promo-title{font-size:42px}
+  .kb-promo-price-row{justify-content:center}
+  .kb-promo-meta{justify-content:center}
+  .kb-promo-cta{width:100%}
+}
+
 .kb-section{padding:48px clamp(1rem,4vw,3rem) 44px;max-width:1140px;margin:0 auto}
 .kb-page-head{padding:48px clamp(1rem,4vw,3rem) 32px;text-align:center;border-bottom:1px solid var(--bdr)}
 .kb-page-title{
@@ -938,6 +973,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       </div>
       <a class="kb-mundial-strip-cta" data-route="/pages/mundial" onclick="go(event)">⚽ Pack Mundialero</a>
     </div>
+
+    <section class="kb-section kb-promo-section" id="kbSambaPromo" style="display:none"></section>
 
     <section class="kb-section">
       <h2 class="kb-section-t">Nuestras Chelitas</h2>
@@ -2217,6 +2254,47 @@ function cardQty(btn, delta){
   if (!el) return;
   el.textContent = Math.max(1, Math.min(99, (parseInt(el.textContent,10)||1)+delta));
 }
+
+// ─── Samba IPA 24 pack — promo destacada del home ─────────────────────────────
+function renderSambaPromo(products){
+  const section = document.getElementById('kbSambaPromo');
+  if (!section || section.dataset.done) return;
+  const samba = (products||[]).find(p => /24\s*pack/i.test(p.title||'') && /samba/i.test(p.title||''));
+  if (!samba) return;
+  const v0 = (samba.variants||[])[0] || {};
+  if (!v0.id) return;
+  const price = parseFloat(v0.price || 0);
+  const compareAt = parseFloat(v0.compareAtPrice || 0);
+  const hasSale = compareAt && compareAt > price;
+  const off = hasSale ? Math.round((1 - price/compareAt) * 100) : 0;
+  const inStock = !!v0.available;
+  const ahorro = hasSale ? Math.round(compareAt - price) : 0;
+  const productData = { name: cleanTitle(samba.title), image: cdnImg(samba.image,200), price, variantId: v0.id };
+  const dataAttr = JSON.stringify(productData).replace(/'/g,"&#39;");
+  section.innerHTML = `
+    <div class="kb-promo-card">
+      <div class="kb-promo-img">
+        ${samba.image ? `<img src="${cdnImg(samba.image,700)}" alt="${escapeHtml(samba.title)}" loading="lazy" decoding="async">` : ''}
+      </div>
+      <div class="kb-promo-body">
+        <span class="kb-promo-tag">🔥 Ofertón limitado</span>
+        <h2 class="kb-promo-title">¡Samba do Samba!</h2>
+        <div class="kb-promo-subtitle">24 latas de pura IPA, la indomable.</div>
+        <div class="kb-promo-price-row">
+          ${hasSale ? `<span class="kb-promo-was">${fmtPrice(compareAt)}</span>` : ''}
+          <span class="kb-promo-now">${fmtPrice(price)}</span>
+          ${hasSale ? `<span class="kb-promo-off">-${off}% off</span>` : ''}
+        </div>
+        ${hasSale ? `<div style="font-family:var(--font-body);font-size:13px;color:#ffce1f;font-weight:700;letter-spacing:.04em;margin-bottom:16px">↓ Ahorrás ${fmtPrice(ahorro)} · sale a ${fmtPrice(Math.round(price/24))} la lata 🍺</div>` : ''}
+        <div class="kb-promo-meta"><span><b>5,8%</b> ABV</span> · <span><b>60</b> IBU</span> · <span>American <b>IPA</b></span> · <span><b>24×473cc</b></span></div>
+        ${inStock
+          ? `<button class="kb-promo-cta" data-product='${dataAttr}' onclick="wtAddToCart(this)">🍺 ¡Lo quiero al carrito!</button>`
+          : `<button class="kb-promo-cta" disabled>Agotado por ahora</button>`}
+      </div>
+    </div>`;
+  section.style.display = '';
+  section.dataset.done = '1';
+}
 function onVariantChange(sel){
   const card = sel.closest('.kb-card'); if (!card) return;
   const opt = sel.options[sel.selectedIndex];
@@ -2262,6 +2340,7 @@ async function populateGridFor(view){
       pk.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin packs disponibles</div>';
       pk.dataset.done = '1';
     }
+    renderSambaPromo(products);
   }
   if (view === 'cervezas') {
     const host = document.getElementById('cervezasContent');
