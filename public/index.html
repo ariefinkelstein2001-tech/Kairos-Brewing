@@ -1692,17 +1692,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
                 <div class="km-hint">💡 La lista son solo <b>favoritos sugeridos</b>. Puedes escribir el nombre de <b>cualquier</b> jugador del Mundial.</div>
               </div>
 
-              <div class="km-form-title">📧 Tu email</div>
-              <div class="km-form-sub">Para asociar tu pronóstico con tu compra y avisarte si ganaste. <b style="color:var(--oro-claro)">Usá el mismo email que vas a poner en el checkout.</b></div>
-              <div class="km-field">
-                <label>Email</label>
-                <input type="email" name="properties[Email]" id="km-email" placeholder="tucorreo@ejemplo.com" required autocomplete="email">
-              </div>
-              <div class="km-field">
-                <label>Nombre (opcional)</label>
-                <input type="text" name="properties[Nombre]" id="km-name" placeholder="Cómo te llamás" autocomplete="name">
-              </div>
-
               <button type="submit" id="km-buy" class="km-cta">🍺 Participar y añadir al carrito</button>
               <div class="km-recap" id="km-recap">Tu pronóstico aparecerá acá a medida que elijas 👆</div>
             </form>
@@ -1787,31 +1776,25 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           if(window.kmSum()!==12){ alert('Tu pack tiene que sumar 12 cervezas 🍺'); return; }
           var campeon=val('properties[1° Campeón]'), sub=val('properties[2° Subcampeón]'), tercero=val('properties[3° Tercer lugar]'), gol=val('properties[4° Goleador]');
           if(!campeon||!sub||!tercero||!gol){ alert('Completa tu pronóstico: 1°, 2°, 3° + goleador 🏆'); return; }
-          var email=(form.querySelector('#km-email')||{}).value||'';
-          email=email.trim().toLowerCase();
-          if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ alert('Necesitamos tu email para asociar el pronóstico con la compra 📧'); return; }
-          var nombre=((form.querySelector('#km-name')||{}).value||'').trim();
           var styles=[];
           for(var k=0;k<qtys.length;k++){
             var v=parseInt(qtys[k].value,10)||0;
             if(v>0){ var label=qtys[k].name.replace('properties[','').replace(']',''); styles.push(v+'× '+label); }
           }
           var twelvepack=styles.join(' · ');
-          var attrs={'Mundial 23 - Campeón':campeon,'Mundial 23 - Subcampeón':sub,'Mundial 23 - Tercer lugar':tercero,'Mundial 23 - Goleador':gol,'Mundial 23 - 12 Pack':twelvepack,'Mundial 23 - Email':email};
-          if(nombre) attrs['Mundial 23 - Nombre']=nombre;
+          var attrs={'Mundial 23 - Campeón':campeon,'Mundial 23 - Subcampeón':sub,'Mundial 23 - Tercer lugar':tercero,'Mundial 23 - Goleador':gol,'Mundial 23 - 12 Pack':twelvepack};
           var vid=form.elements['id'].value;
           // Backup en NUESTRO server antes de mandar a Shopify, porque iDTE/Flapp
           // sobreescribe los cart.attributes del pedido cuando emite la boleta.
+          // Sin email: matcheás contra el pedido de Shopify por timestamp.
           fetch('/api/mundial-prediction', {
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify({
-              email: email, name: nombre,
               campeon: campeon, subcampeon: sub, tercero: tercero, goleador: gol,
               twelvepack: twelvepack,
-              packsCount: 1,
             }),
-          }).catch(function(){ /* fire-and-forget; igual seguimos al checkout */ });
+          }).catch(function(){ /* fire-and-forget */ });
           // Cada Pack Mundialero se agrega como línea SEPARADA (no se fusiona) para preservar su pronóstico propio.
           CART.push({ variantId:vid, name:'Pack Mundialero', image:'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111', price:23000, qty:1, attributes:attrs, isMundial:true });
           saveCart(); updateCart();

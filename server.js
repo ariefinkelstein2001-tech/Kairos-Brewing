@@ -204,80 +204,29 @@ app.get('/healthz', (_req, res) => res.json({ ok: true }));
 // iDTE/Flapp sobreescribe los cart.attributes del pedido en Shopify cuando
 // emite la boleta SII, borrando las predicciones. Para no depender de eso,
 // guardamos el pronóstico en NUESTRO server apenas el cliente lo envía, antes
-// del checkout. Así podés cruzarlo con el pedido de Shopify por email.
+// del checkout. Después se cruza por hora con el pedido de Shopify (la
+// diferencia entre submit del form y checkout suele ser 1-3 min).
 const DATA_DIR = process.env.DATA_DIR || join(__dirname, 'data');
 const PREDICTIONS_FILE = join(DATA_DIR, 'mundial-predictions.jsonl');
 const ADMIN_USER = process.env.ADMIN_USER || '';
 const ADMIN_PASS = process.env.ADMIN_PASS || '';
 
-async function savePrediction(record) {
-  try {
-    await mkdir(DATA_DIR, { recursive: true });
-    await appendFile(PREDICTIONS_FILE, JSON.stringify(record) + '\n', 'utf8');
-  } catch (e) {
-    console.error('savePrediction error:', e.message);
-  }
-}
-
-async function pushKlaviyoMundialEvent(record) {
-  if (!KLAVIYO_PRIVATE_KEY || !record.email) return;
-  try {
-    await fetch('https://a.klaviyo.com/api/events/', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Klaviyo-API-Key ${KLAVIYO_PRIVATE_KEY}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.api+json',
-        'revision': KLAVIYO_REVISION,
-      },
-      body: JSON.stringify({
-        data: {
-          type: 'event',
-          attributes: {
-            properties: {
-              campeon: record.campeon,
-              subcampeon: record.subcampeon,
-              tercero: record.tercero,
-              goleador: record.goleador,
-              twelvepack: record.twelvepack,
-              packsCount: record.packsCount,
-              name: record.name,
-              ts: record.ts,
-            },
-            metric: { data: { type: 'metric', attributes: { name: 'Predicción Mundial' } } },
-            profile: { data: { type: 'profile', attributes: { email: record.email } } },
-            time: record.ts,
-          },
-        },
-      }),
-    });
-  } catch (e) {
-    console.warn('Klaviyo event push failed:', e.message);
-  }
-}
-
 app.post('/api/mundial-prediction', express.json(), async (req, res) => {
   try {
-    const body = req.body || {};
+    const b = req.body || {};
     const record = {
       ts: new Date().toISOString(),
-      email: String(body.email || '').trim().toLowerCase(),
-      name:  String(body.name  || '').trim(),
-      campeon:    String(body.campeon    || ''),
-      subcampeon: String(body.subcampeon || ''),
-      tercero:    String(body.tercero    || ''),
-      goleador:   String(body.goleador   || ''),
-      twelvepack: String(body.twelvepack || ''),
-      packsCount: parseInt(body.packsCount, 10) || 1,
-      ua: String(req.headers['user-agent'] || ''),
-      ip: req.ip || '',
+      campeon:    String(b.campeon    || ''),
+      subcampeon: String(b.subcampeon || ''),
+      tercero:    String(b.tercero    || ''),
+      goleador:   String(b.goleador   || ''),
+      twelvepack: String(b.twelvepack || ''),
     };
-    if (!record.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(record.email)) {
-      return res.status(400).json({ ok: false, error: 'Email inválido' });
+    if (!record.campeon && !record.goleador) {
+      return res.status(400).json({ ok: false, error: 'Faltan datos' });
     }
-    console.log('🍺 Mundial prediction:', JSON.stringify(record));
-    await savePrediction(record);
-    pushKlaviyoMundialEvent(record).catch(() => {});
+    await mkdir(DATA_DIR, { recursive: true });
+    await appendFile(PREDICTIONS_FILE, JSON.stringify(record) + '\n', 'utf8');
     res.json({ ok: true });
   } catch (e) {
     console.error('mundial-prediction error:', e.message);
@@ -311,7 +260,7 @@ app.get('/api/admin/predictions', async (req, res) => {
     const raw = await readFile(PREDICTIONS_FILE, 'utf8').catch(() => '');
     const records = raw.split('\n').filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
     if (req.query.format === 'csv') {
-      const cols = ['ts','email','name','campeon','subcampeon','tercero','goleador','twelvepack','packsCount'];
+      const cols = ['ts','campeon','subcampeon','tercero','goleador','twelvepack'];
       const escape = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
       const csv = '﻿' + [cols.join(',')].concat(records.map(r => cols.map(c => escape(r[c])).join(','))).join('\n');
       res.set('Content-Type', 'text/csv; charset=utf-8');
