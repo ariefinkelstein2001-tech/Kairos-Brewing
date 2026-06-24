@@ -2623,15 +2623,17 @@ function doKbCheckout(){
   const items = CART.filter(i => i.variantId).map(i => `${i.variantId}:${i.qty}`).join(',');
   if (!items) { alert('Ningún producto del carro está disponible online'); return; }
   const extra = {};
-  let mundialN = 0;
-  CART.forEach(i => {
-    if (!i.attributes) return;
-    if (i.isMundial) {
-      mundialN++;
-      Object.entries(i.attributes).forEach(([k,v]) => { extra[`${k} (Pack ${mundialN})`] = v; });
-    } else {
-      Object.assign(extra, i.attributes);
-    }
+  // Atributos no-Mundial: merge directo.
+  CART.forEach(i => { if (i.attributes && !i.isMundial) Object.assign(extra, i.attributes); });
+  // Mundial: el 1er pack usa nombres ORIGINALES (sin sufijo) para que el mapeo
+  // CSV de Zorbo siga llenando las columnas 1er/2do/3er lugar y Goleador.
+  // Packs 2+ usan sufijo "(Pack N)" para no pisar el primero.
+  const mundialItems = CART.filter(i => i.isMundial && i.attributes);
+  mundialItems.forEach((i, idx) => {
+    Object.entries(i.attributes).forEach(([k,v]) => {
+      const key = idx === 0 ? k : `${k} (Pack ${idx + 1})`;
+      extra[key] = v;
+    });
   });
   const params = ['attributes[source]=kairos-clone']
     .concat(Object.entries(extra).map(([k,v]) => `attributes[${encodeURIComponent(k)}]=${encodeURIComponent(v)}`))
