@@ -834,8 +834,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 
 <div class="kb-marquee" aria-label="Anuncios">
   <div class="kb-marquee-track" aria-hidden="true">
-    <span>🚚 Envíos GRATIS sobre los 50 mil. A toda RM y Antofagasta • 📍 Retiro GRATIS en: Badass Parque Arauco, Kairos Garden Vespucio y Kairos Garden Antofagasta •</span>
-    <span>🚚 Envíos GRATIS sobre los 50 mil. A toda RM y Antofagasta • 📍 Retiro GRATIS en: Badass Parque Arauco, Kairos Garden Vespucio y Kairos Garden Antofagasta •</span>
+    <span>🚚 Envíos GRATIS sobre los 50 mil en RM • 📍 Retiro GRATIS en: Badass Parque Arauco, Kairos Garden Vespucio y Kairos Garden Antofagasta •</span>
+    <span>🚚 Envíos GRATIS sobre los 50 mil en RM • 📍 Retiro GRATIS en: Badass Parque Arauco, Kairos Garden Vespucio y Kairos Garden Antofagasta •</span>
   </div>
 </div>
 
@@ -2438,7 +2438,7 @@ function renderProductPage(products){
             <span class="kb-pdp-now" id="pdpPrice">${fmtPrice(price)}</span>
             ${hasSale ? `<span class="kb-pdp-off">Oferta -${off}%</span>` : ''}
           </div>
-          <div class="kb-pdp-stock ${inStock?'ok':'no'}" id="pdpStock">${inStock ? `✓ En stock · Despacho RM y Antofagasta` : '✗ Agotado por ahora'}</div>
+          <div class="kb-pdp-stock ${inStock?'ok':'no'}" id="pdpStock">${inStock ? `✓ En stock · Despacho RM` : '✗ Agotado por ahora'}</div>
           <a class="kb-pdp-locs-link" onclick="pdpShowLocations()">📍 Ver disponibilidad por local</a>
           ${variantOpts}
           <div class="kb-pdp-qty">
@@ -2507,7 +2507,7 @@ function pdpSetVariant(sel){
   if (priceBox) priceBox.innerHTML = `${hasSale ? `<span class="kb-pdp-was">${fmtPrice(compare)}</span>` : ''}<span class="kb-pdp-now" id="pdpPrice">${fmtPrice(price)}</span>${hasSale ? `<span class="kb-pdp-off">Oferta -${off}%</span>` : ''}`;
   const stockBox = document.getElementById('pdpStock');
   const available = opt.dataset.available === '1';
-  if (stockBox){ stockBox.className = `kb-pdp-stock ${available?'ok':'no'}`; stockBox.textContent = available ? '✓ En stock · Despacho RM y Antofagasta' : '✗ Agotado por ahora'; }
+  if (stockBox){ stockBox.className = `kb-pdp-stock ${available?'ok':'no'}`; stockBox.textContent = available ? '✓ En stock · Despacho RM' : '✗ Agotado por ahora'; }
   ['pdpAdd','pdpBuy'].forEach(id => { const b=document.getElementById(id); if(b) b.disabled=!available; });
 }
 function pdpCurrentVariant(){
