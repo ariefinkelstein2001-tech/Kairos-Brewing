@@ -1772,33 +1772,13 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           if(plus||minus){ var inp=t.parentNode.querySelector('.km-qty'); if(inp){ var v=clamp(inp)+(plus?1:-1); if(v<0)v=0; if(v>12)v=12; inp.value=v; window.kmSum(); } }
         });
         form.addEventListener('submit',function(e){
-          e.preventDefault();
-          if(window.kmSum()!==12){ alert('Tu pack tiene que sumar 12 cervezas 🍺'); return; }
+          if(window.kmSum()!==12){ e.preventDefault(); alert('Tu pack tiene que sumar 12 cervezas 🍺'); return; }
           var campeon=val('properties[1° Campeón]'), sub=val('properties[2° Subcampeón]'), tercero=val('properties[3° Tercer lugar]'), gol=val('properties[4° Goleador]');
-          if(!campeon||!sub||!tercero||!gol){ alert('Completa tu pronóstico: 1°, 2°, 3° + goleador 🏆'); return; }
-          var styles=[];
-          for(var k=0;k<qtys.length;k++){
-            var v=parseInt(qtys[k].value,10)||0;
-            if(v>0){ var label=qtys[k].name.replace('properties[','').replace(']',''); styles.push(v+'× '+label); }
-          }
-          var twelvepack=styles.join(' · ');
-          var attrs={'Mundial 23 - Campeón':campeon,'Mundial 23 - Subcampeón':sub,'Mundial 23 - Tercer lugar':tercero,'Mundial 23 - Goleador':gol,'Mundial 23 - 12 Pack':twelvepack};
-          var vid=form.elements['id'].value;
-          // Backup en NUESTRO server antes de mandar a Shopify, porque iDTE/Flapp
-          // sobreescribe los cart.attributes del pedido cuando emite la boleta.
-          // Sin email: matcheás contra el pedido de Shopify por timestamp.
-          fetch('/api/mundial-prediction', {
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({
-              campeon: campeon, subcampeon: sub, tercero: tercero, goleador: gol,
-              twelvepack: twelvepack,
-            }),
-          }).catch(function(){ /* fire-and-forget */ });
-          // Cada Pack Mundialero se agrega como línea SEPARADA (no se fusiona) para preservar su pronóstico propio.
-          CART.push({ variantId:vid, name:'Pack Mundialero', image:'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111', price:23000, qty:1, attributes:attrs, isMundial:true });
-          saveCart(); updateCart();
-          if(!cartOpen) toggleCart();
+          if(!campeon||!sub||!tercero||!gol){ e.preventDefault(); alert('Completa tu pronóstico: 1°, 2°, 3° + goleador 🏆'); return; }
+          // Validación OK → el form POSTea nativamente a Shopify /cart/add con todas
+          // las `properties[...]` como line item properties. Shopify las guarda en la
+          // línea del pedido y NO las toca iDTE/Flapp al emitir la boleta SII.
+          // Después de añadir, return_to=/cart redirige al carrito de Shopify.
         });
         window.kmSum();
 

@@ -7,7 +7,6 @@ import express from 'express';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { mkdir, appendFile, readFile } from 'fs/promises';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -199,79 +198,6 @@ app.get('/api/cart-link', (req, res) => {
 });
 
 app.get('/healthz', (_req, res) => res.json({ ok: true }));
-
-// ─── Backup de predicciones del Mundial ───────────────────────────────────────
-// iDTE/Flapp sobreescribe los cart.attributes del pedido en Shopify cuando
-// emite la boleta SII, borrando las predicciones. Para no depender de eso,
-// guardamos el pronóstico en NUESTRO server apenas el cliente lo envía, antes
-// del checkout. Después se cruza por hora con el pedido de Shopify (la
-// diferencia entre submit del form y checkout suele ser 1-3 min).
-const DATA_DIR = process.env.DATA_DIR || join(__dirname, 'data');
-const PREDICTIONS_FILE = join(DATA_DIR, 'mundial-predictions.jsonl');
-const ADMIN_USER = process.env.ADMIN_USER || '';
-const ADMIN_PASS = process.env.ADMIN_PASS || '';
-
-app.post('/api/mundial-prediction', express.json(), async (req, res) => {
-  try {
-    const b = req.body || {};
-    const record = {
-      ts: new Date().toISOString(),
-      campeon:    String(b.campeon    || ''),
-      subcampeon: String(b.subcampeon || ''),
-      tercero:    String(b.tercero    || ''),
-      goleador:   String(b.goleador   || ''),
-      twelvepack: String(b.twelvepack || ''),
-    };
-    if (!record.campeon && !record.goleador) {
-      return res.status(400).json({ ok: false, error: 'Faltan datos' });
-    }
-    await mkdir(DATA_DIR, { recursive: true });
-    await appendFile(PREDICTIONS_FILE, JSON.stringify(record) + '\n', 'utf8');
-    res.json({ ok: true });
-  } catch (e) {
-    console.error('mundial-prediction error:', e.message);
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-
-function requireAdmin(req, res) {
-  if (!ADMIN_USER || !ADMIN_PASS) {
-    res.status(503).json({ error: 'Admin no configurado. Falta ADMIN_USER y ADMIN_PASS en Railway.' });
-    return false;
-  }
-  const h = req.headers.authorization || '';
-  if (!h.startsWith('Basic ')) {
-    res.set('WWW-Authenticate', 'Basic realm="Kairos Admin"');
-    res.status(401).end('Auth requerida');
-    return false;
-  }
-  try {
-    const [u, p] = Buffer.from(h.slice(6), 'base64').toString('utf8').split(':');
-    if (u === ADMIN_USER && p === ADMIN_PASS) return true;
-  } catch {}
-  res.set('WWW-Authenticate', 'Basic realm="Kairos Admin"');
-  res.status(401).end('Credenciales inválidas');
-  return false;
-}
-
-app.get('/api/admin/predictions', async (req, res) => {
-  if (!requireAdmin(req, res)) return;
-  try {
-    const raw = await readFile(PREDICTIONS_FILE, 'utf8').catch(() => '');
-    const records = raw.split('\n').filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
-    if (req.query.format === 'csv') {
-      const cols = ['ts','campeon','subcampeon','tercero','goleador','twelvepack'];
-      const escape = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
-      const csv = '﻿' + [cols.join(',')].concat(records.map(r => cols.map(c => escape(r[c])).join(','))).join('\n');
-      res.set('Content-Type', 'text/csv; charset=utf-8');
-      res.set('Content-Disposition', `attachment; filename="mundial-predictions-${new Date().toISOString().slice(0,10)}.csv"`);
-      return res.send(csv);
-    }
-    res.json({ count: records.length, predictions: records });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
 
 // POST /api/newsletter — suscribe el email a la lista Kairos de Klaviyo (Tc9EC9).
 // Si KLAVIYO_PRIVATE_KEY está seteada en el entorno, primero verifica si el email
