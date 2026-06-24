@@ -1772,13 +1772,37 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           if(plus||minus){ var inp=t.parentNode.querySelector('.km-qty'); if(inp){ var v=clamp(inp)+(plus?1:-1); if(v<0)v=0; if(v>12)v=12; inp.value=v; window.kmSum(); } }
         });
         form.addEventListener('submit',function(e){
-          if(window.kmSum()!==12){ e.preventDefault(); alert('Tu pack tiene que sumar 12 cervezas 🍺'); return; }
+          e.preventDefault();
+          if(window.kmSum()!==12){ alert('Tu pack tiene que sumar 12 cervezas 🍺'); return; }
           var campeon=val('properties[1° Campeón]'), sub=val('properties[2° Subcampeón]'), tercero=val('properties[3° Tercer lugar]'), gol=val('properties[4° Goleador]');
-          if(!campeon||!sub||!tercero||!gol){ e.preventDefault(); alert('Completa tu pronóstico: 1°, 2°, 3° + goleador 🏆'); return; }
-          // Validación OK → el form POSTea nativamente a Shopify /cart/add con todas
-          // las `properties[...]` como line item properties. Shopify las guarda en la
-          // línea del pedido y NO las toca iDTE/Flapp al emitir la boleta SII.
-          // Después de añadir, return_to=/cart redirige al carrito de Shopify.
+          if(!campeon||!sub||!tercero||!gol){ alert('Completa tu pronóstico: 1°, 2°, 3° + goleador 🏆'); return; }
+          // Reúno TODAS las properties del form (los 11 estilos con qty>0 + las 4 predicciones).
+          // Estas viajan al pedido como LINE ITEM PROPERTIES (no como cart attributes),
+          // así iDTE no las toca al emitir la boleta SII.
+          var properties = {};
+          for (var ei=0; ei<form.elements.length; ei++) {
+            var el=form.elements[ei], nm=el.name||'';
+            if (nm.indexOf('properties[')!==0 || nm.charAt(nm.length-1)!==']') continue;
+            var key=nm.slice(11,-1);
+            if (el.type==='number') {
+              var n=parseInt(el.value,10)||0;
+              if (n>0) properties[key]=String(n);
+            } else if ((el.value||'').trim()) {
+              properties[key]=el.value.trim();
+            }
+          }
+          // Resumen visible en el drawer del SPA.
+          var styles=[];
+          for (var k=0;k<qtys.length;k++){
+            var v=parseInt(qtys[k].value,10)||0;
+            if(v>0){ var lbl=qtys[k].name.replace('properties[','').replace(']',''); styles.push(v+'× '+lbl); }
+          }
+          var attrsDisplay={'Campeón':campeon,'Subcampeón':sub,'Tercer lugar':tercero,'Goleador':gol,'12 pack':styles.join(' · ')};
+          var vid=form.elements['id'].value;
+          // Cada Pack Mundialero se agrega como LÍNEA SEPARADA con SUS propias properties.
+          CART.push({ variantId:vid, name:'Pack Mundialero', image:'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111', price:23000, qty:1, properties:properties, attributes:attrsDisplay, isMundial:true });
+          saveCart(); updateCart();
+          if(!cartOpen) toggleCart();
         });
         window.kmSum();
 
@@ -2612,25 +2636,37 @@ function changeCartQty(idx, delta){
 }
 function doKbCheckout(){
   if (!CART.length) return;
-  const items = CART.filter(i => i.variantId).map(i => `${i.variantId}:${i.qty}`).join(',');
-  if (!items) { alert('Ningún producto del carro está disponible online'); return; }
-  const extra = {};
-  // Atributos no-Mundial: merge directo.
-  CART.forEach(i => { if (i.attributes && !i.isMundial) Object.assign(extra, i.attributes); });
-  // Mundial: el 1er pack usa nombres ORIGINALES (sin sufijo) para que el mapeo
-  // CSV de Zorbo siga llenando las columnas 1er/2do/3er lugar y Goleador.
-  // Packs 2+ usan sufijo "(Pack N)" para no pisar el primero.
-  const mundialItems = CART.filter(i => i.isMundial && i.attributes);
-  mundialItems.forEach((i, idx) => {
-    Object.entries(i.attributes).forEach(([k,v]) => {
-      const key = idx === 0 ? k : `${k} (Pack ${idx + 1})`;
-      extra[key] = v;
-    });
+  const valid = CART.filter(i => i.variantId);
+  if (!valid.length) { alert('Ningún producto del carro está disponible online'); return; }
+
+  // POST bulk a /cart/add de Shopify con todas las líneas + sus line item
+  // properties (donde están las predicciones del Mundial). iDTE/Flapp NO
+  // toca las properties de línea, así que las predicciones quedan a salvo.
+  // return_to=/checkout salta el carrito de Shopify y va directo al checkout.
+  const f = document.createElement('form');
+  f.method = 'POST';
+  f.action = `https://${SHOPIFY_DOMAIN}/cart/add`;
+  f.style.display = 'none';
+  function add(name, value){
+    const i = document.createElement('input');
+    i.type = 'hidden';
+    i.name = name;
+    i.value = String(value);
+    f.appendChild(i);
+  }
+  valid.forEach((item, idx) => {
+    add(`items[${idx}][id]`, item.variantId);
+    add(`items[${idx}][quantity]`, item.qty);
+    if (item.properties) {
+      Object.entries(item.properties).forEach(([k, v]) => {
+        add(`items[${idx}][properties][${k}]`, v);
+      });
+    }
   });
-  const params = ['attributes[source]=kairos-clone']
-    .concat(Object.entries(extra).map(([k,v]) => `attributes[${encodeURIComponent(k)}]=${encodeURIComponent(v)}`))
-    .join('&');
-  window.location.href = `https://${SHOPIFY_DOMAIN}/cart/${items}?${params}`;
+  add('attributes[source]', 'kairos-clone');
+  add('return_to', '/checkout');
+  document.body.appendChild(f);
+  f.submit();
 }
 
 // ─── BOOT ────────────────────────────────────────────────────────────────────
