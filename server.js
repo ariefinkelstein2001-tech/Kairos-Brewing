@@ -7,6 +7,7 @@ import express from 'express';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { mkdir, appendFile, readFile } from 'fs/promises';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -198,6 +199,130 @@ app.get('/api/cart-link', (req, res) => {
 });
 
 app.get('/healthz', (_req, res) => res.json({ ok: true }));
+
+// ─── Backup de predicciones del Mundial ───────────────────────────────────────
+// iDTE/Flapp sobreescribe los cart.attributes del pedido en Shopify cuando
+// emite la boleta SII, borrando las predicciones. Para no depender de eso,
+// guardamos el pronóstico en NUESTRO server apenas el cliente lo envía, antes
+// del checkout. Así podés cruzarlo con el pedido de Shopify por email.
+const DATA_DIR = process.env.DATA_DIR || join(__dirname, 'data');
+const PREDICTIONS_FILE = join(DATA_DIR, 'mundial-predictions.jsonl');
+const ADMIN_USER = process.env.ADMIN_USER || '';
+const ADMIN_PASS = process.env.ADMIN_PASS || '';
+
+async function savePrediction(record) {
+  try {
+    await mkdir(DATA_DIR, { recursive: true });
+    await appendFile(PREDICTIONS_FILE, JSON.stringify(record) + '\n', 'utf8');
+  } catch (e) {
+    console.error('savePrediction error:', e.message);
+  }
+}
+
+async function pushKlaviyoMundialEvent(record) {
+  if (!KLAVIYO_PRIVATE_KEY || !record.email) return;
+  try {
+    await fetch('https://a.klaviyo.com/api/events/', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Klaviyo-API-Key ${KLAVIYO_PRIVATE_KEY}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.api+json',
+        'revision': KLAVIYO_REVISION,
+      },
+      body: JSON.stringify({
+        data: {
+          type: 'event',
+          attributes: {
+            properties: {
+              campeon: record.campeon,
+              subcampeon: record.subcampeon,
+              tercero: record.tercero,
+              goleador: record.goleador,
+              twelvepack: record.twelvepack,
+              packsCount: record.packsCount,
+              name: record.name,
+              ts: record.ts,
+            },
+            metric: { data: { type: 'metric', attributes: { name: 'Predicción Mundial' } } },
+            profile: { data: { type: 'profile', attributes: { email: record.email } } },
+            time: record.ts,
+          },
+        },
+      }),
+    });
+  } catch (e) {
+    console.warn('Klaviyo event push failed:', e.message);
+  }
+}
+
+app.post('/api/mundial-prediction', express.json(), async (req, res) => {
+  try {
+    const body = req.body || {};
+    const record = {
+      ts: new Date().toISOString(),
+      email: String(body.email || '').trim().toLowerCase(),
+      name:  String(body.name  || '').trim(),
+      campeon:    String(body.campeon    || ''),
+      subcampeon: String(body.subcampeon || ''),
+      tercero:    String(body.tercero    || ''),
+      goleador:   String(body.goleador   || ''),
+      twelvepack: String(body.twelvepack || ''),
+      packsCount: parseInt(body.packsCount, 10) || 1,
+      ua: String(req.headers['user-agent'] || ''),
+      ip: req.ip || '',
+    };
+    if (!record.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(record.email)) {
+      return res.status(400).json({ ok: false, error: 'Email inválido' });
+    }
+    console.log('🍺 Mundial prediction:', JSON.stringify(record));
+    await savePrediction(record);
+    pushKlaviyoMundialEvent(record).catch(() => {});
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('mundial-prediction error:', e.message);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+function requireAdmin(req, res) {
+  if (!ADMIN_USER || !ADMIN_PASS) {
+    res.status(503).json({ error: 'Admin no configurado. Falta ADMIN_USER y ADMIN_PASS en Railway.' });
+    return false;
+  }
+  const h = req.headers.authorization || '';
+  if (!h.startsWith('Basic ')) {
+    res.set('WWW-Authenticate', 'Basic realm="Kairos Admin"');
+    res.status(401).end('Auth requerida');
+    return false;
+  }
+  try {
+    const [u, p] = Buffer.from(h.slice(6), 'base64').toString('utf8').split(':');
+    if (u === ADMIN_USER && p === ADMIN_PASS) return true;
+  } catch {}
+  res.set('WWW-Authenticate', 'Basic realm="Kairos Admin"');
+  res.status(401).end('Credenciales inválidas');
+  return false;
+}
+
+app.get('/api/admin/predictions', async (req, res) => {
+  if (!requireAdmin(req, res)) return;
+  try {
+    const raw = await readFile(PREDICTIONS_FILE, 'utf8').catch(() => '');
+    const records = raw.split('\n').filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+    if (req.query.format === 'csv') {
+      const cols = ['ts','email','name','campeon','subcampeon','tercero','goleador','twelvepack','packsCount'];
+      const escape = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+      const csv = '﻿' + [cols.join(',')].concat(records.map(r => cols.map(c => escape(r[c])).join(','))).join('\n');
+      res.set('Content-Type', 'text/csv; charset=utf-8');
+      res.set('Content-Disposition', `attachment; filename="mundial-predictions-${new Date().toISOString().slice(0,10)}.csv"`);
+      return res.send(csv);
+    }
+    res.json({ count: records.length, predictions: records });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 // POST /api/newsletter — suscribe el email a la lista Kairos de Klaviyo (Tc9EC9).
 // Si KLAVIYO_PRIVATE_KEY está seteada en el entorno, primero verifica si el email
