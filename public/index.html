@@ -173,24 +173,46 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-light .kb-info-card h3{color:#1f1f1f}
 .kb-light .kb-info-card p{color:#555}
 
-/* ── Merch (fondo cálido rústico que combina con las fotos madera/ladrillo/helecho) ── */
+/* ── Merch (muro de ladrillos + plantas, como las fotos) ── */
 .kb-merch{
-  background:
-    radial-gradient(circle at 20% 0%, rgba(122,84,42,.18), transparent 45%),
-    radial-gradient(circle at 85% 12%, rgba(86,110,58,.16), transparent 42%),
-    linear-gradient(165deg,#efe7d6 0%,#e6dac2 45%,#d9c8a8 100%);
+  position:relative;
+  background-color:#c9b596;
+  background-image:
+    linear-gradient(335deg,#a14e30 23px,transparent 23px),
+    linear-gradient(155deg,#b35d3a 23px,transparent 23px),
+    linear-gradient(335deg,#a14e30 23px,transparent 23px),
+    linear-gradient(155deg,#b35d3a 23px,transparent 23px);
+  background-size:58px 58px;
+  background-position:0 2px,4px 35px,29px 31px,34px 6px;
 }
-.kb-merch .kb-page-head{border-bottom-color:rgba(90,60,28,.22)}
-.kb-merch .kb-page-title{color:#3a2a14}
-.kb-merch .kb-page-sub{color:#8a6a3a}
-.kb-merch .kb-card-img{
-  background:linear-gradient(160deg,#fffdf8,#f3ecdd);
-  border-radius:16px;
-  box-shadow:0 8px 22px rgba(90,60,28,.14);
+/* velo cálido para bajar el contraste del ladrillo y que se lean los productos */
+.kb-merch::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(58,30,14,.55) 0%,rgba(58,30,14,.30) 30%,rgba(58,30,14,.30) 100%);
 }
-.kb-merch .kb-card-name{color:#3a2a14}
-.kb-merch .kb-card-price{color:#3a2a14}
-.kb-merch .kb-card-soldout{background:#3a2a14}
+/* plantas decorativas colgando arriba */
+.kb-merch::after{
+  content:"🌿🪴🌿🌱🌿🪴🌿🌱🌿🪴🌿🌱🌿🪴🌿🌱";
+  position:absolute;top:0;left:0;right:0;z-index:1;pointer-events:none;
+  font-size:38px;line-height:1;letter-spacing:18px;
+  white-space:nowrap;overflow:hidden;opacity:.85;
+  filter:drop-shadow(0 6px 8px rgba(0,0,0,.35));
+  text-align:center;padding-top:4px;
+}
+.kb-merch > *{position:relative;z-index:2}
+.kb-merch .kb-page-head{border-bottom-color:rgba(255,255,255,.25);padding-top:64px}
+.kb-merch .kb-page-title{color:#fff;text-shadow:0 3px 10px rgba(0,0,0,.5)}
+.kb-merch .kb-page-sub{color:#ffd9a8}
+.kb-merch .kb-card{
+  background:#fffdf9;
+  border-radius:18px;
+  padding:10px 10px 16px;
+  box-shadow:0 14px 30px rgba(40,18,6,.4);
+}
+.kb-merch .kb-card-img{background:#fffdf9;border-radius:12px}
+.kb-merch .kb-card-name{color:#2a1a0c}
+.kb-merch .kb-card-price{color:#2a1a0c}
+.kb-merch .kb-card-soldout{background:#2a1a0c}
 
 /* ── HERO carousel ── */
 .kb-hero{position:relative;width:100%;overflow:hidden;background:#000;line-height:0}
