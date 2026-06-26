@@ -173,6 +173,25 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-light .kb-info-card h3{color:#1f1f1f}
 .kb-light .kb-info-card p{color:#555}
 
+/* ── Merch (fondo cálido rústico que combina con las fotos madera/ladrillo/helecho) ── */
+.kb-merch{
+  background:
+    radial-gradient(circle at 20% 0%, rgba(122,84,42,.18), transparent 45%),
+    radial-gradient(circle at 85% 12%, rgba(86,110,58,.16), transparent 42%),
+    linear-gradient(165deg,#efe7d6 0%,#e6dac2 45%,#d9c8a8 100%);
+}
+.kb-merch .kb-page-head{border-bottom-color:rgba(90,60,28,.22)}
+.kb-merch .kb-page-title{color:#3a2a14}
+.kb-merch .kb-page-sub{color:#8a6a3a}
+.kb-merch .kb-card-img{
+  background:linear-gradient(160deg,#fffdf8,#f3ecdd);
+  border-radius:16px;
+  box-shadow:0 8px 22px rgba(90,60,28,.14);
+}
+.kb-merch .kb-card-name{color:#3a2a14}
+.kb-merch .kb-card-price{color:#3a2a14}
+.kb-merch .kb-card-soldout{background:#3a2a14}
+
 /* ── HERO carousel ── */
 .kb-hero{position:relative;width:100%;overflow:hidden;background:#000;line-height:0}
 .kb-hero-track{display:flex;transition:transform .7s cubic-bezier(.4,0,.2,1)}
@@ -1103,7 +1122,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
   </div>
 
   <!-- ═════ MERCH ═════ -->
-  <div class="kb-view kb-light" id="view-merch">
+  <div class="kb-view kb-light kb-merch" id="view-merch">
     <div class="kb-page-head">
       <h1 class="kb-page-title">Merch</h1>
       <p class="kb-page-sub">Vasos · jockeys · growlers · pins</p>
