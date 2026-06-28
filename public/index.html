@@ -88,9 +88,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 .kb-nav-desktop a{cursor:pointer;transition:color .2s;color:var(--text)}
 .kb-nav-desktop a:hover,.kb-nav-desktop a.active{color:var(--orange)}
-.kb-nav-mundial{color:#ffce1f!important;font-weight:700;letter-spacing:.12em}
-.kb-nav-mundial:hover{color:#fff!important}
-.kb-menu-list .kb-nav-mundial{color:#ffce1f}
 .kb-navitem{position:relative;display:flex;align-items:center}
 .kb-caret{font-size:9px;margin-left:5px;opacity:.8}
 .kb-submenu{
@@ -193,22 +190,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-hero-dots .d.on{background:#000}
 
 /* ── Section base ── */
-/* ── Mundial strip (home, entre hero y chelitas) ── */
-.kb-mundial-strip{position:relative;overflow:hidden;background:linear-gradient(135deg,#08161f 0%,#102a39 50%,#08161f 100%);border-top:1px solid rgba(255,206,31,.18);border-bottom:1px solid rgba(255,206,31,.18);padding:20px 0}
-.kb-mundial-strip-track{display:flex;width:max-content;gap:14px;padding:0 7px;animation:kb-mstrip-scroll 28s linear infinite;will-change:transform}
-.kb-mundial-strip-track img{flex:0 0 auto;height:190px;width:190px;border-radius:14px;object-fit:cover;display:block;box-shadow:0 6px 18px rgba(0,0,0,.55)}
-@keyframes kb-mstrip-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.kb-mundial-strip-cta{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;background:linear-gradient(180deg,#ffe27a,#ffce1f);color:#06131a;font-family:'Anton','Bebas Neue','Oswald',sans-serif;font-weight:400;letter-spacing:.06em;font-size:clamp(22px,3vw,32px);padding:18px 44px;border-radius:14px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:3px solid #fff;box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,31,.22);transition:transform .15s,box-shadow .15s;white-space:nowrap;animation:kb-mstrip-pulse 2s ease-in-out infinite}
-.kb-mundial-strip-cta:hover{transform:translate(-50%,-50%) scale(1.05);box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 0 6px rgba(255,206,31,.3)}
-@keyframes kb-mstrip-pulse{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,31,.22),0 0 0 rgba(255,206,31,0)}50%{box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,31,.22),0 0 26px rgba(255,206,31,.5)}}
-@media(max-width:640px){
-  .kb-mundial-strip{padding:14px 0}
-  .kb-mundial-strip-track{gap:10px;padding:0 5px}
-  .kb-mundial-strip-track img{height:130px;width:130px;border-radius:12px}
-  .kb-mundial-strip-cta{font-size:17px;padding:12px 22px;border-width:2px}
-}
-
-/* ── Promo Samba IPA 24 pack (home, debajo de la franja del Mundial) ── */
+/* ── Promo Samba IPA 24 pack (home) ── */
 .kb-promo-section{padding:32px clamp(1rem,4vw,3rem)}
 .kb-promo-card{position:relative;display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(24px,4vw,52px);align-items:center;background:linear-gradient(135deg,#f5a623 0%,#e0852b 45%,#a8421f 100%);border-radius:28px;padding:clamp(26px,3.5vw,46px);overflow:hidden;box-shadow:0 28px 60px rgba(168,66,31,.35);isolation:isolate}
 .kb-promo-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 0%,rgba(255,206,31,.35),transparent 45%),repeating-linear-gradient(135deg,transparent 0 50px,rgba(255,255,255,.04) 50px 52px);pointer-events:none}
@@ -853,9 +835,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
   </div>
   <nav class="kb-nav-desktop">
     <div class="kb-navitem">
-      <a data-route="/pages/mundial" onclick="go(event)" class="kb-nav-mundial">MUNDIAL</a>
-    </div>
-    <div class="kb-navitem">
       <a data-route="/cervezas" onclick="go(event)">Cervezas<span class="kb-caret">▼</span></a>
       <div class="kb-submenu">
         <a data-route="/cervezas" onclick="go(event)">Todas</a>
@@ -901,7 +880,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     <div></div>
   </div>
   <div class="kb-menu-list">
-    <a data-route="/pages/mundial" onclick="go(event)" class="kb-nav-mundial">MUNDIAL ⚽</a>
 
     <div class="kb-mgroup">
       <a class="kb-mhead" onclick="toggleMgroup(this)">Cervezas<span class="kb-mcaret">▾</span></a>
@@ -944,7 +922,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
   <div class="kb-view" id="view-home">
     <div class="kb-hero">
       <div class="kb-hero-track" id="kbHeroTrack">
-        <div class="kb-hero-slide"><a data-route="/pages/mundial" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_9_jun_2026_11_32_35_a.m..png?v=1781019490&width=2048" alt="Mundial 23 - Polla Kairos"></a></div>
         <div class="kb-hero-slide"><a data-route="/products/goat-father-dopplelbock" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/doppelbock_banner.jpg?v=1781802050&width=2048" alt="Goat Father Doppelbock"></a></div>
         <div class="kb-hero-slide"><a data-route="/packs" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/BANNER-_Antofa-_Delivery.png?v=1776363865&width=2048" alt="Delivery Antofagasta"></a></div>
         <div class="kb-hero-slide"><a data-route="/cervezas" onclick="go(event)"><img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/BANNER_-_SIXPACK_-_otono.webp?v=1774532484&width=2048" alt="Six Pack"></a></div>
@@ -952,32 +929,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       <button class="kb-hero-arr prev" onclick="heroGo(-1)" aria-label="Anterior">‹</button>
       <button class="kb-hero-arr next" onclick="heroGo(1)" aria-label="Siguiente">›</button>
       <div class="kb-hero-dots" id="kbHeroDots"></div>
-    </div>
-
-    <div class="kb-mundial-strip">
-      <div class="kb-mundial-strip-track" aria-hidden="true">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/91103641-81D7-41A2-8151-A3A1C732FFA5.png?v=1781285166&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2179.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2180.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2181.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2182.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2183.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2184.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2185.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2186.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2188.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/91103641-81D7-41A2-8151-A3A1C732FFA5.png?v=1781285166&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2179.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2180.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2181.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2182.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2183.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2184.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2185.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2186.png?v=1781282235&width=400" alt="">
-        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2188.png?v=1781282235&width=400" alt="">
-      </div>
-      <a class="kb-mundial-strip-cta" data-route="/pages/mundial" onclick="go(event)">⚽ Pack Mundialero</a>
     </div>
 
     <section class="kb-section kb-promo-section" id="kbSambaPromo" style="display:none"></section>
@@ -1410,492 +1361,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     </div>
   </div>
 
-  <div class="kb-view" id="view-mundial">
-    <div class="km-mundial">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800;900&display=swap');
-        @import url('https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css');
-        .km-mundial *{box-sizing:border-box;margin:0;padding:0}
-        .km-mundial{--negro:#06131a;--negro2:#0a1f2b;--carbon:#102a39;--panel:#102a39;--oro:#ffce1f;--oro-claro:#ffe27a;--oro-prof:#c89400;--oro-foil:#fff3c4;--verde:#00c85a;--azul:#1f7bff;--rojo:#ff3b3b;--magenta:#e21f8f;--cyan:#1ad1e6;--violeta:#7b3ff2;--crema:#fff;--gris:rgba(255,255,255,.66);--gris2:rgba(255,255,255,.45);--linea:rgba(255,255,255,.16);font-family:'Archivo',system-ui,sans-serif;color:var(--crema);position:relative;border-radius:22px;overflow:hidden;padding:0 0 40px;isolation:isolate;background:radial-gradient(circle at 12% -5%,rgba(0,200,90,.30),transparent 40%),radial-gradient(circle at 90% 6%,rgba(31,123,255,.30),transparent 42%),radial-gradient(circle at 72% 92%,rgba(255,59,59,.20),transparent 45%),linear-gradient(165deg,#0c2230 0%,#08161f 55%,#050d13 100%);box-shadow:0 34px 90px rgba(0,0,0,.6);margin:18px}
-        .km-mundial::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:conic-gradient(from 180deg at 50% -8%,transparent 0deg,rgba(255,255,255,.05) 18deg,transparent 36deg,rgba(255,255,255,.05) 54deg,transparent 72deg,rgba(255,255,255,.05) 90deg,transparent 108deg),repeating-linear-gradient(0deg,transparent 0 78px,rgba(255,255,255,.018) 78px 79px),repeating-linear-gradient(90deg,transparent 0 78px,rgba(255,255,255,.018) 78px 79px)}
-        .km-mundial::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.4px);background-size:7px 7px;mix-blend-mode:overlay;opacity:.5}
-        .km-sparks{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
-        .km-sparks i{position:absolute;bottom:-12px;width:6px;height:6px;border-radius:50%;background:var(--oro-claro);box-shadow:0 0 9px var(--oro);opacity:0;animation:km-float linear infinite}
-        @keyframes km-float{0%{transform:translateY(0) scale(.5);opacity:0}10%{opacity:.95}90%{opacity:.6}100%{transform:translateY(-700px) scale(1);opacity:0}}
-        .km-coins{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:6}
-        .km-coin{position:absolute;top:-44px;border-radius:50%;width:22px;height:22px;background:radial-gradient(circle at 35% 30%,#fff6cf,#ffce1f 48%,#b8860b);box-shadow:inset 0 0 4px rgba(255,255,255,.85),0 2px 7px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.5);animation:km-coinfall linear infinite;animation-timing-function:cubic-bezier(.3,.1,.4,1)}
-        @keyframes km-coinfall{0%{transform:translateY(-30px) rotate(0);opacity:0}7%{opacity:1}88%{opacity:1}100%{transform:translateY(800px) rotate(var(--rot,360deg));opacity:0}}
-        .km-music{position:absolute;top:78px;right:14px;z-index:9;cursor:pointer;width:46px;height:46px;border-radius:50%;border:2px solid var(--oro);background:rgba(5,8,15,.6);color:#fff;font-size:19px;line-height:1;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.5);transition:transform .15s}
-        .km-music:hover{transform:scale(1.08)}
-        .km-music.on{background:var(--oro);color:var(--negro);animation:km-pulse 2s ease-in-out infinite}
-        @keyframes km-rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-        .km-rise{opacity:0;animation:km-rise .75s cubic-bezier(.2,.7,.2,1) forwards}
-        .km-d1{animation-delay:.05s}.km-d2{animation-delay:.18s}.km-d3{animation-delay:.31s}.km-d4{animation-delay:.44s}.km-d5{animation-delay:.57s}.km-d6{animation-delay:.7s}
-        .km-topbar{background:linear-gradient(90deg,var(--magenta),var(--rojo),var(--oro),var(--verde),var(--cyan),var(--azul),var(--violeta),var(--magenta));background-size:300% 100%;animation:km-rainbow 8s linear infinite;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);font-weight:900;letter-spacing:.16em;text-transform:uppercase;font-size:12px;overflow:hidden;white-space:nowrap;padding:9px 0;position:relative;z-index:3}
-        .km-topbar span{display:inline-block;animation:km-scroll 20s linear infinite}
-        @keyframes km-rainbow{to{background-position:-300% 0}}
-        @keyframes km-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-        .km-bunting{display:flex;width:100%;height:30px;overflow:hidden;filter:drop-shadow(0 5px 7px rgba(0,0,0,.55));position:relative;z-index:3}
-        .km-bunting b{flex:1;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:23px solid;transform-origin:top center;animation:km-sway 3.2s ease-in-out infinite}
-        .km-bunting b:nth-child(6n+1){border-top-color:var(--magenta)}
-        .km-bunting b:nth-child(6n+2){border-top-color:var(--oro)}
-        .km-bunting b:nth-child(6n+3){border-top-color:var(--verde)}
-        .km-bunting b:nth-child(6n+4){border-top-color:var(--cyan)}
-        .km-bunting b:nth-child(6n+5){border-top-color:var(--azul)}
-        .km-bunting b:nth-child(6n+6){border-top-color:var(--crema)}
-        .km-bunting b:nth-child(2n){animation-delay:-1.6s}
-        @keyframes km-sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-        .km-wrap{padding:30px 24px 0;position:relative;z-index:2}
-        .km-eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;font-size:11px;color:var(--negro);background:linear-gradient(180deg,var(--oro-claro),var(--oro));padding:8px 15px;border-radius:3px;box-shadow:0 3px 0 var(--oro-prof),0 6px 14px rgba(0,0,0,.35)}
-        .km-h1{font-family:'Bebas Neue','Anton',sans-serif;line-height:.82;text-transform:uppercase;margin:18px 0 10px;letter-spacing:.012em;font-size:clamp(58px,14.5vw,132px);font-weight:400;background:linear-gradient(180deg,#fff 0%,var(--oro-claro) 46%,var(--oro) 78%,var(--oro-prof) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 rgba(0,0,0,.4)) drop-shadow(0 14px 24px rgba(0,0,0,.5));position:relative}
-        .km-h1 .big23{position:relative;-webkit-text-fill-color:var(--oro);display:inline-block;animation:km-beat 1.6s ease-in-out infinite;text-shadow:0 0 28px rgba(245,179,1,.55)}
-        @keyframes km-beat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-        .km-sub{font-size:clamp(15px,3.6vw,19px);font-weight:500;color:var(--gris);max-width:600px;line-height:1.5}
-        .km-sub strong{color:var(--oro-claro);font-weight:800}
-        .km-kicker{font-family:'Bebas Neue','Anton',sans-serif;font-weight:400;letter-spacing:.04em;text-transform:uppercase;font-size:clamp(26px,6vw,46px);line-height:.9;color:var(--oro);margin-bottom:2px;text-shadow:0 2px 0 rgba(0,0,0,.4),0 0 22px rgba(255,206,31,.35)}
-        .km-toma{display:inline-block;vertical-align:middle}
-        .km-logo{display:inline-block;vertical-align:middle;height:.82em;width:auto;margin-left:.18em;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55))}
-        .km-ticker{margin:22px -24px;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);position:relative;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,.2),rgba(0,0,0,.45));overflow:hidden;white-space:nowrap;padding:11px 0}
-        .km-ticker div{display:inline-block;animation:km-scroll 46s linear infinite;font-size:24px;white-space:nowrap}
-        .km-ticker .fi{margin:0 8px;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.5);vertical-align:middle;outline:1px solid rgba(255,255,255,.12)}
-        .km-phototicker{margin:0 -24px 20px;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);background:rgba(0,0,0,.3);overflow:hidden}
-        .km-phototrack{display:flex;width:max-content;gap:10px;padding:10px 5px;animation:km-scroll 11s linear infinite;will-change:transform}
-        .km-phototrack img{flex:0 0 auto;height:160px;width:160px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.5);object-fit:cover;display:block}
-        @media(max-width:560px){.km-phototrack img{height:120px;width:120px}.km-phototrack{animation-duration:9s;gap:8px}}
-        .km-video{margin:20px auto 4px;border-radius:14px;overflow:hidden;border:1px solid rgba(245,179,1,.3);box-shadow:0 16px 34px rgba(0,0,0,.5);background:#000;position:relative;z-index:2;max-width:520px}
-        .km-video video{display:block;width:100%;height:auto;max-height:300px;object-fit:cover}
-        @media(max-width:560px){.km-video video{max-height:210px}}
-        .km-hero{display:grid;grid-template-columns:1fr;gap:18px;align-items:center}
-        @media(min-width:760px){.km-hero{grid-template-columns:1.05fr .95fr;gap:26px}.km-hero .km-video{margin:0;max-width:100%}.km-hero .km-video video{max-height:340px}}
-        .km-premio{position:relative;border-radius:18px;padding:30px 22px;text-align:center;margin-bottom:26px;z-index:1;background:radial-gradient(120% 130% at 50% 0%,rgba(245,179,1,.16),transparent 60%),linear-gradient(160deg,#102a39,#0e0c0a);border:1px solid rgba(245,179,1,.5);box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 20px 44px rgba(0,0,0,.55);overflow:hidden;animation:km-rise .75s .3s cubic-bezier(.2,.7,.2,1) both}
-        .km-premio::before{content:"";position:absolute;top:-30%;left:50%;width:140%;height:150%;transform:translateX(-50%);z-index:0;background:conic-gradient(from 0deg at 50% 40%,rgba(245,179,1,.16) 0 6deg,transparent 6deg 14deg);animation:km-spin 26s linear infinite;opacity:.7;pointer-events:none}
-        @keyframes km-spin{to{transform:translateX(-50%) rotate(360deg)}}
-        .km-premio>*{position:relative;z-index:1}
-        .km-premio .lbl{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.28em;font-size:15px;text-transform:uppercase;color:var(--oro);display:inline-block;padding:4px 16px;border:1px solid rgba(245,179,1,.4);border-radius:40px;margin-bottom:4px}
-        .km-premio .big{font-family:'Anton',sans-serif;font-size:clamp(38px,9.4vw,64px);line-height:.98;margin:10px 0 6px;text-transform:uppercase;background:linear-gradient(180deg,#fff,var(--oro-claro));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.3))}
-        .km-premio .small{font-weight:600;font-size:15px;color:var(--gris)}
-        .km-cup{width:clamp(84px,21vw,124px);height:auto;display:block;margin:0 auto 10px;filter:drop-shadow(0 10px 16px rgba(0,0,0,.6)) drop-shadow(0 0 26px rgba(245,179,1,.6));animation:km-bob 3.8s ease-in-out infinite}
-        @keyframes km-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-        .km-card{position:relative;display:grid;grid-template-columns:1fr;border-radius:20px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,0) 30%),linear-gradient(165deg,#102a39,#06131a);border:1px solid rgba(245,179,1,.34);box-shadow:0 0 0 1px rgba(255,255,255,.05) inset,0 26px 60px rgba(0,0,0,.55)}
-        .km-card::before{content:"";position:absolute;inset:0;border-radius:20px;padding:1.5px;pointer-events:none;z-index:3;background:linear-gradient(120deg,var(--magenta),var(--oro),var(--cyan),var(--azul),var(--magenta));background-size:300% 100%;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55;animation:km-rainbow 10s linear infinite}
-        .km-body{padding:40px 24px 28px;position:relative;z-index:2}
-        .km-prod-name{font-family:'Bebas Neue','Anton',sans-serif;font-weight:400;font-size:clamp(36px,9vw,52px);text-transform:uppercase;line-height:.9;letter-spacing:.01em;background:linear-gradient(180deg,#fff,#d7e2f5);-webkit-background-clip:text;background-clip:text;color:transparent}
-        .km-desc{font-size:14.5px;color:var(--gris);margin:10px 0 18px;line-height:1.6;max-width:560px}
-        .km-price{display:flex;align-items:baseline;gap:13px;margin-bottom:5px;flex-wrap:wrap}
-        .km-price .now{font-family:'Anton',sans-serif;font-size:clamp(44px,11vw,56px);color:var(--oro);line-height:.9;filter:drop-shadow(0 3px 10px rgba(245,179,1,.3))}
-        .km-price .was{font-size:18px;color:var(--gris2);text-decoration:line-through}
-        .km-price .off{background:var(--oro);color:var(--negro);font-weight:900;font-size:13px;padding:5px 10px;border-radius:6px;box-shadow:0 4px 10px rgba(0,0,0,.3);animation:km-beat 1.6s ease-in-out infinite}
-        .km-ahorro{font-size:12.5px;color:var(--oro-claro);font-weight:800;margin-bottom:22px;letter-spacing:.03em}
-        .km-form-title{display:flex;align-items:center;gap:9px;font-family:'Bebas Neue','Anton',sans-serif;font-weight:400;font-size:24px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px;color:var(--crema)}
-        .km-form-sub{font-size:12.5px;color:var(--gris);margin-bottom:16px;line-height:1.5}
-        .km-hint{font-size:11.5px;color:var(--gris);margin-top:8px;line-height:1.5}
-        .km-hint b{color:var(--oro-claro)}
-        .km-build{margin-bottom:18px;background:rgba(0,0,0,.28);border:1px solid var(--linea);border-radius:13px;padding:4px 15px}
-        .km-style{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--linea)}
-        .km-style:last-child{border-bottom:none}
-        .km-style-name{font-weight:800;font-size:14px;color:var(--crema)}
-        .km-style-name small{display:block;font-weight:600;font-size:10.5px;color:var(--gris2);letter-spacing:.02em;margin-top:1px}
-        .km-stepper{display:flex;align-items:center;gap:8px;flex:none}
-        .km-stepper button{width:36px;height:36px;border-radius:9px;border:1.5px solid rgba(245,179,1,.4);background:rgba(0,0,0,.4);color:var(--oro);font:900 20px/1 'Archivo',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
-        .km-stepper button:hover{background:var(--oro);color:var(--negro);transform:translateY(-1px)}
-        .km-qty{width:48px;text-align:center;padding:9px 4px;border-radius:9px;border:1.5px solid rgba(245,179,1,.28);background:#0d1b24;color:#fff;font-weight:800;font-size:16px;-moz-appearance:textfield}
-        .km-qty::-webkit-outer-spin-button,.km-qty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-        .km-total{margin-top:9px;text-align:center;font-weight:800;font-size:14px;padding:11px;border-radius:9px;background:rgba(245,179,1,.1);transition:.2s}
-        .km-total b{color:var(--oro-claro)}
-        .km-total.ok{background:rgba(0,200,90,.16)}.km-total.ok b{color:var(--verde)}
-        .km-total.bad{background:rgba(255,59,59,.13)}.km-total.bad b{color:var(--rojo)}
-        .km-cta:disabled{filter:grayscale(.45);opacity:.5;cursor:not-allowed}
-        .km-field{margin-bottom:13px}
-        .km-field label{display:block;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;color:var(--oro)}
-        .km-field select,.km-field input{width:100%;padding:14px 15px;border-radius:9px;font-size:15px;font-family:'Archivo',sans-serif;font-weight:700;background:#100e0b;color:var(--crema);border:1.5px solid rgba(245,179,1,.26);outline:none;transition:border-color .2s,box-shadow .2s}
-        .km-field select option{background:#100e0b;color:var(--crema)}
-        .km-field select:focus,.km-field input:focus{border-color:var(--oro);box-shadow:0 0 0 3px rgba(245,179,1,.18)}
-        .km-cta{width:100%;margin-top:10px;padding:19px;border:none;border-radius:11px;cursor:pointer;font-family:'Bebas Neue','Anton',sans-serif;font-weight:400;font-size:26px;letter-spacing:.05em;text-transform:uppercase;color:var(--negro);background:linear-gradient(180deg,var(--oro-claro),var(--oro));box-shadow:0 7px 0 var(--oro-prof),0 14px 26px rgba(0,0,0,.5);transition:transform .08s,box-shadow .08s;animation:km-pulse 2s ease-in-out infinite}
-        @keyframes km-pulse{0%,100%{box-shadow:0 7px 0 var(--oro-prof),0 14px 26px rgba(0,0,0,.5),0 0 0 rgba(245,179,1,0)}50%{box-shadow:0 7px 0 var(--oro-prof),0 14px 26px rgba(0,0,0,.5),0 0 30px rgba(245,179,1,.55)}}
-        .km-cta:hover{transform:translateY(-2px)}
-        .km-cta:active{transform:translateY(4px);box-shadow:0 3px 0 var(--oro-prof)}
-        .km-recap{margin-top:14px;font-size:12.5px;color:var(--crema);background:#100e0b;border:1px dashed rgba(245,179,1,.4);border-radius:9px;padding:12px 14px;line-height:1.7}
-        .km-recap b{color:var(--oro)}
-        .km-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:28px}
-        @media(max-width:560px){.km-steps{grid-template-columns:1fr}}
-        .km-step{position:relative;background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--linea);border-radius:14px;padding:20px 16px 18px;text-align:center;transition:transform .2s,border-color .2s;overflow:hidden}
-        .km-step::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px}
-        .km-steps .km-step:nth-child(1)::before{background:var(--verde)}
-        .km-steps .km-step:nth-child(2)::before{background:var(--azul)}
-        .km-steps .km-step:nth-child(3)::before{background:var(--magenta)}
-        .km-step:hover{transform:translateY(-4px);border-color:rgba(245,179,1,.5)}
-        .km-step .n{font-family:'Bebas Neue','Anton',sans-serif;font-weight:400;font-size:42px;line-height:.9;color:var(--oro)}
-        .km-step h4{font-size:14px;margin:8px 0 5px;text-transform:uppercase;letter-spacing:.06em;color:var(--crema)}
-        .km-step p{font-size:12.5px;color:var(--gris);line-height:1.5}
-        .km-count{margin-top:26px;border-radius:16px;padding:24px 20px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(160deg,#102a39,#0d0b09);border:1px solid var(--linea)}
-        .km-count .ttl{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.2em;text-transform:uppercase;font-size:16px;color:var(--oro);margin-bottom:16px}
-        .km-clock{display:flex;justify-content:center;gap:11px;flex-wrap:wrap}
-        .km-u{background:#06131a;border:1px solid rgba(245,179,1,.22);border-radius:12px;padding:13px 8px;min-width:78px;box-shadow:inset 0 2px 16px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.03)}
-        .km-u .num{font-family:'Anton',sans-serif;font-size:clamp(32px,8.5vw,48px);color:var(--oro-claro);line-height:1;text-shadow:0 0 18px rgba(245,179,1,.4)}
-        .km-u .lab{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gris2);margin-top:5px}
-        .km-count .cierre{margin-top:16px;font-size:13px;font-weight:700;color:var(--crema)}
-        .km-count .cierre b{color:var(--oro)}
-        .km-legal{margin-top:26px;background:rgba(0,0,0,.32);border:1px solid var(--linea);border-radius:16px;padding:24px;font-size:12.5px;line-height:1.65;color:var(--gris)}
-        .km-legal h3{font-family:'Bebas Neue','Anton',sans-serif;font-weight:400;font-size:24px;color:var(--oro);text-transform:uppercase;letter-spacing:.05em;margin-bottom:15px;display:flex;align-items:center;gap:9px}
-        .km-legal ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px}
-        .km-legal li{padding-left:4px}
-        .km-legal b{color:var(--crema)}
-        .km-legal .km-foot{margin-top:18px;padding-top:13px;border-top:1px solid var(--linea);font-size:11px;color:var(--gris2)}
-        @media(prefers-reduced-motion:reduce){.km-mundial *{animation:none!important}.km-rise{opacity:1!important}}
-      </style>
-
-      <div class="km-sparks">
-        <i style="left:6%;animation-duration:7s;animation-delay:0s"></i>
-        <i style="left:18%;animation-duration:9s;animation-delay:1.4s"></i>
-        <i style="left:32%;animation-duration:6.5s;animation-delay:2.1s"></i>
-        <i style="left:46%;animation-duration:8.5s;animation-delay:.6s"></i>
-        <i style="left:59%;animation-duration:7.5s;animation-delay:3s"></i>
-        <i style="left:71%;animation-duration:10s;animation-delay:1.1s"></i>
-        <i style="left:83%;animation-duration:6.8s;animation-delay:2.6s"></i>
-        <i style="left:93%;animation-duration:9.2s;animation-delay:.3s"></i>
-      </div>
-
-      <div class="km-coins" aria-hidden="true">
-        <span class="km-coin" style="left:3%;animation-duration:4.2s;--rot:280deg"></span>
-        <span class="km-coin" style="left:14%;width:26px;height:26px;animation-duration:3.6s;animation-delay:.5s;--rot:360deg"></span>
-        <span class="km-coin" style="left:25%;width:24px;height:24px;animation-duration:4s;animation-delay:.9s;--rot:150deg"></span>
-        <span class="km-coin" style="left:36%;width:28px;height:28px;animation-duration:3.9s;animation-delay:.3s;--rot:240deg"></span>
-        <span class="km-coin" style="left:47%;animation-duration:4.5s;animation-delay:2.6s;--rot:330deg"></span>
-        <span class="km-coin" style="left:57%;width:26px;height:26px;animation-duration:6s;animation-delay:3.4s;--rot:200deg"></span>
-        <span class="km-coin" style="left:67%;width:24px;height:24px;animation-duration:5.4s;animation-delay:.4s;--rot:120deg"></span>
-        <span class="km-coin" style="left:77%;width:30px;height:30px;animation-duration:4.9s;animation-delay:1.5s;--rot:300deg"></span>
-        <span class="km-coin" style="left:87%;animation-duration:4.1s;animation-delay:.6s;--rot:260deg"></span>
-        <span class="km-coin" style="left:97%;width:24px;height:24px;animation-duration:3.7s;animation-delay:1.3s;--rot:180deg"></span>
-      </div>
-
-      <audio id="km-audio" loop preload="none">
-        <source src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Kairos_Mundial_365.mp3?v=1780952146" type="audio/mpeg">
-      </audio>
-      <button id="km-music" class="km-music" aria-label="Activar música">🔈</button>
-
-      <div class="km-topbar"><span>🔥 GANA 365 LATAS GRATIS · MUNDIAL 23 · 12 PACK A $23.000 · ¡PARTICIPA LAS VECES QUE QUIERAS! 🍺 &nbsp;&nbsp; 🔥 GANA 365 LATAS GRATIS · MUNDIAL 23 · 12 PACK A $23.000 · ¡PARTICIPA LAS VECES QUE QUIERAS! 🍺 &nbsp;&nbsp;</span></div>
-
-      <div class="km-bunting"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
-
-      <div class="km-wrap">
-        <div class="km-hero">
-          <div class="km-hero-copy">
-            <div class="km-kicker km-rise km-d1">Polla Mundial 23</div>
-            <h1 class="km-h1 km-rise km-d2">Mundial <span class="big23">23</span><br><span class="km-toma">se toma</span> <img class="km-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/KAIROS.png?v=1781104668" alt="Kairos"></h1>
-            <p class="km-sub km-rise km-d3">Lleva el <strong>Pack Mundialero</strong>, pronostica el podio + el goleador y participa por <strong>365 latas gratis</strong>: una por cada día del año. La fiesta más grande del fútbol, con chela artesanal en la mano. 🍺🌎</p>
-          </div>
-          <div class="km-video km-rise km-d4">
-            <video autoplay loop muted playsinline preload="metadata">
-              <source src="https://cdn.shopify.com/videos/c/o/v/54e11409ecca4652a5cf067c4a6c06f2.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-
-        <div class="km-phototicker km-rise km-d4">
-          <div class="km-phototrack">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/91103641-81D7-41A2-8151-A3A1C732FFA5.png?v=1781285166" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2179.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2180.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2181.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2182.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2183.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2184.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2185.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2186.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2188.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/91103641-81D7-41A2-8151-A3A1C732FFA5.png?v=1781285166" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2179.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2180.png?v=1781282235" alt="">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2181.png?v=1781282235" alt="">
-          </div>
-        </div>
-
-        <div class="km-premio">
-          <svg class="km-cup" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-label="Copa">
-            <defs><linearGradient id="kmGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset=".45" stop-color="#f5b301"/><stop offset="1" stop-color="#b98400"/></linearGradient></defs>
-            <path d="M28 28 C9 31 9 56 31 53" fill="none" stroke="url(#kmGold)" stroke-width="7" stroke-linecap="round"/>
-            <path d="M72 28 C91 31 91 56 69 53" fill="none" stroke="url(#kmGold)" stroke-width="7" stroke-linecap="round"/>
-            <rect x="23" y="13" width="54" height="9" rx="4.5" fill="url(#kmGold)"/>
-            <path d="M26 20 H74 C74 47 64 61 50 61 C36 61 26 47 26 20 Z" fill="url(#kmGold)"/>
-            <path d="M34 22 Q35 42 46 53" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="3" stroke-linecap="round"/>
-            <text x="50" y="44" font-family="Anton, sans-serif" font-size="20" font-weight="900" fill="#8a6200" text-anchor="middle">23</text>
-            <rect x="46" y="61" width="8" height="12" fill="url(#kmGold)"/>
-            <path d="M38 73 H62 L66 81 H34 Z" fill="url(#kmGold)"/>
-            <rect x="30" y="81" width="40" height="10" rx="3" fill="url(#kmGold)"/>
-          </svg>
-          <div class="lbl">El premio mayor</div>
-          <div class="big">365 latas gratis</div>
-          <div class="small">365 días, 365 latas Kairos · una cervecita por cada día del año 🍻</div>
-        </div>
-
-        <div class="km-card km-rise km-d5">
-          <div class="km-body">
-            <div class="km-prod-name">Pack Mundialero</div>
-            <p class="km-desc">Arma tu 12 pack a tu pinta eligiendo entre todos los estilos artesanales Kairos. Edición especial Mundial 23: cómpralo y entras automáticamente a la polla por el podio y el goleador del torneo.</p>
-            <div class="km-price">
-              <span class="now">$23.000</span>
-              <span class="was">$36.990</span>
-              <span class="off">-38%</span>
-            </div>
-            <div class="km-ahorro">↓ Ahorras $13.990 · 23 lucas porque es el Mundial 23 😉</div>
-
-            <form action="https://kairos-brewing.myshopify.com/cart/add" method="post" id="km-polla-form" target="_top">
-              <input type="hidden" name="id" value="51471459778855">
-              <input type="hidden" name="quantity" value="1">
-              <input type="hidden" name="return_to" value="/cart">
-
-              <div class="km-form-title">🍺 Arma tu 12 pack</div>
-              <div class="km-form-sub">Elige cuántas latas de cada estilo. Tienen que sumar <b style="color:var(--oro-claro)">12</b> en total.</div>
-              <div class="km-build">
-                <div class="km-style"><span class="km-style-name">Nada Personal<small>Pils · 4,5%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Nada Personal (Pils)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Galactic Mission<small>Golden · 4,8%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Galactic Mission (Golden)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Hoyo en Uno<small>Hoppy Lager · 4,7%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Hoyo en Uno (Hoppy Lager)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Ritual de la Banana<small>Weizen · 4,5%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Ritual de la Banana (Weizen)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Imperio Perdido<small>Session NEIPA · 4,5%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Imperio Perdido (Session NEIPA)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Secret Lab<small>APA · 5%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Secret Lab (APA)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Samba<small>IPA · 5,5%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Samba (IPA)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Alerta Roja<small>Red Ale · 5%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Alerta Roja (Red Ale)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Kenny Bell<small>Amber · 5,2%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Kenny Bell (Amber)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Obertura<small>Stout · 5,1%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Obertura (Stout)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-style"><span class="km-style-name">Valle Nevado<small>Barley Wine · 10%</small></span><div class="km-stepper"><button type="button" class="km-minus">−</button><input type="number" class="km-qty" name="properties[Valle Nevado (Barley Wine)]" min="0" max="12" value="0" inputmode="numeric"><button type="button" class="km-plus">+</button></div></div>
-                <div class="km-total" id="km-total">Total: <b id="km-total-n">0</b> / 12 · elige tus cervezas 🍺</div>
-              </div>
-
-              <div class="km-form-title">📝 Tu pronóstico</div>
-              <div class="km-form-sub">Achúntale a los 3 primeros + el goleador y te ganái el año de chela. <b style="color:var(--oro-claro)">¡Participa las veces que quieras!</b> Cada pack que compres = otro pronóstico. 🔁</div>
-
-              <div class="km-field">
-                <label>🥇 Campeón del Mundo</label>
-                <select name="properties[1° Campeón]" required>
-                  <option value="" disabled selected>Elige al campeón...</option>
-                  <optgroup label="Grupo A"><option>México</option><option>Sudáfrica</option><option>Corea del Sur</option><option>Chequia</option></optgroup>
-                  <optgroup label="Grupo B"><option>Canadá</option><option>Qatar</option><option>Suiza</option><option>Bosnia y Herzegovina</option></optgroup>
-                  <optgroup label="Grupo C"><option>Brasil</option><option>Marruecos</option><option>Haití</option><option>Escocia</option></optgroup>
-                  <optgroup label="Grupo D"><option>Estados Unidos</option><option>Paraguay</option><option>Australia</option><option>Turquía</option></optgroup>
-                  <optgroup label="Grupo E"><option>Alemania</option><option>Curazao</option><option>Costa de Marfil</option><option>Ecuador</option></optgroup>
-                  <optgroup label="Grupo F"><option>Países Bajos</option><option>Japón</option><option>Túnez</option><option>Suecia</option></optgroup>
-                  <optgroup label="Grupo G"><option>Bélgica</option><option>Egipto</option><option>Irán</option><option>Nueva Zelanda</option></optgroup>
-                  <optgroup label="Grupo H"><option>España</option><option>Cabo Verde</option><option>Arabia Saudita</option><option>Uruguay</option></optgroup>
-                  <optgroup label="Grupo I"><option>Francia</option><option>Senegal</option><option>Noruega</option><option>Iraq</option></optgroup>
-                  <optgroup label="Grupo J"><option>Argentina</option><option>Argelia</option><option>Austria</option><option>Jordania</option></optgroup>
-                  <optgroup label="Grupo K"><option>Portugal</option><option>Colombia</option><option>Uzbekistán</option><option>RD Congo</option></optgroup>
-                  <optgroup label="Grupo L"><option>Inglaterra</option><option>Croacia</option><option>Ghana</option><option>Panamá</option></optgroup>
-                </select>
-              </div>
-
-              <div class="km-field">
-                <label>🥈 Segundo lugar</label>
-                <select name="properties[2° Subcampeón]" required>
-                  <option value="" disabled selected>Elige al subcampeón...</option>
-                  <optgroup label="Grupo A"><option>México</option><option>Sudáfrica</option><option>Corea del Sur</option><option>Chequia</option></optgroup>
-                  <optgroup label="Grupo B"><option>Canadá</option><option>Qatar</option><option>Suiza</option><option>Bosnia y Herzegovina</option></optgroup>
-                  <optgroup label="Grupo C"><option>Brasil</option><option>Marruecos</option><option>Haití</option><option>Escocia</option></optgroup>
-                  <optgroup label="Grupo D"><option>Estados Unidos</option><option>Paraguay</option><option>Australia</option><option>Turquía</option></optgroup>
-                  <optgroup label="Grupo E"><option>Alemania</option><option>Curazao</option><option>Costa de Marfil</option><option>Ecuador</option></optgroup>
-                  <optgroup label="Grupo F"><option>Países Bajos</option><option>Japón</option><option>Túnez</option><option>Suecia</option></optgroup>
-                  <optgroup label="Grupo G"><option>Bélgica</option><option>Egipto</option><option>Irán</option><option>Nueva Zelanda</option></optgroup>
-                  <optgroup label="Grupo H"><option>España</option><option>Cabo Verde</option><option>Arabia Saudita</option><option>Uruguay</option></optgroup>
-                  <optgroup label="Grupo I"><option>Francia</option><option>Senegal</option><option>Noruega</option><option>Iraq</option></optgroup>
-                  <optgroup label="Grupo J"><option>Argentina</option><option>Argelia</option><option>Austria</option><option>Jordania</option></optgroup>
-                  <optgroup label="Grupo K"><option>Portugal</option><option>Colombia</option><option>Uzbekistán</option><option>RD Congo</option></optgroup>
-                  <optgroup label="Grupo L"><option>Inglaterra</option><option>Croacia</option><option>Ghana</option><option>Panamá</option></optgroup>
-                </select>
-              </div>
-
-              <div class="km-field">
-                <label>🥉 Tercer lugar</label>
-                <select name="properties[3° Tercer lugar]" required>
-                  <option value="" disabled selected>Elige al tercero...</option>
-                  <optgroup label="Grupo A"><option>México</option><option>Sudáfrica</option><option>Corea del Sur</option><option>Chequia</option></optgroup>
-                  <optgroup label="Grupo B"><option>Canadá</option><option>Qatar</option><option>Suiza</option><option>Bosnia y Herzegovina</option></optgroup>
-                  <optgroup label="Grupo C"><option>Brasil</option><option>Marruecos</option><option>Haití</option><option>Escocia</option></optgroup>
-                  <optgroup label="Grupo D"><option>Estados Unidos</option><option>Paraguay</option><option>Australia</option><option>Turquía</option></optgroup>
-                  <optgroup label="Grupo E"><option>Alemania</option><option>Curazao</option><option>Costa de Marfil</option><option>Ecuador</option></optgroup>
-                  <optgroup label="Grupo F"><option>Países Bajos</option><option>Japón</option><option>Túnez</option><option>Suecia</option></optgroup>
-                  <optgroup label="Grupo G"><option>Bélgica</option><option>Egipto</option><option>Irán</option><option>Nueva Zelanda</option></optgroup>
-                  <optgroup label="Grupo H"><option>España</option><option>Cabo Verde</option><option>Arabia Saudita</option><option>Uruguay</option></optgroup>
-                  <optgroup label="Grupo I"><option>Francia</option><option>Senegal</option><option>Noruega</option><option>Iraq</option></optgroup>
-                  <optgroup label="Grupo J"><option>Argentina</option><option>Argelia</option><option>Austria</option><option>Jordania</option></optgroup>
-                  <optgroup label="Grupo K"><option>Portugal</option><option>Colombia</option><option>Uzbekistán</option><option>RD Congo</option></optgroup>
-                  <optgroup label="Grupo L"><option>Inglaterra</option><option>Croacia</option><option>Ghana</option><option>Panamá</option></optgroup>
-                </select>
-              </div>
-
-              <div class="km-field">
-                <label>⚽ Goleador del Mundial <span style="font-weight:600;font-size:10px;color:var(--gris)">· favoritos o escribe otro</span></label>
-                <input type="text" name="properties[4° Goleador]" list="km-goleadores" placeholder="Elige un favorito o escribe cualquier jugador..." required>
-                <datalist id="km-goleadores">
-                  <option value="Lionel Messi"><option value="Kylian Mbappé"><option value="Erling Haaland">
-                  <option value="Vinícius Júnior"><option value="Lamine Yamal"><option value="Harry Kane">
-                  <option value="Julián Álvarez"><option value="Lautaro Martínez"><option value="Mohamed Salah">
-                  <option value="Heung-min Son"><option value="Cristiano Ronaldo"><option value="Jude Bellingham">
-                  <option value="Rodrygo"><option value="Florian Wirtz"><option value="Bukayo Saka">
-                  <option value="Rafael Leão"><option value="Antoine Griezmann"><option value="Pedri">
-                </datalist>
-                <div class="km-hint">💡 La lista son solo <b>favoritos sugeridos</b>. Puedes escribir el nombre de <b>cualquier</b> jugador del Mundial.</div>
-              </div>
-
-              <button type="submit" id="km-buy" class="km-cta">🍺 Participar y añadir al carrito</button>
-              <div class="km-recap" id="km-recap">Tu pronóstico aparecerá acá a medida que elijas 👆</div>
-            </form>
-          </div>
-        </div>
-
-        <div class="km-ticker km-rise km-d4">
-          <div><span class="fi fi-mx"></span><span class="fi fi-za"></span><span class="fi fi-kr"></span><span class="fi fi-cz"></span><span class="fi fi-ca"></span><span class="fi fi-qa"></span><span class="fi fi-ch"></span><span class="fi fi-ba"></span><span class="fi fi-br"></span><span class="fi fi-ma"></span><span class="fi fi-ht"></span><span class="fi fi-gb-sct"></span><span class="fi fi-us"></span><span class="fi fi-py"></span><span class="fi fi-au"></span><span class="fi fi-tr"></span><span class="fi fi-de"></span><span class="fi fi-cw"></span><span class="fi fi-ci"></span><span class="fi fi-ec"></span><span class="fi fi-nl"></span><span class="fi fi-jp"></span><span class="fi fi-tn"></span><span class="fi fi-se"></span><span class="fi fi-be"></span><span class="fi fi-eg"></span><span class="fi fi-ir"></span><span class="fi fi-nz"></span><span class="fi fi-es"></span><span class="fi fi-cv"></span><span class="fi fi-sa"></span><span class="fi fi-uy"></span><span class="fi fi-fr"></span><span class="fi fi-sn"></span><span class="fi fi-no"></span><span class="fi fi-iq"></span><span class="fi fi-ar"></span><span class="fi fi-dz"></span><span class="fi fi-at"></span><span class="fi fi-jo"></span><span class="fi fi-pt"></span><span class="fi fi-co"></span><span class="fi fi-uz"></span><span class="fi fi-cd"></span><span class="fi fi-gb-eng"></span><span class="fi fi-hr"></span><span class="fi fi-gh"></span><span class="fi fi-pa"></span><span class="fi fi-mx"></span><span class="fi fi-za"></span><span class="fi fi-kr"></span><span class="fi fi-cz"></span><span class="fi fi-ca"></span><span class="fi fi-qa"></span><span class="fi fi-ch"></span><span class="fi fi-ba"></span><span class="fi fi-br"></span><span class="fi fi-ma"></span></div>
-        </div>
-
-        <div class="km-steps km-rise km-d6">
-          <div class="km-step"><div class="n">1</div><h4>Compra el pack</h4><p>Lleva el Pack Mundialero a $23.000. Cada pack es un pronóstico: participa las veces que quieras.</p></div>
-          <div class="km-step"><div class="n">2</div><h4>Pronostica</h4><p>Elige campeón, 2°, 3° y el goleador antes de pagar.</p></div>
-          <div class="km-step"><div class="n">3</div><h4>Si achuntái, ganái</h4><p>El que acierte los 4 se gana 365 latas de cerveza. 🏆</p></div>
-        </div>
-
-        <div class="km-count km-rise km-d6">
-          <div class="ttl">⏳ La polla cierra en</div>
-          <div class="km-clock">
-            <div class="km-u"><div class="num" id="km-dd">--</div><div class="lab">Días</div></div>
-            <div class="km-u"><div class="num" id="km-hh">--</div><div class="lab">Horas</div></div>
-            <div class="km-u"><div class="num" id="km-mm">--</div><div class="lab">Min</div></div>
-            <div class="km-u"><div class="num" id="km-ss">--</div><div class="lab">Seg</div></div>
-          </div>
-          <div class="cierre">Cierre al terminar la fase de grupos · <b>27 de junio 2026</b></div>
-        </div>
-
-        <div class="km-legal">
-          <h3>📋 Bases del Concurso · Polla Mundial 23</h3>
-          <ol>
-            <li><b>Participación.</b> Pueden participar personas mayores de 18 años que compren el "Pack Mundialero" en kairos-brewing.com y completen su pronóstico (1°, 2° y 3° lugar + goleador del torneo) dentro del período de vigencia. Cada Pack comprado equivale a un pronóstico; no hay límite de participaciones.</li>
-            <li><b>Período de participación y cierre.</b> El concurso estará vigente desde la publicación de estas bases hasta las 23:59 hrs (horario de Chile continental) del <b>27 de junio de 2026</b>, fecha que coincide con el término de la fase de grupos del Mundial. No se aceptarán pronósticos ni compras con posterioridad a ese día y hora.</li>
-            <li><b>Mecánica para ganar.</b> Ganará quien acierte de forma simultánea el 1°, 2° y 3° lugar final del torneo y el goleador del Mundial.</li>
-            <li><b>Único ganador.</b> El concurso contempla un (1) único ganador.</li>
-            <li><b>Empate / desempate.</b> Si más de una persona acierta el resultado completo, se realizará un <b>sorteo aleatorio</b> entre todas las personas que hayan acertado, del cual saldrá el único ganador.</li>
-            <li><b>Qué es "cerveza gratis por un año".</b> El premio consiste en cerveza Kairos durante un período de 12 meses, por un máximo total de <b>365 latas</b>.</li>
-            <li><b>Entregas mensuales.</b> Las entregas serán mensuales y equivalentes a la cantidad de días del mes calendario correspondiente (<b>28, 30 o 31 latas</b> según el mes), hasta completar el máximo de 365 latas en los 12 meses.</li>
-            <li><b>Surtido.</b> Las latas entregadas corresponderán al surtido disponible que Kairos defina en cada período. No se garantizan estilos específicos ni productos de ediciones limitadas.</li>
-            <li><b>Condiciones de entrega.</b> Despacho a domicilio dentro de la <b>Región Metropolitana</b>. Los ganadores fuera de la RM deberán retirar el premio en locales Kairos que la empresa determine.</li>
-            <li><b>Retiro no efectuado.</b> Si el ganador no retira o no recibe la entrega mensual dentro del plazo, dicha entrega se considerará caducada, sin derecho a recuperación.</li>
-            <li><b>Naturaleza del premio.</b> El premio es <b>personal e intransferible</b> y no podrá ser canjeado por dinero ni por otros productos.</li>
-            <li><b>Situaciones no previstas.</b> Cualquier situación no contemplada en estas bases será resuelta por Kairos, cuya decisión será final.</li>
-          </ol>
-          <div class="km-foot">Promoción válida en Chile. El consumo de bebidas alcohólicas es exclusivo para mayores de 18 años. Bebe con responsabilidad.</div>
-        </div>
-      </div>
-    </div>
-
-    <script>
-    (function(){
-      if(window.__kmInit) return; window.__kmInit=true;
-      function init(){
-        var form=document.getElementById('km-polla-form');
-        if(!form) return;
-        function val(n){ var e=form.elements[n]; return e?e.value:''; }
-        window.kmRecap=function(){
-          var r=document.getElementById('km-recap'); if(!r) return;
-          var c=val('properties[1° Campeón]'),s=val('properties[2° Subcampeón]'),t=val('properties[3° Tercer lugar]'),g=val('properties[4° Goleador]');
-          if(!c&&!s&&!t&&!g){ r.textContent='Tu pronóstico aparecerá acá a medida que elijas 👆'; return; }
-          r.innerHTML='🥇 <b>'+(c||'—')+'</b> &nbsp; 🥈 <b>'+(s||'—')+'</b> &nbsp; 🥉 <b>'+(t||'—')+'</b><br>⚽ Goleador: <b>'+(g||'—')+'</b>';
-        };
-        ['properties[1° Campeón]','properties[2° Subcampeón]','properties[3° Tercer lugar]','properties[4° Goleador]'].forEach(function(n){
-          var e=form.elements[n]; if(e){ e.addEventListener('change',window.kmRecap); e.addEventListener('input',window.kmRecap);}
-        });
-        var qtys=form.querySelectorAll('.km-qty'), totalBox=document.getElementById('km-total'), buy=document.getElementById('km-buy');
-        function clamp(i){ var v=parseInt(i.value,10); if(isNaN(v)||v<0)v=0; if(v>12)v=12; return v; }
-        window.kmSum=function(){
-          var s=0; for(var k=0;k<qtys.length;k++){ var v=clamp(qtys[k]); qtys[k].value=v; s+=v; }
-          if(totalBox){ var msg=s===12?'¡Listo! 🍺':(s<12?('Te faltan '+(12-s)):('Te sobran '+(s-12)));
-            totalBox.className='km-total'+(s===12?' ok':(s>12?' bad':''));
-            totalBox.innerHTML='Total: <b>'+s+'</b> / 12 · '+msg; }
-          return s;
-        };
-        for(var k=0;k<qtys.length;k++){ qtys[k].addEventListener('input',window.kmSum); qtys[k].addEventListener('change',window.kmSum); }
-        form.addEventListener('click',function(e){
-          var t=e.target; if(!t||!t.classList) return;
-          var plus=t.classList.contains('km-plus'), minus=t.classList.contains('km-minus');
-          if(plus||minus){ var inp=t.parentNode.querySelector('.km-qty'); if(inp){ var v=clamp(inp)+(plus?1:-1); if(v<0)v=0; if(v>12)v=12; inp.value=v; window.kmSum(); } }
-        });
-        form.addEventListener('submit',function(e){
-          e.preventDefault();
-          if(window.kmSum()!==12){ alert('Tu pack tiene que sumar 12 cervezas 🍺'); return; }
-          var campeon=val('properties[1° Campeón]'), sub=val('properties[2° Subcampeón]'), tercero=val('properties[3° Tercer lugar]'), gol=val('properties[4° Goleador]');
-          if(!campeon||!sub||!tercero||!gol){ alert('Completa tu pronóstico: 1°, 2°, 3° + goleador 🏆'); return; }
-          // Reúno TODAS las properties del form (los 11 estilos con qty>0 + las 4 predicciones).
-          // Estas viajan al pedido como LINE ITEM PROPERTIES (no como cart attributes),
-          // así iDTE no las toca al emitir la boleta SII.
-          var properties = {};
-          for (var ei=0; ei<form.elements.length; ei++) {
-            var el=form.elements[ei], nm=el.name||'';
-            if (nm.indexOf('properties[')!==0 || nm.charAt(nm.length-1)!==']') continue;
-            var key=nm.slice(11,-1);
-            if (el.type==='number') {
-              var n=parseInt(el.value,10)||0;
-              if (n>0) properties[key]=String(n);
-            } else if ((el.value||'').trim()) {
-              properties[key]=el.value.trim();
-            }
-          }
-          // Resumen visible en el drawer del SPA.
-          var styles=[];
-          for (var k=0;k<qtys.length;k++){
-            var v=parseInt(qtys[k].value,10)||0;
-            if(v>0){ var lbl=qtys[k].name.replace('properties[','').replace(']',''); styles.push(v+'× '+lbl); }
-          }
-          var attrsDisplay={'Campeón':campeon,'Subcampeón':sub,'Tercer lugar':tercero,'Goleador':gol,'12 pack':styles.join(' · ')};
-          var vid=form.elements['id'].value;
-          // Cada Pack Mundialero se agrega como LÍNEA SEPARADA con SUS propias properties.
-          CART.push({ variantId:vid, name:'Pack Mundialero', image:'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111', price:23000, qty:1, properties:properties, attributes:attrsDisplay, isMundial:true });
-          saveCart(); updateCart();
-          if(!cartOpen) toggleCart();
-        });
-        window.kmSum();
-
-        var fin=new Date('2026-06-27T23:59:59-04:00').getTime();
-        function pad(n){ return (n<10?'0':'')+n; }
-        function tick(){
-          var dd=document.getElementById('km-dd'); if(!dd) return;
-          var d=fin-Date.now();
-          if(d<=0){ dd.textContent='00'; document.getElementById('km-hh').textContent='00'; document.getElementById('km-mm').textContent='00'; document.getElementById('km-ss').textContent='00';
-            var cc=document.querySelector('.km-count .ttl'); if(cc) cc.textContent='🔒 ¡Polla cerrada!'; return; }
-          dd.textContent=Math.floor(d/86400000);
-          document.getElementById('km-hh').textContent=pad(Math.floor(d/3600000)%24);
-          document.getElementById('km-mm').textContent=pad(Math.floor(d/60000)%60);
-          document.getElementById('km-ss').textContent=pad(Math.floor(d/1000)%60);
-        }
-        tick(); setInterval(tick,1000);
-
-        var a=document.getElementById('km-audio'), b=document.getElementById('km-music');
-        if(a&&b){
-          var on=false;
-          function icon(){ b.textContent=on?'🔊':'🔈'; b.className=on?'km-music on':'km-music'; }
-          function play(){ var p=a.play(); if(p&&p.then){ p.then(function(){on=true;icon();}).catch(function(){}); } else { on=true; icon(); } }
-          function toggle(){ if(on){ a.pause(); on=false; icon(); } else { play(); } }
-          b.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
-          icon();
-          // Autoplay al entrar a la vista Mundial (el click en el link nav cuenta como user gesture).
-          // En mobile (sobre todo iOS) a veces el navegador bloquea el play; ahí lo
-          // disparamos en el próximo touch/click del usuario.
-          window.kmEnterMundial = function(){
-            if(on) return;
-            var p=a.play();
-            if(p&&p.then){
-              p.then(function(){on=true;icon();}).catch(function(){
-                var trigger=function(){
-                  document.removeEventListener('touchend',trigger,true);
-                  document.removeEventListener('click',trigger,true);
-                  if(!on) play();
-                };
-                document.addEventListener('touchend',trigger,{once:true,capture:true});
-                document.addEventListener('click',trigger,{once:true,capture:true});
-              });
-            } else { on=true; icon(); }
-          };
-        }
-      }
-      if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',init); } else { init(); }
-    })();
-    </script>
-  </div>
-
   <div class="kb-view kb-light" id="view-product"></div>
   <div class="kb-view kb-light" id="view-page"></div>
 </main>
@@ -1970,7 +1435,6 @@ const ROUTES = {
   '/eventos':       'eventos',
   '/nosotros':      'nosotros',
   '/arma-tu-pack':  'armar',
-  '/pages/mundial': 'mundial',
   '/politicas-de-uso': 'terminos',
   '/privacidad':    'privacidad',
 };
@@ -1978,7 +1442,6 @@ let CURRENT_HANDLE = null;
 function viewFromPath(path){
   const p = path.replace(/\/+$/,'') || '/';
   if (p.indexOf('/products/') === 0) { CURRENT_HANDLE = p.slice(10); return 'product'; }
-  if (p === '/pages/mundial') return 'mundial';
   if (p.indexOf('/pages/') === 0) { CURRENT_HANDLE = p.slice(7); return 'page'; }
   if (p.indexOf('/cervezas') === 0) return 'cervezas';
   if (p.indexOf('/arma-tu-pack') === 0) return 'armar';
@@ -1999,9 +1462,6 @@ function showView(name){
     document.querySelectorAll('#view-nosotros video').forEach(vid => {
       if (vid.preload !== 'metadata') { vid.preload = 'metadata'; vid.load(); }
     });
-  }
-  if (name === 'mundial' && typeof window.kmEnterMundial === 'function') {
-    window.kmEnterMundial();
   }
   populateGridFor(name);
 }
@@ -2688,28 +2148,20 @@ function updateCart(){
     body.innerHTML = '<div class="kb-cart-empty">Tu carro está vacío.<br>Explora las cervezas para empezar.</div>';
     return;
   }
-  let mundialCount = 0;
-  body.innerHTML = CART.map((i,idx) => {
-    if (i.isMundial) mundialCount++;
-    const label = i.isMundial ? `${escapeHtml(i.name)} <span class="kb-ci-tag">#${mundialCount}</span>` : escapeHtml(i.name);
-    const qtyCtrl = i.isMundial
-      ? `<button class="kb-ci-rm" onclick="removeCartItem(${idx})">Quitar</button>`
-      : `<div class="kb-ci-qty">
-           <button onclick="changeCartQty(${idx},-1)">−</button>
-           <span>${i.qty}</span>
-           <button onclick="changeCartQty(${idx},1)">+</button>
-         </div>`;
-    return `
+  body.innerHTML = CART.map((i,idx) => `
     <div class="kb-ci">
       <div class="kb-ci-img">${i.image ? `<img src="${i.image}" alt="">` : ''}</div>
       <div class="kb-ci-info">
-        <div class="kb-ci-name">${label}</div>
+        <div class="kb-ci-name">${escapeHtml(i.name)}</div>
         <div class="kb-ci-unit">${fmtPrice(i.price)} c/u</div>
-        ${qtyCtrl}
+        <div class="kb-ci-qty">
+          <button onclick="changeCartQty(${idx},-1)">−</button>
+          <span>${i.qty}</span>
+          <button onclick="changeCartQty(${idx},1)">+</button>
+        </div>
       </div>
       <div class="kb-ci-price">${fmtPrice(i.qty * i.price)}</div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 function removeCartItem(idx){
   CART.splice(idx,1); saveCart(); updateCart();
@@ -2725,9 +2177,7 @@ function doKbCheckout(){
   if (!valid.length) { alert('Ningún producto del carro está disponible online'); return; }
 
   // POST bulk a /cart/add de Shopify con todas las líneas + sus line item
-  // properties (donde están las predicciones del Mundial). iDTE/Flapp NO
-  // toca las properties de línea, así que las predicciones quedan a salvo.
-  // return_to=/checkout salta el carrito de Shopify y va directo al checkout.
+  // properties. return_to=/checkout salta el carrito y va directo al checkout.
   const f = document.createElement('form');
   f.method = 'POST';
   f.action = `https://${SHOPIFY_DOMAIN}/cart/add`;
@@ -2760,46 +2210,6 @@ function doKbCheckout(){
   buildHeroDots();
   showView(viewFromPath(location.pathname));
   resetHeroTimer();
-})();
-</script>
-
-<!-- ===== Popup MUNDIAL ===== -->
-<div id="km-pop-overlay" class="km-pop-overlay" role="dialog" aria-modal="true" aria-label="Polla Mundial Kairos">
-  <div class="km-pop">
-    <button class="km-pop-x" id="km-pop-x" aria-label="Cerrar">✕</button>
-    <a data-route="/pages/mundial" onclick="go(event)" id="km-pop-link" class="km-pop-link">
-      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/IMG-2197.jpg?v=1781290111" alt="Polla Mundial Kairos - Participa">
-    </a>
-  </div>
-</div>
-<style>
-.km-pop-overlay{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,7,10,.78);backdrop-filter:blur(3px)}
-.km-pop-overlay.km-show{display:flex;animation:kmPopFade .3s ease}
-@keyframes kmPopFade{from{opacity:0}to{opacity:1}}
-.km-pop{position:relative;width:100%;max-width:440px;animation:kmPopIn .4s cubic-bezier(.2,.8,.2,1)}
-@keyframes kmPopIn{from{transform:translateY(30px) scale(.95);opacity:0}to{transform:none;opacity:1}}
-.km-pop-link{display:block;line-height:0}
-.km-pop-link img{width:100%;height:auto;display:block;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.6)}
-.km-pop-x{position:absolute;top:-14px;right:-14px;z-index:3;width:36px;height:36px;border-radius:50%;cursor:pointer;border:2px solid #fff;background:#06131a;color:#fff;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.5);transition:transform .15s}
-.km-pop-x:hover{transform:scale(1.1);background:#ffce1f;color:#06131a}
-@media(max-width:480px){.km-pop-x{top:-10px;right:-10px}}
-</style>
-<script>
-(function(){
-  var KEY='km_pop_polla_img_v1';
-  var DIAS=2;
-  function seen(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } }
-  function mark(){ try{ localStorage.setItem(KEY, String(Date.now())); }catch(e){} }
-  function fresh(){ var t=seen(); if(!t) return false; return (Date.now()-parseInt(t,10)) < DIAS*86400000; }
-  var ov=document.getElementById('km-pop-overlay');
-  if(!ov || fresh()){ if(ov) ov.remove(); return; }
-  if(document.body && ov.parentNode!==document.body){ document.body.appendChild(ov); }
-  function close(){ mark(); ov.remove(); }
-  document.getElementById('km-pop-x').addEventListener('click', function(e){ e.preventDefault(); close(); });
-  ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
-  document.getElementById('km-pop-link').addEventListener('click', function(){ mark(); setTimeout(function(){ if(ov && ov.parentNode) ov.remove(); }, 50); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
-  ov.classList.add('km-show');
 })();
 </script>
 
