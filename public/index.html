@@ -2314,27 +2314,40 @@ function renderProductPage(products){
 }
 function pdpShowLocations(){
   const p = window.__pdpProduct; if (!p) return;
-  const v = pdpCurrentVariant(); if (!v) return;
-  const locs = v.locations || [];
-  const list = locs.length
-    ? locs.map(l => {
-        const s = parseInt(l.stock,10) || 0;
-        const cls = s > 0 ? 'ok' : 'no';
-        const status = s > 0 ? (s + ' disponibles') : 'Sin stock';
-        return `<li class="kb-locs-item ${cls}"><span class="kb-locs-name">${escapeHtml(l.name)}</span><span class="kb-locs-stock">${status}</span></li>`;
-      }).join('')
-    : '<li class="kb-locs-item"><span>Sin información de locales por ahora.</span></li>';
   const html = `
     <div class="kb-locs-overlay" id="kbLocsOverlay" onclick="if(event.target===this) pdpHideLocations()">
       <div class="kb-locs-modal" role="dialog" aria-modal="true" aria-label="Disponibilidad por local">
         <button class="kb-locs-x" onclick="pdpHideLocations()" aria-label="Cerrar">✕</button>
         <h3>Disponibilidad por local</h3>
-        <p class="kb-locs-sub">${escapeHtml(p.title)}${v.title && v.title !== 'Default Title' ? ' · ' + escapeHtml(v.title) : ''}</p>
-        <ul class="kb-locs-list">${list}</ul>
+        <p class="kb-locs-sub">${escapeHtml(p.title)}</p>
+        <ul class="kb-locs-list" id="kbLocsList"><li class="kb-locs-item"><span>Cargando…</span></li></ul>
         <p class="kb-locs-note">Stock en tiempo real. Sujeto a cambios durante el día.</p>
       </div>
     </div>`;
   document.body.insertAdjacentHTML('beforeend', html);
+  fetch('/api/inventory?product=' + encodeURIComponent(p.id))
+    .then(r => r.json())
+    .then(data => {
+      const ul = document.getElementById('kbLocsList'); if (!ul) return;
+      const locs = (data && data.locations) || [];
+      if (!locs.length) {
+        ul.innerHTML = '<li class="kb-locs-item"><span>Sin información de stock por local por ahora.</span></li>';
+        return;
+      }
+      // orden fijo: Garden, Garden Antofagasta, Badass
+      const order = n => /antofagasta/i.test(n) ? 1 : /badass/i.test(n) ? 2 : 0;
+      locs.sort((a,b) => order(a.name) - order(b.name));
+      ul.innerHTML = locs.map(l => {
+        const s = parseInt(l.stock,10) || 0;
+        const cls = s > 0 ? 'ok' : 'no';
+        const status = s > 0 ? (s + ' disponibles') : 'Sin stock';
+        return `<li class="kb-locs-item ${cls}"><span class="kb-locs-name">${escapeHtml(l.name)}</span><span class="kb-locs-stock">${status}</span></li>`;
+      }).join('');
+    })
+    .catch(() => {
+      const ul = document.getElementById('kbLocsList');
+      if (ul) ul.innerHTML = '<li class="kb-locs-item"><span>No pudimos cargar el stock. Intenta de nuevo.</span></li>';
+    });
 }
 function pdpHideLocations(){
   const ov = document.getElementById('kbLocsOverlay');

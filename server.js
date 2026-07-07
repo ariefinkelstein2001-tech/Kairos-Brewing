@@ -199,6 +199,56 @@ app.get('/api/cart-link', (req, res) => {
 
 app.get('/healthz', (_req, res) => res.json({ ok: true }));
 
+// ─── Inventario por local (solo Garden, Garden Antofagasta y Badass) ──────────
+// Endpoint separado y tolerante a fallos: si la query de inventario falla (p.ej.
+// falta el scope read_inventory), devuelve locations:[] sin romper el catálogo.
+const INV_TTL = 2 * 60 * 1000;
+const invCache = new Map(); // productId -> { at, locations }
+
+const INVENTORY_QUERY = (gid) => `{
+  product(id: "${gid}") {
+    variants(first: 30) {
+      edges { node {
+        inventoryItem {
+          inventoryLevels(first: 20) {
+            edges { node {
+              location { name }
+              quantities(names: ["available"]) { name quantity }
+            } }
+          }
+        }
+      } }
+    }
+  }
+}`;
+
+app.get('/api/inventory', async (req, res) => {
+  const id = String(req.query.product || '').replace(/\D/g, '');
+  if (!TOKEN || !id) return res.json({ locations: [] });
+  const cached = invCache.get(id);
+  if (cached && Date.now() - cached.at < INV_TTL) return res.json({ locations: cached.locations });
+  try {
+    const resp = await shopifyGraphQL(INVENTORY_QUERY(`gid://shopify/Product/${id}`));
+    if (resp.errors) throw new Error(JSON.stringify(resp.errors));
+    const map = {};
+    (resp.data?.product?.variants?.edges || []).forEach(({ node: v }) => {
+      (v.inventoryItem?.inventoryLevels?.edges || []).forEach(({ node: lvl }) => {
+        const name = lvl.location?.name || '';
+        if (!SHOW_LOCATION_RX.test(name)) return;
+        const q = (lvl.quantities || []).find(x => x.name === 'available')?.quantity ?? 0;
+        map[name] = (map[name] || 0) + (parseInt(q, 10) || 0);
+      });
+    });
+    const locations = Object.keys(map).map(name => ({ name, stock: map[name] }));
+    invCache.set(id, { at: Date.now(), locations });
+    res.set('Cache-Control', 'public, max-age=120');
+    res.json({ locations });
+  } catch (e) {
+    console.warn('inventory error:', e.message);
+    res.json({ locations: [], error: e.message });
+  }
+});
+
 // POST /api/newsletter — suscribe el email a la lista Kairos de Klaviyo (Tc9EC9).
 // Si KLAVIYO_PRIVATE_KEY está seteada en el entorno, primero verifica si el email
 // ya está en la lista y devuelve already_subscribed:true sin re-suscribir.
