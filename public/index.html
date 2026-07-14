@@ -1873,7 +1873,10 @@ function isDestilado(p){
 function isMerch(p){
   if (isHiddenProduct(p)) return false;
   const t = (p.title || '').toLowerCase();
-  return /vaso|jockey|jarra|copa|growler|pin|gorr/.test(t);
+  const type = (p.type || '').toLowerCase();
+  if (/camiseta|polera|poler[oó]n|ropa|merch|accesori|gorro|jockey|vaso|jarra|copa|textil|prenda/.test(type)) return true;
+  if ((p.collections || []).some(c => /merch|tienda|ropa|accesori/i.test((c.handle||'')+' '+(c.title||'')))) return true;
+  return /vaso|jockey|jarra|copa|growler|\bpin\b|gorr|camiseta|polera|poler[oó]n|hoodie|poler/.test(t);
 }
 function hasZorbo(p){ return (p.tags || []).map(t => String(t).toUpperCase()).includes('ZORBO'); }
 function isSubscription(p){ return /suscrip|subscription/i.test(p.title || ''); }
