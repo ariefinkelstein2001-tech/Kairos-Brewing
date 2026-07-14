@@ -2290,7 +2290,14 @@ async function populateGridFor(view){
       return /camiseta|polera|poler[oó]n|hoodie|polerón|gorro|gorra|jockey|ropa|prenda|textil|calcet|t-?shirt|tshirt|\btee\b|\btees\b|remera|sudadera|buzo|short|pantal/.test(s);
     };
     const ropa = list.filter(isApparel);
-    const cristal = list.filter(p => !isApparel(p));
+    // Orden manual de Cristalería: tulip, copa gin banny, allegra badass, luego el resto.
+    const CRISTAL_ORDER = [/vaso\s*tulip/i, /copa\s*gin\s*banny/i, /allegra\s*badass|cervecer[ao]\s*allegra/i];
+    const cristalRank = p => {
+      const t = p.title || '';
+      const i = CRISTAL_ORDER.findIndex(rx => rx.test(t));
+      return i === -1 ? CRISTAL_ORDER.length : i;
+    };
+    const cristal = list.filter(p => !isApparel(p)).sort((a,b) => cristalRank(a) - cristalRank(b));
     const section = (title, arr) => arr.length
       ? `<h2 class="kb-coll-t">${title}</h2>
          <div class="kb-hscroll-wrap">
