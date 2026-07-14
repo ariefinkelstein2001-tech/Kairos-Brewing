@@ -1141,8 +1141,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       <h1 class="kb-page-title">Merch</h1>
       <p class="kb-page-sub">Vasos · jockeys · growlers · pins</p>
     </div>
-    <section class="kb-section">
-      <div class="kb-grid" id="gridMerch"><div class="kb-loading">Cargando merch…</div></div>
+    <section class="kb-collwrap">
+      <div id="gridMerch"><div class="kb-loading">Cargando merch…</div></div>
     </section>
   </div>
 
@@ -2267,7 +2267,17 @@ async function populateGridFor(view){
     const el = document.getElementById('gridMerch');
     if (!el || el.dataset.done) return;
     const list = products.filter(isMerch);
-    el.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin merch disponible</div>';
+    const isApparel = p => {
+      const s = (p.title||'').toLowerCase() + ' ' + (p.type||'').toLowerCase();
+      return /camiseta|polera|poler[oó]n|hoodie|polerón|gorro|gorra|jockey|ropa|prenda|textil|calcet/.test(s);
+    };
+    const ropa = list.filter(isApparel);
+    const cristal = list.filter(p => !isApparel(p));
+    const section = (title, arr) => arr.length
+      ? `<h2 class="kb-coll-t">${title}</h2><div class="kb-grid">${arr.map(buildCard).join('')}</div>`
+      : '';
+    const html = section('Cristalería', cristal) + section('Ropa', ropa);
+    el.innerHTML = html || '<div class="kb-loading">Sin merch disponible</div>';
     el.dataset.done = '1';
   }
   if (view === 'product') renderProductPage(products);
