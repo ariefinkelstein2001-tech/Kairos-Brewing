@@ -2291,7 +2291,7 @@ async function populateGridFor(view){
     };
     const ropa = list.filter(isApparel);
     // Orden manual de Cristalería: tulip, copa gin banny, allegra badass, luego el resto.
-    const CRISTAL_ORDER = [/vaso\s*tulip/i, /copa\s*gin\s*banny/i, /allegra\s*badass|cervecer[ao]\s*allegra/i];
+    const CRISTAL_ORDER = [/vaso\s*tulip/i, /copa\s*gin\s*banny/i, /allegra.*500|500.*allegra/i];
     const cristalRank = p => {
       const t = p.title || '';
       const i = CRISTAL_ORDER.findIndex(rx => rx.test(t));
