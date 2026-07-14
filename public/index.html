@@ -292,6 +292,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
   padding-bottom:14px;scrollbar-width:thin;scrollbar-color:var(--orange) #111;
 }
+.kb-hscroll-wrap{position:relative}
+.kb-hs-arr{
+  position:absolute;top:calc(50% - 20px);transform:translateY(-50%);z-index:6;
+  width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(20,20,20,.82);color:#fff;font-size:26px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,transform .15s;
+}
+.kb-hs-arr:hover{background:#000;transform:translateY(-50%) scale(1.06)}
+.kb-hs-arr.prev{left:-8px}
+.kb-hs-arr.next{right:-8px;animation:kb-hs-nudge 1.8s ease-in-out infinite}
+@keyframes kb-hs-nudge{0%,100%{transform:translateY(-50%)}50%{transform:translateY(-50%) translateX(5px)}}
+@media(max-width:560px){.kb-hs-arr{width:38px;height:38px;font-size:22px}.kb-hs-arr.prev{left:-2px}.kb-hs-arr.next{right:-2px}}
 .kb-hscroll::-webkit-scrollbar{height:6px}
 .kb-hscroll::-webkit-scrollbar-track{background:#111}
 .kb-hscroll::-webkit-scrollbar-thumb{background:var(--orange);border-radius:3px}
@@ -2044,6 +2057,11 @@ function buildCard(p){
     </div>
   </div>`;
 }
+function hsScroll(btn, dir){
+  const wrap = btn.closest('.kb-hscroll-wrap');
+  const row = wrap && wrap.querySelector('.kb-hscroll');
+  if (row) row.scrollBy({ left: dir * Math.max(280, row.clientWidth * 0.8), behavior: 'smooth' });
+}
 function cardQty(btn, delta){
   const el = btn.closest('.kb-qty').querySelector('.v');
   if (!el) return;
@@ -2274,7 +2292,12 @@ async function populateGridFor(view){
     const ropa = list.filter(isApparel);
     const cristal = list.filter(p => !isApparel(p));
     const section = (title, arr) => arr.length
-      ? `<h2 class="kb-coll-t">${title}</h2><div class="kb-hscroll kb-merch-row">${arr.map(buildCard).join('')}</div>`
+      ? `<h2 class="kb-coll-t">${title}</h2>
+         <div class="kb-hscroll-wrap">
+           <button class="kb-hs-arr prev" onclick="hsScroll(this,-1)" aria-label="Anterior">‹</button>
+           <div class="kb-hscroll kb-merch-row">${arr.map(buildCard).join('')}</div>
+           <button class="kb-hs-arr next" onclick="hsScroll(this,1)" aria-label="Siguiente">›</button>
+         </div>`
       : '';
     const html = section('Cristalería', cristal) + section('Ropa', ropa);
     el.innerHTML = html || '<div class="kb-loading">Sin merch disponible</div>';
