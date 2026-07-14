@@ -1296,7 +1296,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 
       <section class="kb-ns-block">
         <div class="kb-ns-media">
-          <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/HISTORIA_KAIROS21.png?v=1769533185&width=1100" alt="Kairos 2024" loading="lazy">
+          <img class="kb-ns-circle" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/HISTORIA_KAIROS21.png?v=1769533185&width=1100" alt="Kairos 2024" loading="lazy">
         </div>
         <div class="kb-ns-txt">
           <h2 class="kb-ns-year">2024</h2>
@@ -1764,15 +1764,14 @@ function showView(name){
     document.querySelectorAll('#view-nosotros video').forEach(vid => {
       if (vid.preload !== 'metadata') { vid.preload = 'metadata'; vid.load(); }
     });
-    const circ = document.querySelector('#view-nosotros .kb-ns-circle');
-    if (circ && !circ.dataset.obs) {
-      circ.dataset.obs = '1';
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((ents,o) => {
-          ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } });
-        }, { threshold: 0.2 });
-        io.observe(circ);
-      } else { circ.classList.add('in'); }
+    const circs = document.querySelectorAll('#view-nosotros .kb-ns-circle');
+    if (circs.length && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((ents,o) => {
+        ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } });
+      }, { threshold: 0.2 });
+      circs.forEach(c => { if (!c.dataset.obs) { c.dataset.obs = '1'; io.observe(c); } });
+    } else {
+      circs.forEach(c => c.classList.add('in'));
     }
   }
   if (name === 'mundial') {
