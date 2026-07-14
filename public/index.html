@@ -2269,12 +2269,12 @@ async function populateGridFor(view){
     const list = products.filter(isMerch);
     const isApparel = p => {
       const s = (p.title||'').toLowerCase() + ' ' + (p.type||'').toLowerCase();
-      return /camiseta|polera|poler[oó]n|hoodie|polerón|gorro|gorra|jockey|ropa|prenda|textil|calcet/.test(s);
+      return /camiseta|polera|poler[oó]n|hoodie|polerón|gorro|gorra|jockey|ropa|prenda|textil|calcet|t-?shirt|tshirt|\btee\b|\btees\b|remera|sudadera|buzo|short|pantal/.test(s);
     };
     const ropa = list.filter(isApparel);
     const cristal = list.filter(p => !isApparel(p));
     const section = (title, arr) => arr.length
-      ? `<h2 class="kb-coll-t">${title}</h2><div class="kb-grid">${arr.map(buildCard).join('')}</div>`
+      ? `<h2 class="kb-coll-t">${title}</h2><div class="kb-hscroll kb-merch-row">${arr.map(buildCard).join('')}</div>`
       : '';
     const html = section('Cristalería', cristal) + section('Ropa', ropa);
     el.innerHTML = html || '<div class="kb-loading">Sin merch disponible</div>';
