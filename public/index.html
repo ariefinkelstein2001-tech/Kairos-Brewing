@@ -591,7 +591,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-ns-hero{position:relative;min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;background-size:cover;background-position:center}
 .kb-ns-hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.32)}
 .kb-ns-hero h1{position:relative;font-family:var(--font-heavy);color:#fff;font-size:clamp(48px,11vw,118px);letter-spacing:.04em;text-transform:uppercase;line-height:1}
-#view-nosotros{background:#fff}
+#view-nosotros{background:#fff;overflow-x:hidden}
 .kb-ns-media img.kb-ns-onwhite{background:#fff;filter:brightness(1.06) contrast(1.02)}
 .kb-ns-time{max-width:1120px;margin:0 auto;padding:10px clamp(1rem,4vw,3rem)}
 .kb-ns-block{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);align-items:center;padding:54px 0;border-bottom:1px solid rgba(0,0,0,.1)}
@@ -1768,10 +1768,19 @@ function showView(name){
     });
     const circs = document.querySelectorAll('#view-nosotros .kb-ns-circle');
     if (circs.length && 'IntersectionObserver' in window) {
+      // Observamos el contenedor (que NO se mueve). La imagen sí se traslada
+      // fuera de pantalla en su estado inicial, así que observarla a ella nunca
+      // dispararía la intersección.
       const io = new IntersectionObserver((ents,o) => {
-        ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } });
-      }, { threshold: 0.2 });
-      circs.forEach(c => { if (!c.dataset.obs) { c.dataset.obs = '1'; io.observe(c); } });
+        ents.forEach(e => {
+          if (e.isIntersecting) {
+            const img = e.target.querySelector('.kb-ns-circle');
+            if (img) img.classList.add('in');
+            o.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      circs.forEach(c => { const par = c.parentElement; if (par && !par.dataset.obs) { par.dataset.obs = '1'; io.observe(par); } });
     } else {
       circs.forEach(c => c.classList.add('in'));
     }
