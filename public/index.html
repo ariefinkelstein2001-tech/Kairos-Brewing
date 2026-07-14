@@ -309,6 +309,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .kb-hscroll::-webkit-scrollbar-track{background:#111}
 .kb-hscroll::-webkit-scrollbar-thumb{background:var(--orange);border-radius:3px}
 .kb-hscroll .kb-card{flex:0 0 240px;scroll-snap-align:start}
+@media(max-width:560px){.kb-hscroll .kb-card{flex:0 0 160px}.kb-merch-row .kb-card-name{font-size:13px}.kb-merch-row .kb-card-price{font-size:14px}}
 
 /* ── Product grid (otras vistas) ── */
 .kb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
@@ -2289,6 +2290,10 @@ async function populateGridFor(view){
       const s = (p.title||'').toLowerCase() + ' ' + (p.type||'').toLowerCase();
       return /camiseta|polera|poler[oó]n|hoodie|polerón|gorro|gorra|jockey|ropa|prenda|textil|calcet|t-?shirt|tshirt|\btee\b|\btees\b|remera|sudadera|buzo|short|pantal/.test(s);
     };
+    const isGlass = p => {
+      const s = (p.title||'').toLowerCase() + ' ' + (p.type||'').toLowerCase();
+      return /vaso|jarra|copa|growler|schop|schopero|cristal|pinta|shot/.test(s);
+    };
     const ropa = list.filter(isApparel);
     // Orden manual de Cristalería: tulip, copa gin banny, allegra badass, luego el resto.
     const CRISTAL_ORDER = [/vaso\s*tulip/i, /copa\s*gin\s*banny/i, /allegra.*500|500.*allegra/i];
@@ -2297,7 +2302,8 @@ async function populateGridFor(view){
       const i = CRISTAL_ORDER.findIndex(rx => rx.test(t));
       return i === -1 ? CRISTAL_ORDER.length : i;
     };
-    const cristal = list.filter(p => !isApparel(p)).sort((a,b) => cristalRank(a) - cristalRank(b));
+    const cristal = list.filter(p => !isApparel(p) && isGlass(p)).sort((a,b) => cristalRank(a) - cristalRank(b));
+    const otros = list.filter(p => !isApparel(p) && !isGlass(p));
     const section = (title, arr) => arr.length
       ? `<h2 class="kb-coll-t">${title}</h2>
          <div class="kb-hscroll-wrap">
@@ -2306,7 +2312,7 @@ async function populateGridFor(view){
            <button class="kb-hs-arr next" onclick="hsScroll(this,1)" aria-label="Siguiente">›</button>
          </div>`
       : '';
-    const html = section('Cristalería', cristal) + section('Ropa', ropa);
+    const html = section('Cristalería', cristal) + section('Ropa', ropa) + section('Otros', otros);
     el.innerHTML = html || '<div class="kb-loading">Sin merch disponible</div>';
     el.dataset.done = '1';
   }
