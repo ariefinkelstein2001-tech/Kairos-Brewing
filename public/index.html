@@ -379,8 +379,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-armar-head{text-align:center;max-width:780px;margin:0 auto 38px}
 .kb-armar-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;color:var(--orange-d);border:1px solid var(--orange);border-radius:30px;padding:7px 18px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:22px;font-weight:600}
 .kb-armar-pill .kb-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 3px rgba(245,166,35,.25)}
-.kb-armar-title{font-family:var(--font-display);font-size:clamp(38px,7vw,74px);color:#1f1f1f;line-height:.98;text-transform:uppercase;margin-bottom:16px;letter-spacing:.01em}
-.kb-armar-sub{color:#555;font-size:15px;max-width:560px;margin:0 auto 28px;line-height:1.55}
+.kb-armar-title{font-family:var(--font-display);font-size:clamp(26px,5vw,40px);color:#1f1f1f;line-height:1;text-transform:uppercase;margin-bottom:18px;letter-spacing:.02em}
 .kb-armar-progress{max-width:640px;margin:0 auto}
 .kb-armar-progress-row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:#666;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
 .kb-armar-progress-row b{font-size:20px;color:var(--orange-d)}
@@ -390,7 +389,12 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-armar-size{background:#fff;color:#1f1f1f;border:1px solid #d8d4c6;border-radius:30px;padding:11px 28px;font-family:var(--font-body);font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;transition:background .15s,color .15s,border-color .15s}
 .kb-armar-size:hover{border-color:var(--orange)}
 .kb-armar-size.active{background:var(--orange);color:#000;border-color:var(--orange)}
-.kb-armar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 14px}
+.kb-armar-grid{display:block}
+.kb-armar-coll-t{margin:34px 0 14px;text-align:left}
+.kb-armar-coll-t:first-child{margin-top:8px}
+.kb-armar-row{gap:14px;padding-bottom:10px}
+.kb-armar-row .kb-armar-card{flex:0 0 150px;scroll-snap-align:start}
+@media(max-width:600px){.kb-armar-row .kb-armar-card{flex:0 0 40%}}
 .kb-armar-card{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
 .kb-armar-card-img{height:180px;width:100%;display:flex;align-items:flex-end;justify-content:center}
 .kb-armar-card-img img{max-height:100%;width:auto;object-fit:contain}
@@ -401,7 +405,7 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-armar-plus:disabled{opacity:.3;pointer-events:none}
 
 .kb-armar-bar-sticky{position:fixed;left:0;right:0;bottom:0;z-index:300;background:#f3f1e7;border-top:2px solid var(--orange);padding:14px clamp(1rem,4vw,3rem) 16px;box-shadow:0 -8px 26px rgba(0,0,0,.16)}
-.kb-armar-slots{display:flex;gap:10px;justify-content:flex-start;margin-bottom:14px;flex-wrap:nowrap;overflow-x:auto;align-items:flex-end;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.kb-armar-slots{display:flex;gap:10px;justify-content:center;margin-bottom:14px;flex-wrap:nowrap;overflow-x:auto;align-items:flex-end;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .kb-slot{width:50px;height:122px;border-radius:9px/12px;position:relative;flex-shrink:0;transition:width .2s;
   background:linear-gradient(90deg,#8f9094 0%,#c5c7ca 20%,#eef0f2 50%,#c5c7ca 80%,#8f9094 100%);
   border:1px solid #aeb0b4;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 4px 10px rgba(0,0,0,.18)}
@@ -1031,8 +1035,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     <div class="kb-armar">
       <div class="kb-armar-head">
         <div class="kb-armar-pill"><span class="kb-dot"></span><span id="armarStylesCount">0</span> estilos disponibles</div>
-        <h1 class="kb-armar-title">Tú eliges, nosotros lo armamos.</h1>
-        <p class="kb-armar-sub">Elige los estilos que más te representan, llena el pack y nosotros te lo dejamos en la puerta. Cervezas frescas, lúpulo serio, locura intacta.</p>
+        <h1 class="kb-armar-title">Arma tu Pack</h1>
         <div class="kb-armar-sizes">
           <button class="kb-armar-size" data-size="6" onclick="armarSetSize(6)">6 Pack</button>
           <button class="kb-armar-size" data-size="12" onclick="armarSetSize(12)">12 Pack</button>
@@ -2123,18 +2126,31 @@ async function populateArmar(){
     armarList = products.filter(isBeer);
     const sc = document.getElementById('armarStylesCount');
     if (sc) sc.textContent = armarList.length;
-    grid.innerHTML = armarList.length
-      ? armarList.map((p,i) => {
-          const v0 = (p.variants||[])[0] || {};
-          const img = p.image || (p.images&&p.images[0]) || '';
-          return `<div class="kb-armar-card">
-            <div class="kb-armar-card-img">${img?`<img src="${cdnImg(img,400)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">`:''}</div>
-            <div class="kb-armar-card-name">${escapeHtml(cleanTitle(p.title))}</div>
-            <div class="kb-armar-card-price">${fmtPrice(parseFloat(v0.price||0))}</div>
-            <button class="kb-armar-plus" aria-label="Agregar" onclick="armarAdd(${i})">+</button>
-          </div>`;
-        }).join('')
-      : '<div class="kb-loading">Sin cervezas disponibles</div>';
+    if (!armarList.length){
+      grid.innerHTML = '<div class="kb-loading">Sin cervezas disponibles</div>';
+    } else {
+      const card = (p, i) => {
+        const v0 = (p.variants||[])[0] || {};
+        const img = p.image || (p.images&&p.images[0]) || '';
+        return `<div class="kb-armar-card">
+          <div class="kb-armar-card-img">${img?`<img src="${cdnImg(img,400)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">`:''}</div>
+          <div class="kb-armar-card-name">${escapeHtml(cleanTitle(p.title))}</div>
+          <div class="kb-armar-card-price">${fmtPrice(parseFloat(v0.price||0))}</div>
+          <button class="kb-armar-plus" aria-label="Agregar" onclick="armarAdd(${i})">+</button>
+        </div>`;
+      };
+      const groups = { casa:[], temporada:[], artista:[], tour:[], otros:[] };
+      armarList.forEach((p,i) => { const g = classifyBeer(p); (groups[g] || groups.otros).push({p,i}); });
+      const titles = { casa:'De la Casa', temporada:'Colección de Temporada', artista:'Colección de Artista', tour:'🌎 World Tour', otros:'Más estilos' };
+      const order = ['casa','temporada','artista','tour','otros'];
+      grid.innerHTML = order.filter(g => groups[g].length).map(g => `
+        <h2 class="kb-coll-t kb-armar-coll-t">${titles[g]}</h2>
+        <div class="kb-hscroll-wrap">
+          <button class="kb-hs-arr prev" onclick="hsScroll(this,-1)" aria-label="Anterior">‹</button>
+          <div class="kb-hscroll kb-armar-row">${groups[g].map(x => card(x.p, x.i)).join('')}</div>
+          <button class="kb-hs-arr next" onclick="hsScroll(this,1)" aria-label="Siguiente">›</button>
+        </div>`).join('');
+    }
     grid.dataset.done = '1';
   }
   armarRender();
