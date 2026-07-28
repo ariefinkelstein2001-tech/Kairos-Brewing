@@ -427,7 +427,10 @@ function buildWheel(){
     const label = document.createElement('div');
     label.className = 'slice-label';
     label.textContent = p.label;
-    label.style.transform = `rotate(${mid}deg)`;
+    // .slice-label parte "acostada" hacia la derecha (3 en punto) por el
+    // width+text-align:right, no hacia arriba, así que hay que restar 90°
+    // para que quede alineada con su porción real del conic-gradient.
+    label.style.transform = `rotate(${mid - 90}deg)`;
     wheel.appendChild(label);
   });
 }
