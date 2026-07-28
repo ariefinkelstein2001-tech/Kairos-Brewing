@@ -886,6 +886,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     </div>
     <a data-route="/eventos" onclick="go(event)">Eventos</a>
     <a data-route="/nosotros" onclick="go(event)">Nosotros</a>
+    <a data-route="/pasaporte-cervecero" onclick="go(event)">Pasaporte</a>
   </nav>
   <div class="kb-header-r">
     <button class="kb-iconbtn kb-cart" onclick="toggleCart()" aria-label="Carrito">
@@ -937,6 +938,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 
     <a data-route="/eventos" onclick="go(event)">Eventos</a>
     <a data-route="/nosotros" onclick="go(event)">Nosotros</a>
+    <a data-route="/pasaporte-cervecero" onclick="go(event)">Pasaporte</a>
   </div>
 </div>
 
@@ -1382,6 +1384,112 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     </div>
   </div>
 
+  <div class="kb-view" id="view-pasaporte">
+    <div id="kairosPassportApp">
+    <div class="wrap">
+
+      <div class="hero-video">
+        <video autoplay muted loop playsinline>
+          <source src="https://cdn.shopify.com/videos/c/o/v/d6ce6b11803241d4b600785a24b6c508.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="header">
+        <img class="logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/logobrewing.png?v=1785251709" alt="Kairos Brewing">
+        <h1>Pasaporte cervecero</h1>
+        <div class="sub">Toma 5 chelas Kairos y gana premios</div>
+      </div>
+
+      <!-- LOGIN / REGISTRO -->
+      <div class="card" id="pptAuthCard">
+        <div class="tabs">
+          <button class="tab-btn active" id="pptTabLogin">Iniciar sesión</button>
+          <button class="tab-btn" id="pptTabRegister">Crear cuenta</button>
+        </div>
+
+        <div id="pptLoginForm">
+          <label>Usuario</label>
+          <input type="text" id="pptLoginUser" placeholder="Tu usuario">
+          <label>Contraseña</label>
+          <input type="password" id="pptLoginPass" placeholder="Tu contraseña">
+          <button class="primary" id="pptLoginBtn">Entrar</button>
+          <p class="msg error" id="pptLoginMsg"></p>
+        </div>
+
+        <div id="pptRegisterForm" style="display:none">
+          <label>Usuario</label>
+          <input type="text" id="pptRegUser" placeholder="Elige un usuario">
+          <label>Contraseña</label>
+          <input type="password" id="pptRegPass" placeholder="Elige una contraseña">
+          <label>Whatsapp o email</label>
+          <input type="text" id="pptRegContact" placeholder="Para avisarte de tus premios">
+          <button class="primary" id="pptRegisterBtn">Crear cuenta</button>
+          <p class="msg error" id="pptRegisterMsg"></p>
+        </div>
+      </div>
+
+      <!-- APP LOGUEADA -->
+      <div class="card" id="pptAppCard" style="display:none">
+        <div class="top-row">
+          <div class="greeting">Hola, <strong id="pptGreetingName"></strong></div>
+          <div class="logout" id="pptLogoutBtn">Cerrar sesión</div>
+        </div>
+
+        <div class="progress-label" id="pptProgressLabel">0 / 5 cervezas</div>
+        <div class="progress-row" id="pptProgressRow"></div>
+
+        <div id="pptUploadSection">
+          <label>Foto de tu chela Kairos de hoy</label>
+          <div class="upload-zone" id="pptUploadZone">
+            <div class="stamp-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 12c2-4 4-6 9-6s7 2 9 6c-2 4-4 6-9 6s-7-2-9-6z"/><circle cx="12" cy="12" r="2.4"/></svg></div>
+            <p id="pptUploadText">Toca para subir la foto</p>
+            <img id="pptPhotoPreview">
+          </div>
+          <input type="file" id="pptFileInput" accept="image/*" style="display:none">
+          <button class="primary" id="pptUploadBtn" disabled>Registrar cerveza de hoy</button>
+          <p class="msg" id="pptUploadMsg"></p>
+        </div>
+
+        <div id="pptUnlockedSection" style="display:none">
+          <p style="text-align:center;font-size:13px;font-weight:600;opacity:.85;margin-top:16px">¡Desbloqueaste la ruleta! Gira para ver tu premio</p>
+          <button class="primary" id="pptSpinBtn">Girar la ruleta</button>
+        </div>
+      </div>
+
+      <div class="wheel-stage" id="pptWheelStage" style="display:none">
+        <div class="wheel-holder">
+          <div class="pointer"></div>
+          <div class="wheel" id="pptWheel">
+            <div class="wheel-center"><span>KBC</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result" id="pptResultBox">
+        <div class="eyebrow">Premio</div>
+        <h2 id="pptResultTitle"></h2>
+        <div class="code" id="pptResultCode"></div>
+      </div>
+
+      <div class="staff-link" id="pptStaffToggle">Panel de staff</div>
+
+      <div class="admin" id="pptAdminPanel" style="display:none">
+        <div class="card">
+          <label>PIN de staff</label>
+          <input type="text" id="pptPinInput" placeholder="PIN">
+          <button class="primary" id="pptPinBtn" style="margin-top:10px">Entrar</button>
+          <div id="pptAdminList" style="display:none;margin-top:16px">
+            <h3 style="margin-bottom:10px;font-size:14px">Canjes recientes</h3>
+            <div id="pptEntriesContainer"><div class="empty">Cargando...</div></div>
+            <button class="ghost" id="pptRefreshBtn">Actualizar lista</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+  </div>
+
   <div class="kb-view kb-light" id="view-product"></div>
   <div class="kb-view kb-light" id="view-page"></div>
 </main>
@@ -1392,6 +1500,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       <h4>Conócenos</h4>
       <ul>
         <li><a data-route="/nosotros" onclick="go(event)">Nosotros</a></li>
+        <li><a data-route="/pasaporte-cervecero" onclick="go(event)">Pasaporte cervecero</a></li>
         <li><a data-route="/politicas-de-uso" onclick="go(event)">Términos y condiciones</a></li>
         <li><a data-route="/privacidad" onclick="go(event)">Configuración de privacidad</a></li>
       </ul>
@@ -1458,6 +1567,7 @@ const ROUTES = {
   '/arma-tu-pack':  'armar',
   '/politicas-de-uso': 'terminos',
   '/privacidad':    'privacidad',
+  '/pasaporte-cervecero': 'pasaporte',
 };
 let CURRENT_HANDLE = null;
 function viewFromPath(path){
@@ -2449,6 +2559,457 @@ function doKbCheckout(){
     document.documentElement.style.overflow='';
     gate.remove();
   });
+})();
+</script>
+
+<!-- ===== Pasaporte cervecero (programa de fidelidad) ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  #kairosPassportApp{
+    --ppt-orange:#F8AA41;
+    --ppt-orange-deep:#E0932A;
+    --ppt-blue:#274AB0;
+    --ppt-blue-deep:#1B3785;
+    --ppt-ink:#111111;
+    --ppt-ink-soft:#1D1D1D;
+    --ppt-paper:#FFF8EC;
+    --ppt-muted:#8A8A8A;
+    --ppt-line:#2A2A2A;
+    --ppt-err:#C0392B;
+    margin:0;background:var(--ppt-orange);color:var(--ppt-ink);font-family:'Jost',sans-serif;
+  }
+  #kairosPassportApp .wrap{max-width:460px;margin:0 auto;padding:26px 18px 56px;}
+  #kairosPassportApp h1,#kairosPassportApp h2,#kairosPassportApp h3{font-family:'Jost',sans-serif;font-weight:700;text-transform:uppercase;margin:0;letter-spacing:.01em;}
+
+  #kairosPassportApp .header{text-align:center;margin-bottom:22px;}
+  #kairosPassportApp .hero-video{width:100%;max-width:260px;margin:0 auto 18px;display:block;border-radius:10px;overflow:hidden;}
+  #kairosPassportApp .hero-video video{width:100%;height:auto;display:block;}
+  #kairosPassportApp .header img.logo{height:64px;width:auto;margin-bottom:6px;}
+  #kairosPassportApp .header h1{font-size:30px;line-height:1.05;margin-top:6px;}
+  #kairosPassportApp .header .sub{font-size:13px;color:var(--ppt-ink);opacity:.75;margin-top:8px;font-weight:500;}
+
+  #kairosPassportApp .card{background:var(--ppt-ink);border-radius:6px;padding:20px;position:relative;color:var(--ppt-paper);}
+  #kairosPassportApp .card::after{content:"";position:absolute;top:14px;right:14px;width:10px;height:10px;border-radius:50%;background:var(--ppt-blue);}
+
+  #kairosPassportApp label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ppt-paper);opacity:.6;margin:16px 0 6px;font-weight:600;}
+  #kairosPassportApp input[type=text],#kairosPassportApp input[type=password]{width:100%;background:var(--ppt-ink-soft);border:1.5px solid var(--ppt-line);color:var(--ppt-paper);padding:12px 12px;border-radius:4px;font-family:'Jost',sans-serif;font-size:15px;font-weight:500;}
+  #kairosPassportApp input[type=text]:focus,#kairosPassportApp input[type=password]:focus{outline:none;border-color:var(--ppt-blue);}
+
+  #kairosPassportApp .tabs{display:flex;gap:8px;margin-bottom:4px;}
+  #kairosPassportApp .tab-btn{flex:1;background:var(--ppt-ink-soft);border:1.5px solid var(--ppt-line);color:var(--ppt-paper);opacity:.55;padding:10px;border-radius:4px;font-family:'Jost',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;}
+  #kairosPassportApp .tab-btn.active{opacity:1;border-color:var(--ppt-orange);color:var(--ppt-orange);}
+
+  #kairosPassportApp .upload-zone{border:2px dashed var(--ppt-line);border-radius:5px;padding:22px 14px;text-align:center;margin-top:8px;cursor:pointer;transition:border-color .15s;}
+  #kairosPassportApp .upload-zone:hover{border-color:var(--ppt-orange);}
+  #kairosPassportApp .upload-zone.filled{border-style:solid;border-color:var(--ppt-blue);}
+  #kairosPassportApp .upload-zone p{margin:0;font-size:13px;color:var(--ppt-paper);opacity:.7;font-weight:500;}
+  #kairosPassportApp .stamp-icon{width:40px;height:40px;border-radius:50%;border:2px solid var(--ppt-orange);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+  #kairosPassportApp .stamp-icon svg{width:20px;height:20px;stroke:var(--ppt-orange);}
+  #kairosPassportApp #pptPhotoPreview{max-width:100%;max-height:120px;border-radius:4px;margin-top:10px;display:none;}
+
+  #kairosPassportApp button.primary{width:100%;margin-top:20px;background:var(--ppt-blue);color:#fff;border:none;padding:15px;border-radius:4px;font-family:'Jost',sans-serif;font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;}
+  #kairosPassportApp button.primary:disabled{background:var(--ppt-line);color:var(--ppt-muted);cursor:not-allowed;}
+  #kairosPassportApp button.ghost{width:100%;background:transparent;border:1.5px solid var(--ppt-line);color:var(--ppt-paper);padding:10px;border-radius:4px;font-size:12px;cursor:pointer;margin-top:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  #kairosPassportApp .msg{font-size:12px;margin-top:10px;font-weight:600;display:none;}
+  #kairosPassportApp .msg.error{color:var(--ppt-err);}
+  #kairosPassportApp .msg.ok{color:#8FBF6B;}
+
+  #kairosPassportApp .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  #kairosPassportApp .greeting{font-size:13px;opacity:.8;font-weight:500;}
+  #kairosPassportApp .logout{font-size:11px;color:var(--ppt-paper);opacity:.5;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;}
+
+  #kairosPassportApp .progress-row{display:flex;justify-content:center;gap:10px;margin:18px 0 4px;}
+  #kairosPassportApp .beer-dot{width:34px;height:34px;border-radius:50%;border:2px solid var(--ppt-orange);display:flex;align-items:center;justify-content:center;font-size:15px;}
+  #kairosPassportApp .beer-dot.filled{background:var(--ppt-orange);}
+  #kairosPassportApp .progress-label{text-align:center;font-size:12px;opacity:.7;margin-bottom:6px;font-weight:600;}
+
+  #kairosPassportApp .wheel-stage{display:flex;flex-direction:column;align-items:center;margin:26px 0 8px;}
+  #kairosPassportApp .wheel-holder{position:relative;width:270px;height:270px;}
+  #kairosPassportApp .pointer{position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid var(--ppt-blue);z-index:3;}
+  #kairosPassportApp .wheel{width:100%;height:100%;border-radius:50%;position:relative;border:7px solid var(--ppt-ink);box-shadow:inset 0 0 0 2px var(--ppt-orange);transition:transform 4.5s cubic-bezier(.12,.66,.05,1);}
+  #kairosPassportApp .wheel-center{position:absolute;top:50%;left:50%;width:48px;height:48px;background:var(--ppt-ink);border-radius:50%;transform:translate(-50%,-50%);z-index:2;display:flex;align-items:center;justify-content:center;border:3px solid var(--ppt-orange);}
+  #kairosPassportApp .wheel-center span{font-family:'Jost',sans-serif;font-weight:800;font-size:10px;color:var(--ppt-orange);letter-spacing:.05em;}
+  #kairosPassportApp .slice-label{position:absolute;top:50%;left:50%;width:118px;text-align:right;font-size:10.5px;font-weight:700;transform-origin:0 0;color:#fff;text-transform:uppercase;letter-spacing:.02em;}
+
+  #kairosPassportApp .result{text-align:center;margin-top:22px;padding:22px 20px;border-radius:6px;background:var(--ppt-ink);border:2px solid var(--ppt-blue);display:none;color:var(--ppt-paper);}
+  #kairosPassportApp .result .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--ppt-orange);}
+  #kairosPassportApp .result h2{font-size:22px;margin:10px 0 4px;color:#fff;}
+  #kairosPassportApp .code{font-family:'Jost',sans-serif;font-weight:700;letter-spacing:.15em;font-size:18px;background:var(--ppt-ink-soft);padding:11px;border-radius:4px;margin-top:14px;border:1.5px dashed var(--ppt-blue);}
+
+  #kairosPassportApp .staff-link{text-align:center;margin-top:32px;font-size:11px;color:var(--ppt-ink);opacity:.55;cursor:pointer;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  #kairosPassportApp .staff-link:hover{opacity:.85;}
+  #kairosPassportApp .admin{margin-top:14px;}
+  #kairosPassportApp .entry-row{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--ppt-line);font-size:12.5px;gap:10px;color:var(--ppt-paper);}
+  #kairosPassportApp .entry-row .meta{flex:1;}
+  #kairosPassportApp .entry-row .code-tag{color:var(--ppt-orange);font-weight:700;letter-spacing:.05em;}
+  #kairosPassportApp .badge{font-size:10px;padding:3px 9px;border-radius:10px;white-space:nowrap;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+  #kairosPassportApp .badge.pending{background:var(--ppt-line);color:var(--ppt-paper);}
+  #kairosPassportApp .badge.done{background:var(--ppt-blue);color:#fff;}
+  #kairosPassportApp .mini-btn{font-size:11px;background:transparent;border:1px solid var(--ppt-line);color:var(--ppt-paper);padding:4px 9px;border-radius:4px;cursor:pointer;font-weight:600;}
+  #kairosPassportApp .empty{font-size:12px;color:var(--ppt-paper);opacity:.6;text-align:center;padding:14px 0;}
+</style>
+<script>
+(function(){
+// PEGA AQUÍ LA URL de tu Web App de Google Apps Script
+var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwlR9zmKlCU2UaSTr74YwcTdhX7CdfW2-iTq-oKYSUUH4g3GM3oZ3fFnkS09MfrP4Do/exec';
+var BEERS_NEEDED = 5;
+
+async function callBackend(payload){
+  const res = await fetch(WEBAPP_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+const PRIZES = [
+  { id:'sigue', label:'Sigue participando', weight:20, color:'#2A2A2A' },
+  { id:'dcto10', label:'10% dcto próxima compra', weight:20, color:'#1B3785' },
+  { id:'cerveza', label:'Cerveza gratis', weight:38, color:'#274AB0' },
+  { id:'pack6', label:'Pack de 6 cervezas', weight:12, color:'#E0932A' },
+  { id:'merch', label:'Merch Kairos', weight:7, color:'#F8AA41' },
+  { id:'growler', label:'Growler Kairos', weight:3, color:'#C0392B' },
+];
+
+let pptSession = { username:'', password:'' };
+let pptUploadedPhoto = null;
+let pptWheelBuilt = false;
+
+// ---------- Tabs login/registro ----------
+const pptTabLogin = document.getElementById('pptTabLogin');
+const pptTabRegister = document.getElementById('pptTabRegister');
+const pptLoginForm = document.getElementById('pptLoginForm');
+const pptRegisterForm = document.getElementById('pptRegisterForm');
+
+pptTabLogin.addEventListener('click', () => {
+  pptTabLogin.classList.add('active'); pptTabRegister.classList.remove('active');
+  pptLoginForm.style.display = 'block'; pptRegisterForm.style.display = 'none';
+});
+pptTabRegister.addEventListener('click', () => {
+  pptTabRegister.classList.add('active'); pptTabLogin.classList.remove('active');
+  pptRegisterForm.style.display = 'block'; pptLoginForm.style.display = 'none';
+});
+
+// ---------- Registro ----------
+document.getElementById('pptRegisterBtn').addEventListener('click', async () => {
+  const username = document.getElementById('pptRegUser').value.trim();
+  const password = document.getElementById('pptRegPass').value;
+  const contact = document.getElementById('pptRegContact').value.trim();
+  const msg = document.getElementById('pptRegisterMsg');
+  msg.style.display = 'none';
+  if (!username || !password || !contact){
+    msg.textContent = 'Completa todos los campos.';
+    msg.style.display = 'block';
+    return;
+  }
+  try {
+    const res = await callBackend({ action:'register', username, password, contact });
+    if (res.error){
+      msg.textContent = res.error;
+      msg.style.display = 'block';
+      return;
+    }
+    pptSession = { username, password };
+    pptEnterApp(res.beerCount, res.uploadedToday);
+  } catch(e){
+    msg.textContent = 'No se pudo conectar con el servidor.';
+    msg.style.display = 'block';
+  }
+});
+
+// ---------- Login ----------
+document.getElementById('pptLoginBtn').addEventListener('click', async () => {
+  const username = document.getElementById('pptLoginUser').value.trim();
+  const password = document.getElementById('pptLoginPass').value;
+  const msg = document.getElementById('pptLoginMsg');
+  msg.style.display = 'none';
+  if (!username || !password){
+    msg.textContent = 'Completa usuario y contraseña.';
+    msg.style.display = 'block';
+    return;
+  }
+  try {
+    const res = await callBackend({ action:'login', username, password });
+    if (res.error){
+      msg.textContent = res.error;
+      msg.style.display = 'block';
+      return;
+    }
+    pptSession = { username, password };
+    pptEnterApp(res.beerCount, res.uploadedToday);
+  } catch(e){
+    msg.textContent = 'No se pudo conectar con el servidor.';
+    msg.style.display = 'block';
+  }
+});
+
+// ---------- Logout ----------
+document.getElementById('pptLogoutBtn').addEventListener('click', () => {
+  pptSession = { username:'', password:'' };
+  document.getElementById('pptAppCard').style.display = 'none';
+  document.getElementById('pptAuthCard').style.display = 'block';
+  document.getElementById('pptWheelStage').style.display = 'none';
+  document.getElementById('pptResultBox').style.display = 'none';
+  pptUploadedPhoto = null;
+});
+
+function pptEnterApp(beerCount, uploadedToday){
+  document.getElementById('pptAuthCard').style.display = 'none';
+  document.getElementById('pptAppCard').style.display = 'block';
+  document.getElementById('pptGreetingName').textContent = pptSession.username;
+  pptRenderProgress(beerCount, uploadedToday);
+}
+
+function pptRenderProgress(beerCount, uploadedToday){
+  const row = document.getElementById('pptProgressRow');
+  row.innerHTML = '';
+  for (let i=1;i<=BEERS_NEEDED;i++){
+    const dot = document.createElement('div');
+    dot.className = 'beer-dot' + (i <= beerCount ? ' filled' : '');
+    dot.textContent = i <= beerCount ? '🍺' : '';
+    row.appendChild(dot);
+  }
+  document.getElementById('pptProgressLabel').textContent = beerCount + ' / ' + BEERS_NEEDED + ' cervezas';
+
+  const uploadSection = document.getElementById('pptUploadSection');
+  const unlockedSection = document.getElementById('pptUnlockedSection');
+  const uploadBtn = document.getElementById('pptUploadBtn');
+  const uploadMsg = document.getElementById('pptUploadMsg');
+
+  if (beerCount >= BEERS_NEEDED){
+    uploadSection.style.display = 'none';
+    unlockedSection.style.display = 'block';
+  } else {
+    uploadSection.style.display = 'block';
+    unlockedSection.style.display = 'none';
+    if (uploadedToday){
+      uploadBtn.disabled = true;
+      uploadMsg.textContent = 'Ya registraste tu cerveza de hoy. Vuelve mañana.';
+      uploadMsg.className = 'msg ok';
+      uploadMsg.style.display = 'block';
+    } else {
+      uploadMsg.style.display = 'none';
+    }
+  }
+}
+
+// ---------- Subida de foto diaria ----------
+const pptUploadZone = document.getElementById('pptUploadZone');
+const pptFileInput = document.getElementById('pptFileInput');
+const pptUploadText = document.getElementById('pptUploadText');
+const pptPhotoPreview = document.getElementById('pptPhotoPreview');
+const pptUploadBtn = document.getElementById('pptUploadBtn');
+
+pptUploadZone.addEventListener('click', () => pptFileInput.click());
+
+pptFileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxW = 500;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      pptUploadedPhoto = canvas.toDataURL('image/jpeg', 0.6);
+      pptPhotoPreview.src = pptUploadedPhoto;
+      pptPhotoPreview.style.display = 'block';
+      pptUploadText.textContent = 'Foto lista';
+      pptUploadZone.classList.add('filled');
+      pptUploadBtn.disabled = false;
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+pptUploadBtn.addEventListener('click', async () => {
+  const msg = document.getElementById('pptUploadMsg');
+  if (!pptUploadedPhoto){
+    msg.textContent = 'Primero sube una foto.';
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+    return;
+  }
+  pptUploadBtn.disabled = true;
+  try {
+    const res = await callBackend({ action:'uploadBeer', username:pptSession.username, password:pptSession.password, photo:pptUploadedPhoto });
+    if (res.error){
+      msg.textContent = res.error;
+      msg.className = 'msg error';
+      msg.style.display = 'block';
+      pptUploadBtn.disabled = false;
+      return;
+    }
+    pptUploadedPhoto = null;
+    pptPhotoPreview.style.display = 'none';
+    pptUploadZone.classList.remove('filled');
+    pptUploadText.textContent = 'Toca para subir la foto';
+    pptRenderProgress(res.beerCount, true);
+  } catch(e){
+    msg.textContent = 'No se pudo conectar con el servidor.';
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+    pptUploadBtn.disabled = false;
+  }
+});
+
+// ---------- Ruleta ----------
+function pptBuildWheel(){
+  if (pptWheelBuilt) return;
+  pptWheelBuilt = true;
+  const wheel = document.getElementById('pptWheel');
+  let cumulative = 0;
+  const stops = [];
+  PRIZES.forEach(p => {
+    const start = cumulative;
+    const end = cumulative + p.weight;
+    stops.push(`${p.color} ${start*3.6}deg ${end*3.6}deg`);
+    cumulative = end;
+  });
+  wheel.style.background = `conic-gradient(${stops.join(',')})`;
+
+  cumulative = 0;
+  PRIZES.forEach(p => {
+    const mid = (cumulative + p.weight/2) * 3.6;
+    cumulative += p.weight;
+    const label = document.createElement('div');
+    label.className = 'slice-label';
+    label.textContent = p.label;
+    label.style.transform = `rotate(${mid}deg)`;
+    wheel.appendChild(label);
+  });
+}
+pptBuildWheel();
+
+function pptPickPrize(){
+  const total = PRIZES.reduce((s,p)=>s+p.weight,0);
+  let r = Math.random() * total;
+  for (const p of PRIZES){
+    if (r < p.weight) return p;
+    r -= p.weight;
+  }
+  return PRIZES[0];
+}
+
+function pptAngleForPrize(prize){
+  let cumulative = 0;
+  for (const p of PRIZES){
+    if (p.id === prize.id) return (cumulative + p.weight/2) * 3.6;
+    cumulative += p.weight;
+  }
+  return 0;
+}
+
+document.getElementById('pptSpinBtn').addEventListener('click', async () => {
+  document.getElementById('pptSpinBtn').disabled = true;
+  const wheelStage = document.getElementById('pptWheelStage');
+  const wheel = document.getElementById('pptWheel');
+  wheelStage.style.display = 'flex';
+  document.getElementById('pptAppCard').style.opacity = '0.5';
+  document.getElementById('pptAppCard').style.pointerEvents = 'none';
+
+  const prize = pptPickPrize();
+  const targetAngle = pptAngleForPrize(prize);
+  const spins = 6;
+  const finalRotation = spins*360 + (360 - targetAngle);
+
+  // Reseteamos la rueda sin animación y forzamos un reflow, para que el
+  // navegador registre el estado inicial antes de animar hacia el resultado.
+  wheel.style.transition = 'none';
+  wheel.style.transform = 'rotate(0deg)';
+  wheel.offsetHeight; // fuerza el reflow
+  requestAnimationFrame(() => {
+    wheel.style.transition = 'transform 4.5s cubic-bezier(.12,.66,.05,1)';
+    wheel.style.transform = `rotate(${finalRotation}deg)`;
+  });
+
+  await new Promise(r => setTimeout(r, 4700));
+
+  try {
+    const res = await callBackend({ action:'claimPrize', username:pptSession.username, password:pptSession.password, prize: prize.label });
+    if (res.error){
+      alert(res.error);
+      return;
+    }
+    document.getElementById('pptResultTitle').textContent = prize.label;
+    document.getElementById('pptResultCode').textContent = res.code;
+    document.getElementById('pptResultBox').style.display = 'block';
+    pptRenderProgress(0, false);
+  } catch(e){
+    alert('No se pudo registrar el premio. Muéstrale esta pantalla al staff.');
+  } finally {
+    document.getElementById('pptAppCard').style.opacity = '1';
+    document.getElementById('pptAppCard').style.pointerEvents = 'auto';
+  }
+});
+
+// ---------- Panel de staff ----------
+document.getElementById('pptStaffToggle').addEventListener('click', () => {
+  const panel = document.getElementById('pptAdminPanel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+});
+
+let pptStaffPin = '';
+
+document.getElementById('pptPinBtn').addEventListener('click', async () => {
+  pptStaffPin = document.getElementById('pptPinInput').value.trim();
+  document.getElementById('pptAdminList').style.display = 'block';
+  await pptLoadEntries();
+});
+
+document.getElementById('pptRefreshBtn').addEventListener('click', pptLoadEntries);
+
+async function pptLoadEntries(){
+  const container = document.getElementById('pptEntriesContainer');
+  container.innerHTML = '<div class="empty">Cargando...</div>';
+  try {
+    const res = await callBackend({ action:'list', pin: pptStaffPin });
+    if (res.error){
+      container.innerHTML = '<div class="empty">PIN incorrecto.</div>';
+      return;
+    }
+    const list = res.entries || [];
+    if (list.length === 0){
+      container.innerHTML = '<div class="empty">Aún no hay canjes registrados.</div>';
+      return;
+    }
+    container.innerHTML = '';
+    list.forEach(entry => {
+      const row = document.createElement('div');
+      row.className = 'entry-row';
+      const date = new Date(entry.timestamp);
+      row.innerHTML = `
+        <div class="meta">
+          <div><strong>${entry.username}</strong> — ${entry.prize}</div>
+          <div class="code-tag">${entry.code}</div>
+          <div style="opacity:.6">${date.toLocaleDateString('es-CL')}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="badge ${entry.redeemed ? 'done' : 'pending'}">${entry.redeemed ? 'Canjeado' : 'Pendiente'}</span>
+          ${!entry.redeemed ? `<button class="mini-btn" data-code="${entry.code}">Marcar canjeado</button>` : ''}
+        </div>
+      `;
+      container.appendChild(row);
+    });
+    container.querySelectorAll('.mini-btn[data-code]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const code = btn.getAttribute('data-code');
+        await callBackend({ action:'markRedeemed', code, pin: pptStaffPin });
+        pptLoadEntries();
+      });
+    });
+  } catch(e) {
+    container.innerHTML = '<div class="empty">No se pudieron cargar los canjes.</div>';
+  }
+}
 })();
 </script>
 </body>

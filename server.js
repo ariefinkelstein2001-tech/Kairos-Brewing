@@ -318,11 +318,6 @@ app.post('/api/newsletter', express.json(), async (req, res) => {
 // ─── Front estático + SPA ──────────────────────────────────────────────────────
 app.use(express.static(join(__dirname, 'public')));
 
-// Página standalone del Pasaporte Cervecero (fuera del router del SPA).
-app.get('/pasaporte-cervecero', (_req, res) => {
-  res.sendFile(join(__dirname, 'public', 'pasaporte-cervecero.html'));
-});
-
 // Todas las rutas de la SPA (excepto /api/*) devuelven index.html; el router
 // del front renderea la vista según el path.
 app.get(/^\/(?!api\/).*/, (_req, res) => {
