@@ -323,6 +323,11 @@ app.get('/pasaporte-cervecero', (_req, res) => {
   res.sendFile(join(__dirname, 'public', 'pasaporte-cervecero.html'));
 });
 
+// Página standalone de la Trivia Cervecera (fuera del router del SPA).
+app.get('/trivia-cervecera', (_req, res) => {
+  res.sendFile(join(__dirname, 'public', 'trivia-cervecera.html'));
+});
+
 // Todas las rutas de la SPA (excepto /api/*) devuelven index.html; el router
 // del front renderea la vista según el path.
 app.get(/^\/(?!api\/).*/, (_req, res) => {
