@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia Cervecera — Kairos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cellar:#0c0c0d;
+  --cellar-2:#151415;
+  --oak:#1e1c1a;
+  --oak-2:#282523;
+  --malt:#f5f1e8;
+  --malt-dim:#a8a29a;
+  --copper:#a9822f;
+  --copper-bright:#d4af37;
+  --hop:#7c9142;
+  --hop-bright:#9db85c;
+  --brick:#8a2f24;
+  --brick-bright:#b3452e;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:
+    radial-gradient(ellipse at top left, rgba(212,175,55,0.09), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(212,175,55,0.06), transparent 55%),
+    var(--cellar);
+  color:var(--malt);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+  pointer-events:none;
+  z-index:0;
+}
+.stage{
+  position:relative;
+  width:100%;
+  max-width:480px;
+  z-index:1;
+}
+.card{
+  background:linear-gradient(180deg, var(--oak), var(--cellar-2));
+  border:1px solid rgba(212,175,55,0.25);
+  border-radius:var(--radius);
+  padding:36px 30px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  position:relative;
+  animation:rise .5s ease both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---------- Brand header ---------- */
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:24px;
+}
+.brand img{
+  height:56px;
+  width:auto;
+  filter:drop-shadow(0 2px 10px rgba(212,175,55,0.25));
+}
+
+h1{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  letter-spacing:0.01em;
+  font-size:clamp(26px,6vw,32px);
+  line-height:1.15;
+  text-align:center;
+  color:var(--malt);
+  margin-bottom:10px;
+}
+.subtitle{
+  text-align:center;
+  color:var(--malt-dim);
+  font-size:15px;
+  line-height:1.5;
+  margin-bottom:26px;
+}
+.subtitle b{ color:var(--copper-bright); font-weight:700; }
+
+/* ---------- Rules ticket ---------- */
+.rules{
+  display:flex;
+  gap:14px;
+  margin-bottom:28px;
+  padding:16px;
+  border-radius:10px;
+  background:rgba(0,0,0,0.18);
+  border:1px dashed rgba(212,175,55,0.35);
+}
+.rules .r{
+  flex:1;
+  text-align:center;
+}
+.rules .r .num{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  font-size:20px;
+  color:var(--copper-bright);
+  display:block;
+}
+.rules .r .lbl{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--malt-dim);
+  display:block;
+  margin-top:2px;
+}
+
+/* ---------- Form ---------- */
+.field{ margin-bottom:16px; }
+.field label{
+  display:block;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--malt-dim);
+  margin-bottom:6px;
+}
+.field input{
+  width:100%;
+  background:var(--cellar);
+  border:1px solid rgba(242,230,207,0.18);
+  border-radius:8px;
+  padding:13px 14px;
+  color:var(--malt);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  outline:none;
+  transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus{
+  border-color:var(--copper);
+  box-shadow:0 0 0 3px rgba(212,175,55,0.18);
+}
+.field .err{
+  font-size:12px;
+  color:var(--brick-bright);
+  margin-top:5px;
+  min-height:14px;
+}
+
+.btn{
+  width:100%;
+  border:none;
+  border-radius:10px;
+  padding:15px 18px;
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:16px;
+  letter-spacing:0.03em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:transform .12s ease, filter .12s ease;
+}
+.btn:active{ transform:scale(0.98); }
+.btn-primary{
+  background:linear-gradient(180deg, var(--copper-bright), var(--copper));
+  color:#1c1208;
+}
+.btn-primary:hover{ filter:brightness(1.08); }
+.btn-ghost{
+  background:transparent;
+  color:var(--malt-dim);
+  border:1px solid rgba(242,230,207,0.22);
+  margin-top:10px;
+}
+.btn-ghost:hover{ color:var(--malt); border-color:rgba(242,230,207,0.4); }
+
+.fine{
+  text-align:center;
+  font-size:11.5px;
+  color:var(--malt-dim);
+  margin-top:16px;
+  line-height:1.5;
+  opacity:0.75;
+}
+
+/* ---------- Progress dots ---------- */
+.progress{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:22px;
+}
+.dot{
+  width:11px;height:11px;
+  border-radius:50%;
+  background:rgba(242,230,207,0.15);
+  border:1px solid rgba(242,230,207,0.25);
+  transition:all .25s ease;
+}
+.dot.current{ background:var(--copper-bright); border-color:var(--copper-bright); transform:scale(1.25); }
+.dot.correct{ background:var(--hop); border-color:var(--hop); }
+.dot.wrong{ background:var(--brick); border-color:var(--brick); }
+
+/* ---------- Pour gauge timer ---------- */
+.gauge-wrap{
+  display:flex;
+  justify-content:center;
+  margin-bottom:18px;
+  position:relative;
+}
+.glass{
+  width:64px;
+  height:78px;
+  position:relative;
+}
+.glass svg{ width:100%; height:100%; display:block; }
+.pour-fill{
+  transform-origin:center;
+  transition:transform .18s linear;
+}
+.timer-num{
+  position:absolute;
+  bottom:6px; left:0; right:0;
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  font-size:15px;
+  color:var(--cellar);
+}
+.timer-num.light{ color:var(--malt); }
+
+/* ---------- Question ---------- */
+.q-count{
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--copper-bright);
+  letter-spacing:0.08em;
+  margin-bottom:8px;
+}
+.question{
+  font-family:'Oswald',sans-serif;
+  font-size:19px;
+  font-weight:600;
+  line-height:1.35;
+  text-align:center;
+  margin-bottom:22px;
+  min-height:52px;
+}
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.opt{
+  text-align:left;
+  background:var(--cellar);
+  border:1px solid rgba(242,230,207,0.16);
+  border-radius:10px;
+  padding:14px 16px;
+  color:var(--malt);
+  font-size:14.5px;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  transition:border-color .12s, background .12s, transform .08s;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.opt .letter{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  color:var(--copper-bright);
+  font-size:13px;
+  flex:none;
+}
+.opt:hover:not(:disabled){ border-color:var(--copper); background:rgba(212,175,55,0.08); }
+.opt:active:not(:disabled){ transform:scale(0.985); }
+.opt:disabled{ cursor:default; }
+.opt.correct{ border-color:var(--hop); background:rgba(124,145,66,0.18); }
+.opt.wrong{ border-color:var(--brick); background:rgba(179,69,46,0.18); }
+.opt.dim{ opacity:0.45; }
+
+/* ---------- Result ---------- */
+.result-icon{
+  width:76px;height:76px;
+  margin:0 auto 18px;
+  display:block;
+}
+.result-title{
+  font-family:'Oswald',sans-serif;
+  font-size:26px;
+  font-weight:700;
+  text-align:center;
+  margin-bottom:10px;
+}
+.result-sub{
+  text-align:center;
+  color:var(--malt-dim);
+  font-size:15px;
+  line-height:1.55;
+  margin-bottom:24px;
+}
+.coupon{
+  border:2px dashed var(--copper);
+  border-radius:12px;
+  padding:20px;
+  text-align:center;
+  margin-bottom:22px;
+  background:rgba(212,175,55,0.08);
+  position:relative;
+}
+.coupon .tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--copper-bright);
+  margin-bottom:8px;
+}
+.coupon .prize{
+  font-family:'Oswald',sans-serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--malt);
+  margin-bottom:6px;
+}
+.coupon .code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  color:var(--copper-bright);
+  letter-spacing:0.05em;
+}
+.score-line{
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  color:var(--malt-dim);
+  margin-bottom:18px;
+}
+
+.hidden{ display:none !important; }
+
+@media (max-width:400px){
+  .card{ padding:28px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- ===================== SCREEN 0: LANDING ===================== -->
+  <div class="card" id="screen-landing">
+    <div class="brand">
+      <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING_b42351c9-1e32-4cfd-8712-4ce6bf1114f5.png?v=1772805913" alt="Kairos Brewing">
+    </div>
+    <h1>Trivia Cervecera</h1>
+    <p class="subtitle">Demuestra cuánto sabes de cerveza. <b>7 preguntas</b>, <b>5 segundos</b> cada una. Si las aciertas todas, te ganas una <b>media pinta</b> en el local.</p>
+
+    <div class="rules">
+      <div class="r"><span class="num">7</span><span class="lbl">Preguntas</span></div>
+      <div class="r"><span class="num">5s</span><span class="lbl">Por pregunta</span></div>
+      <div class="r"><span class="num">100%</span><span class="lbl">Para ganar</span></div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-start">Quiero Jugar</button>
+    <p class="fine">Necesitas registrarte para participar. Un intento por persona.</p>
+  </div>
+
+  <!-- ===================== SCREEN 1: REGISTRO ===================== -->
+  <div class="card hidden" id="screen-register">
+    <h1>Antes de partir</h1>
+    <p class="subtitle">Déjanos tus datos para avisarte si ganas y entregarte tu media pinta.</p>
+
+    <form id="register-form" novalidate>
+      <div class="field">
+        <label for="f-name">Nombre completo</label>
+        <input type="text" id="f-name" placeholder="Ej: Javiera Rojas" autocomplete="name">
+        <div class="err" id="err-name"></div>
+      </div>
+      <div class="field">
+        <label for="f-email">Correo electrónico</label>
+        <input type="email" id="f-email" placeholder="tu@correo.cl" autocomplete="email">
+        <div class="err" id="err-email"></div>
+      </div>
+      <div class="field">
+        <label for="f-phone">Teléfono</label>
+        <input type="tel" id="f-phone" placeholder="+56 9 1234 5678" autocomplete="tel">
+        <div class="err" id="err-phone"></div>
+      </div>
+      <button type="submit" class="btn btn-primary">Comenzar Trivia</button>
+    </form>
+    <button class="btn btn-ghost" id="btn-back-landing">Volver</button>
+    <p class="fine">Tus datos se usan solo para este concurso y contactarte en caso de premio.</p>
+  </div>
+
+  <!-- ===================== SCREEN 2: TRIVIA ===================== -->
+  <div class="card hidden" id="screen-quiz">
+    <div class="progress" id="progress-dots"></div>
+
+    <div class="gauge-wrap">
+      <div class="glass">
+        <svg viewBox="0 0 64 78">
+          <defs>
+            <clipPath id="glassClip">
+              <path d="M14 6 H50 L45 70 Q45 74 41 74 H23 Q19 74 19 70 Z"/>
+            </clipPath>
+          </defs>
+          <path d="M14 6 H50 L45 70 Q45 74 41 74 H23 Q19 74 19 70 Z" fill="rgba(242,230,207,0.06)" stroke="rgba(242,230,207,0.35)" stroke-width="2"/>
+          <g clip-path="url(#glassClip)">
+            <rect class="pour-fill" id="pourFill" x="12" y="8" width="40" height="66" fill="var(--copper-bright)"/>
+          </g>
+          <path d="M14 6 H50 L45 70 Q45 74 41 74 H23 Q19 74 19 70 Z" fill="none" stroke="rgba(242,230,207,0.5)" stroke-width="2"/>
+        </svg>
+        <div class="timer-num" id="timerNum">5</div>
+      </div>
+    </div>
+
+    <div class="q-count" id="qCount">PREGUNTA 1 / 7</div>
+    <div class="question" id="questionText">Cargando...</div>
+    <div class="options" id="optionsWrap"></div>
+  </div>
+
+  <!-- ===================== SCREEN 3: RESULTADO ===================== -->
+  <div class="card hidden" id="screen-result">
+    <svg class="result-icon" id="resultIcon" viewBox="0 0 24 24" fill="none"></svg>
+    <div class="result-title" id="resultTitle"></div>
+    <p class="result-sub" id="resultSub"></p>
+    <div class="score-line" id="scoreLine"></div>
+
+    <div class="coupon hidden" id="coupon">
+      <div class="tag">Cupón de premio</div>
+      <div class="prize">🍺 Media Pinta Gratis</div>
+      <div class="code" id="couponCode"></div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-restart">Jugar de Nuevo</button>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   BANCO DE 100 PREGUNTAS
+   ============================================================ */
+const QUESTION_BANK = [
+["¿En qué región se encuentran las evidencias más antiguas de elaboración de cerveza?","Mesopotamia","Escandinavia","Amazonía","Islandia",0],
+["¿Qué cereal es la base más común para elaborar cerveza?","Cebada malteada","Arroz salvaje","Quinoa","Avena cruda",0],
+["¿Qué civilización antigua tenía a Ninkasi, diosa de la cerveza?","Los sumerios","Los aztecas","Los vikingos","Los romanos",0],
+["¿En qué siglo se promulgó la Ley de Pureza alemana (Reinheitsgebot)?","Siglo XVI","Siglo XIX","Siglo XII","Siglo XX",0],
+["¿Qué ingrediente exige el Reinheitsgebot además de agua, malta y levadura?","Lúpulo","Miel","Canela","Maíz",0],
+["¿Qué país es reconocido como cuna de la cerveza Pilsner?","República Checa","Bélgica","Irlanda","España",0],
+["¿En qué ciudad checa nació el estilo Pilsner en 1842?","Pilsen (Plzeň)","Praga","Brno","Ostrava",0],
+["¿Qué monjes fueron pioneros en perfeccionar recetas de cerveza en la Edad Media?","Monjes trapenses","Monjes benedictinos exclusivamente en España","Monjes budistas","Monjes ortodoxos rusos",0],
+["¿Qué evento alemán es la fiesta cervecera más famosa del mundo?","Oktoberfest","Bierfest de Berlín","Karneval","Fasnacht",0],
+["¿En qué ciudad se celebra el Oktoberfest?","Múnich","Berlín","Hamburgo","Colonia",0],
+["¿Qué imperio llevó la cerveza a gran parte de Europa junto con sus rutas comerciales?","El Imperio Romano","El Imperio Otomano","El Imperio Mongol","El Imperio Persa",0],
+["¿Qué revolución tecnológica del siglo XIX permitió producir cerveza a gran escala?","La revolución industrial y la refrigeración","La imprenta","El telégrafo","La máquina de coser",0],
+["¿Quién identificó el rol de la levadura en la fermentación en el siglo XIX?","Louis Pasteur","Charles Darwin","Gregor Mendel","Isaac Newton",0],
+["¿Qué país tiene la mayor tradición de cerveza trapense certificada?","Bélgica","Francia","Portugal","Grecia",0],
+["¿Qué fenómeno histórico en EE.UU. (1920-1933) prohibió la fabricación de alcohol?","La Ley Seca (Prohibición)","La Gran Depresión","La Fiebre del Oro","El New Deal",0],
+["¿Cuál es el estilo de cerveza de fermentación alta más tradicional de Inglaterra?","Ale","Lager","Pilsner","Bock",0],
+["¿Qué tipo de fermentación usa levaduras que actúan a bajas temperaturas?","Fermentación baja (lager)","Fermentación alta (ale)","Fermentación espontánea únicamente","Fermentación mixta obligatoria",0],
+["¿Qué estilo belga se caracteriza por fermentación espontánea con levaduras silvestres?","Lambic","Stout","Weizen","Porter",0],
+["¿Qué estilo de cerveza es tradicionalmente negra, con notas a café y chocolate tostado?","Stout","Pilsner","Kölsch","Witbier",0],
+["¿Cuál es la diferencia principal entre una Stout y una Porter?","Históricamente la Stout es una porter más robusta","La Stout siempre es sin alcohol","La Porter lleva frutas y la Stout no","No existe ninguna diferencia real",0],
+["¿Qué estilo alemán de trigo es turbio y afrutado, con notas a banana y clavo de olor?","Weizen (Hefeweizen)","Kölsch","Bock","Pilsner",0],
+["¿Qué estilo belga se sirve tradicionalmente turbio, con cáscara de naranja y cilantro?","Witbier","Lambic","Dubbel","Tripel",0],
+["¿Qué significa IPA?","India Pale Ale","Irish Premium Ale","International Pale Amber","Imperial Pale Alcohol",0],
+["¿Por qué las IPA tienen ese nombre histórico?","Se cargaban de lúpulo para resistir el viaje a India","Se inventaron en India","Solo se producían en Indiana, EE.UU.","Era un acrónimo comercial moderno sin historia",0],
+["¿Qué caracteriza a una Double o Imperial IPA respecto a una IPA normal?","Mayor graduación alcohólica y más lúpulo","Menor graduación alcohólica","Ausencia total de lúpulo","Es siempre sin filtrar y ácida",0],
+["¿Qué estilo alemán es una lager tostada y con más cuerpo, típica de otoño?","Märzen (Oktoberfestbier)","Kölsch","Berliner Weisse","Gose",0],
+["¿Qué estilo alemán es una cerveza ácida y salada, a veces con especias como cilantro?","Gose","Bock","Dunkel","Helles",0],
+["¿Qué tipo de cerveza belga fuerte suele tener triple fermentación y color dorado?","Tripel","Dubbel","Quadrupel oscura","Lambic joven",0],
+["¿Qué estilo de cerveza alemana es fuerte, oscura y con alto contenido alcohólico, tradicionalmente de invierno?","Doppelbock","Kölsch","Helles","Berliner Weisse",0],
+["¿Qué estilo de cerveza es rubia, suave y típica de Colonia, Alemania?","Kölsch","Altbier","Rauchbier","Schwarzbier",0],
+["¿Qué estilo alemán tiene un característico sabor ahumado por el uso de malta ahumada?","Rauchbier","Helles","Kölsch","Weizenbock",0],
+["¿Qué estilo describe a una cerveza negra tipo lager, suave pese a su color?","Schwarzbier","Barleywine","Tripel","Saison",0],
+["¿Qué estilo de cerveza belga/francesa nació como bebida refrescante para trabajadores agrícolas de temporada?","Saison","Bock","Weizenbock","Dunkel",0],
+["¿Qué estilo se caracteriza por ser muy fuerte, dulce y con sabor a vino, ideal para guardar y añejar?","Barleywine","Session IPA","Pilsner","Gose",0],
+["¿Qué es una 'Session Beer'?","Una cerveza de bajo contenido alcohólico pensada para tomar varias en una sesión","Una cerveza que solo se vende en sesiones de cata","Una cerveza sin lúpulo","Una cerveza que se sirve únicamente caliente",0],
+["¿Qué caracteriza a una cerveza 'Sour'?","Un perfil ácido, logrado con bacterias o levaduras salvajes","Que se sirve fría con hielo","Que siempre lleva frutas cítricas artificiales","Que es una lager clásica alemana",0],
+["¿Qué estilo describe cervezas negras muy fuertes maduradas en barricas de whisky o bourbon?","Imperial Stout (Barrel-Aged)","Session IPA","Berliner Weisse","Kölsch",0],
+["¿Qué tipo de cerveza mexicana es oscura, dulce y con notas a caramelo tostado?","Vienna Lager (estilo usado en cervezas mexicanas oscuras)","Pilsner checa","Witbier belga","Gose alemana",0],
+["¿Qué caracteriza a una 'Milkshake IPA' o 'New England IPA'?","Aspecto turbio, cuerpo suave y bajo amargor pese al lúpulo","Total ausencia de lúpulo","Es siempre sin alcohol","Se elabora solo con trigo sarraceno",0],
+["¿Qué grado de amargor mide el índice IBU en la cerveza?","International Bitterness Units, el amargor aportado por el lúpulo","La cantidad de alcohol","El color exacto de la cerveza","El nivel de carbonatación",0],
+["¿Cuáles son los cuatro ingredientes clásicos y esenciales de la cerveza?","Agua, malta, lúpulo y levadura","Agua, azúcar, frutas y colorante","Malta, miel, canela y agua","Lúpulo, trigo, sal y levadura",0],
+["¿Qué función principal cumple la malta en la cerveza?","Aporta los azúcares fermentables y el color","Aporta únicamente el amargor","Sirve solo como conservante","Aporta la carbonatación final",0],
+["¿Qué cereal, además de la cebada, se usa comúnmente en cervezas de trigo?","Trigo","Centeno exclusivamente","Arroz integral","Sorgo silvestre",0],
+["¿Qué planta trepadora aporta el amargor y aroma característico de la cerveza?","El lúpulo (Humulus lupulus)","La menta","El romero","El diente de león",0],
+["¿Qué parte de la planta de lúpulo se utiliza en la elaboración de cerveza?","Los conos (flores femeninas)","Las raíces","Las semillas únicamente","La corteza del tallo",0],
+["¿Qué organismo microscópico transforma los azúcares en alcohol y CO2?","La levadura","Una bacteria láctica exclusivamente","Un hongo filamentoso","Una enzima sintética",0],
+["¿Qué tipo de levadura se usa tradicionalmente para elaborar ale?","Saccharomyces cerevisiae","Saccharomyces pastorianus","Penicillium","Aspergillus",0],
+["¿Qué tipo de levadura se asocia a la elaboración de lagers?","Saccharomyces pastorianus","Saccharomyces cerevisiae","Lactobacillus","Brettanomyces exclusivamente",0],
+["¿Qué papel cumple el agua en la calidad final de una cerveza?","Su composición mineral influye directamente en sabor y estilo","No influye en nada en el resultado final","Solo sirve para diluir el alcohol","Se elimina completamente antes de embotellar",0],
+["¿Qué proceso convierte los almidones de la malta en azúcares fermentables?","La maceración (mashing)","El embotellado","La filtración final","El etiquetado",0],
+["¿Qué es el 'mosto' en el proceso cervecero?","El líquido azucarado obtenido antes de la fermentación","La espuma final de la cerveza","El residuo sólido de la malta","El nombre del barril de guarda",0],
+["¿Qué es el 'bagazo' o 'afrecho' de malta que queda tras macerar?","El residuo sólido de granos usados en la maceración","El sedimento final en la botella","La espuma de la fermentación","El lúpulo ya usado",0],
+["¿Qué se hace al mosto para esterilizarlo y añadir lúpulo?","Se hierve","Se congela","Se centrifuga","Se sala",0],
+["¿Cuánto tiempo dura aproximadamente el hervido tradicional del mosto?","Alrededor de 60 a 90 minutos","Sólo 5 minutos","Más de 24 horas","No se hierve nunca",0],
+["¿Qué aporta el lúpulo añadido al inicio del hervido?","Mayor amargor","Mayor aroma floral únicamente","Color oscuro","Carbonatación",0],
+["¿Qué aporta el lúpulo añadido al final del hervido o en seco (dry hopping)?","Aroma más que amargor","Amargor intenso únicamente","Color caramelo","Mayor grado alcohólico",0],
+["¿Qué es el 'dry hopping'?","Agregar lúpulo durante la fermentación o guarda para potenciar aroma","Secar la cerveza al sol","Filtrar la cerveza sin lúpulo","Hervir el lúpulo dos veces",0],
+["¿A qué temperatura aproximada fermenta tradicionalmente una lager?","Entre 7°C y 13°C","Entre 30°C y 40°C","Sobre 50°C","Bajo 0°C congelada",0],
+["¿A qué temperatura aproximada fermenta tradicionalmente una ale?","Entre 15°C y 24°C","Entre 0°C y 4°C","Sobre 40°C","Exactamente a -5°C",0],
+["¿Qué es la 'guarda' o 'lagering' en la elaboración de lagers?","Un período de maduración en frío tras la fermentación","El proceso de embotellado final","El filtrado con carbón activado","El etiquetado manual",0],
+["¿Qué gas es responsable de la carbonatación natural de la cerveza?","Dióxido de carbono (CO2)","Oxígeno","Nitrógeno puro siempre","Metano",0],
+["¿Qué es la 'carbonatación forzada'?","Inyectar CO2 artificialmente en vez de esperar la fermentación natural","Agitar la botella para generar espuma","Calentar la cerveza para liberar gas","Filtrar el exceso de gas",0],
+["¿Qué mide el grado Plato o Brix relacionado a la cerveza?","La concentración de azúcares del mosto","El color exacto de la espuma","La temperatura de fermentación","El nivel de amargor",0],
+["¿Qué es el ABV en una etiqueta de cerveza?","Alcohol By Volume, el porcentaje de alcohol","Amargor Base Válido","Aroma Base Vegetal","Antigüedad de la Botella",0],
+["¿Qué defecto de sabor recuerda al maíz cocido y suele indicar mal control de temperatura?","Acetaldehído/DMS (sabor a maíz)","Sabor a lúpulo fresco","Sabor a caramelo","Sabor a vainilla",0],
+["¿Qué defecto de sabor recuerda a mantequilla y se asocia a diacetilo mal controlado?","Sabor a diacetilo (mantequilla)","Sabor a cítricos","Sabor a pan tostado","Sabor a menta",0],
+["¿Qué proceso se usa para eliminar sedimentos y dar claridad a la cerveza?","Filtración","Maceración","Malteado","Embotellado directo",0],
+["¿Qué es una cerveza 'sin filtrar'?","Una cerveza que conserva levadura y turbidez natural","Una cerveza sin alcohol","Una cerveza sin lúpulo","Una cerveza pasteurizada dos veces",0],
+["¿Qué proceso térmico se usa para estabilizar y alargar la vida útil de algunas cervezas comerciales?","Pasteurización","Fermentación doble","Carbonatación forzada únicamente","Malteado en frío",0],
+["¿Qué es el malteado?","El proceso de germinar y secar el grano para activar enzimas","El proceso de embotellar la cerveza","El filtrado final del lúpulo","El etiquetado de barriles",0],
+["¿Qué tipo de malta aporta colores y sabores tostados intensos tipo café?","Malta tostada o 'chocolate malt'","Malta pilsner clara","Malta de trigo cruda","Malta cristal muy clara",0],
+["¿Cuál es el país que más cerveza produce en el mundo actualmente?","China","Alemania","Estados Unidos","Brasil",0],
+["¿Qué país europeo es históricamente el mayor consumidor de cerveza per cápita?","República Checa","España","Francia","Suecia",0],
+["¿Cuál es una de las marcas de cerveza belga trapense más reconocidas mundialmente?","Chimay","Guinness","Corona","Heineken",0],
+["¿De qué país es originaria la marca Guinness?","Irlanda","Escocia","Gales","Inglaterra",0],
+["¿De qué país es originaria la cerveza Heineken?","Países Bajos (Holanda)","Bélgica","Dinamarca","Alemania",0],
+["¿Qué país es reconocido por su intensa cultura de microcervecerías (craft beer) desde los años 80?","Estados Unidos","Japón","Rusia","Argentina",0],
+["¿Qué significa el término 'craft beer' o cerveza artesanal en su idea central?","Producción a menor escala, independiente y con recetas tradicionales","Cerveza fabricada exclusivamente en fábricas industriales","Cerveza sin lúpulo","Cerveza que no lleva levadura",0],
+["¿Cuál es la unidad de medida tradicional británica equivalente a 0,568 litros?","Pinta imperial","Litro","Copa","Jarra",0],
+["¿Qué es una 'media pinta'?","La mitad del volumen de una pinta estándar","Una pinta doble","Una medida exclusiva de vino","Un tipo de vaso sin relación al volumen",0],
+["¿Qué país tiene el festival cervecero 'Bierfest' propio además del Oktoberfest alemán?","Austria","Marruecos","Perú","Tailandia",0],
+["¿Qué copa es tradicional para servir cervezas trapenses y belgas fuertes?","Copa cáliz (tulipa)","Vaso recto angosto","Jarra de peltre exclusivamente","Copa de vino tinto",0],
+["¿Por qué se sirve la cerveza inclinando el vaso al comienzo del vertido?","Para controlar la formación de espuma","Para enfriarla más rápido","Para que pierda todo el gas","Para cambiar su color",0],
+["¿Qué función cumple la espuma al servir una cerveza?","Retiene aromas y protege el sabor del oxígeno","No cumple ninguna función real","Sirve solo para decorar","Aumenta el alcohol de la cerveza",0],
+["¿A qué temperatura aproximada se recomienda servir una lager clara tipo Pilsner?","Entre 4°C y 6°C","Entre 20°C y 25°C","Congelada bajo 0°C","Sobre 30°C",0],
+["¿A qué temperatura se sirven tradicionalmente cervezas ale más complejas o stouts?","Un poco más templadas, entre 8°C y 12°C","Siempre heladas bajo 0°C","Hirviendo","Exactamente igual que una lager clara",0],
+["¿Qué es el 'maridaje' aplicado a la cerveza?","La combinación de una cerveza con un plato para realzar sabores","Un tipo de barril de madera","Un estilo de cerveza belga","Un proceso de filtración",0],
+["¿Qué tipo de cerveza suele maridar bien con mariscos y pescados por su ligereza?","Pilsner o lager clara","Imperial Stout muy alcohólica","Barleywine añejado","Doppelbock oscura",0],
+["¿Qué tipo de cerveza suele maridar bien con carnes ahumadas o parrilladas?","Porter o Stout","Berliner Weisse muy ácida","Witbier muy ligera","Gose extremadamente salada",0],
+["¿Qué región de Chile es reconocida como un polo importante de producción de lúpulo?","La zona sur de Chile (como La Araucanía)","El desierto de Atacama","Isla de Pascua","La Patagonia argentina",0],
+["¿Qué producto agrícola necesita la cebada antes de convertirse en malta para cerveza?","Germinación controlada y posterior secado","Fermentación directa sin procesar","Molienda en frío exclusivamente","Cocción a más de 200°C sin germinar",0],
+["¿Qué significa que una cerveza sea 'de guarda' o 'lagered' por varias semanas?","Que maduró en frío antes de embotellarse","Que se guardó caliente varios meses","Que no lleva lúpulo","Que se sirve exclusivamente en barril",0],
+["¿Qué tipo de recipiente se usa tradicionalmente para el añejamiento de cervezas 'barrel-aged'?","Barricas de madera, a menudo ex-whisky o vino","Botellas de vidrio verde","Bidones plásticos sellados","Ollas de cerámica sin sellar",0],
+["¿Qué es un 'growler' en la cultura cervecera artesanal?","Un envase reutilizable para llevar cerveza de barril fresca","Un tipo de lúpulo silvestre","Una técnica de fermentación","Un estilo de cerveza mexicana",0],
+["¿Qué significa 'nano-cervecería'?","Una cervecería de producción muy pequeña, más chica que una microcervecería","Una cervecería robotizada sin personal","Una cervecería que solo hace cerveza sin alcohol","Una cadena internacional de cervecerías",0],
+["¿Qué famoso monasterio belga da nombre a una reconocida cerveza trapense?","Orval","San Pedro","Montserrat","El Escorial",0],
+["¿Qué es un 'chiller' o intercambiador de calor en el proceso cervecero?","Un equipo que enfría rápidamente el mosto tras el hervido","Un tipo de copa para servir cerveza fría","Un aditivo para dar amargor","Un filtro para eliminar el alcohol",0],
+["¿Qué significa que una cerveza sea 'de temporada' o 'seasonal'?","Que se elabora solo en cierta época del año con ingredientes propios","Que caduca en menos de 24 horas","Que solo se vende en Navidad sin excepción","Que no lleva lúpulo en ninguna receta",0],
+["¿Qué es el 'gravity' u 'original gravity' (OG) en una receta de cerveza?","La densidad del mosto antes de fermentar, indica azúcares disponibles","El peso final de la botella llena","La altura del vaso de servicio","El nivel de espuma requerido",0],
+["¿Qué es un 'flight' de cervezas en una cata?","Una selección de varias muestras pequeñas para degustar y comparar","Un vuelo comercial patrocinado por una marca","Un tipo de copa de gran tamaño","Un proceso de fermentación acelerada",0]
+];
+
+/* ===== estado global ===== */
+let selectedQuestions = [];
+let currentIndex = 0;
+let correctCount = 0;
+let timerInterval = null;
+let timeLeft = 5;
+const TOTAL_TIME = 5;
+const QUESTIONS_PER_ROUND = 7;
+
+/* ===== util: shuffle ===== */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function pickQuestions(){
+  const pool = shuffle(QUESTION_BANK);
+  selectedQuestions = pool.slice(0, QUESTIONS_PER_ROUND).map(q=>{
+    const [text, o0,o1,o2,o3, correctIdx] = q;
+    const options = [o0,o1,o2,o3];
+    const correctText = options[correctIdx];
+    const shuffledOptions = shuffle(options.map((t,i)=>({t,orig:i})));
+    const newCorrectIndex = shuffledOptions.findIndex(o=>o.t===correctText);
+    return { text, options: shuffledOptions.map(o=>o.t), correctIndex: newCorrectIndex };
+  });
+}
+
+/* ===== screens ===== */
+const screens = {
+  landing: document.getElementById('screen-landing'),
+  register: document.getElementById('screen-register'),
+  quiz: document.getElementById('screen-quiz'),
+  result: document.getElementById('screen-result'),
+};
+function showScreen(name){
+  Object.values(screens).forEach(s=>s.classList.add('hidden'));
+  screens[name].classList.remove('hidden');
+}
+
+/* ===== landing -> register ===== */
+document.getElementById('btn-start').addEventListener('click', ()=> showScreen('register'));
+document.getElementById('btn-back-landing').addEventListener('click', ()=> showScreen('landing'));
+
+/* ===== registration ===== */
+const form = document.getElementById('register-form');
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+
+  document.getElementById('err-name').textContent='';
+  document.getElementById('err-email').textContent='';
+  document.getElementById('err-phone').textContent='';
+
+  let ok = true;
+  if(name.length < 3){
+    document.getElementById('err-name').textContent = 'Ingresa tu nombre completo.';
+    ok = false;
+  }
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRe.test(email)){
+    document.getElementById('err-email').textContent = 'Ingresa un correo válido.';
+    ok = false;
+  }
+  const phoneRe = /^[+()\d\s-]{8,}$/;
+  if(!phoneRe.test(phone)){
+    document.getElementById('err-phone').textContent = 'Ingresa un teléfono válido.';
+    ok = false;
+  }
+  if(!ok) return;
+
+  registerPlayer({name, email, phone});
+
+  pickQuestions();
+  currentIndex = 0;
+  correctCount = 0;
+  buildProgressDots();
+  showScreen('quiz');
+  loadQuestion();
+});
+
+/* ===== registro de jugador =====
+   Cambia REGISTER_ENDPOINT por la URL de tu Google Apps Script / Sheets webhook
+   (mismo patrón usado en Pasaporte Cervecero) para guardar los registros.
+   Si se deja vacío, solo se registra en consola. */
+const REGISTER_ENDPOINT = ""; // ej: "https://script.google.com/macros/s/XXXX/exec"
+
+function registerPlayer(data){
+  console.log('Nuevo registro trivia:', data);
+  if(REGISTER_ENDPOINT){
+    fetch(REGISTER_ENDPOINT, {
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({...data, timestamp:new Date().toISOString()})
+    }).catch(err=> console.warn('No se pudo enviar el registro:', err));
+  }
+}
+
+/* ===== progress dots ===== */
+function buildProgressDots(){
+  const wrap = document.getElementById('progress-dots');
+  wrap.innerHTML = '';
+  for(let i=0;i<QUESTIONS_PER_ROUND;i++){
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'dot-'+i;
+    wrap.appendChild(d);
+  }
+  updateDots();
+}
+function updateDots(){
+  for(let i=0;i<QUESTIONS_PER_ROUND;i++){
+    const d = document.getElementById('dot-'+i);
+    d.classList.remove('current','correct','wrong');
+    if(i === currentIndex) d.classList.add('current');
+  }
+}
+function markDot(index, isCorrect){
+  const d = document.getElementById('dot-'+index);
+  d.classList.remove('current');
+  d.classList.add(isCorrect ? 'correct' : 'wrong');
+}
+
+/* ===== quiz logic ===== */
+function loadQuestion(){
+  updateDots();
+  const q = selectedQuestions[currentIndex];
+  document.getElementById('qCount').textContent = `PREGUNTA ${currentIndex+1} / ${QUESTIONS_PER_ROUND}`;
+  document.getElementById('questionText').textContent = q.text;
+
+  const wrap = document.getElementById('optionsWrap');
+  wrap.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, idx)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="letter">${letters[idx]}</span><span>${opt}</span>`;
+    btn.addEventListener('click', ()=> selectAnswer(idx));
+    wrap.appendChild(btn);
+  });
+
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  timeLeft = TOTAL_TIME;
+  updateGauge();
+  timerInterval = setInterval(()=>{
+    timeLeft -= 0.1;
+    if(timeLeft <= 0){
+      timeLeft = 0;
+      updateGauge();
+      clearInterval(timerInterval);
+      selectAnswer(-1); // tiempo agotado = incorrecta
+      return;
+    }
+    updateGauge();
+  }, 100);
+}
+
+function updateGauge(){
+  const pct = timeLeft / TOTAL_TIME;
+  const fill = document.getElementById('pourFill');
+  const emptyHeight = 66 * (1-pct);
+  fill.setAttribute('y', 8 + emptyHeight);
+  fill.setAttribute('height', 66 * pct);
+  const num = document.getElementById('timerNum');
+  num.textContent = Math.ceil(timeLeft);
+  num.classList.toggle('light', pct < 0.35);
+}
+
+function selectAnswer(chosenIndex){
+  clearInterval(timerInterval);
+  const q = selectedQuestions[currentIndex];
+  const buttons = document.querySelectorAll('#optionsWrap .opt');
+  buttons.forEach(b=> b.disabled = true);
+
+  const isCorrect = chosenIndex === q.correctIndex;
+  buttons.forEach((b, idx)=>{
+    if(idx === q.correctIndex) b.classList.add('correct');
+    else if(idx === chosenIndex) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+
+  if(isCorrect) correctCount++;
+  markDot(currentIndex, isCorrect);
+
+  setTimeout(()=>{
+    currentIndex++;
+    if(currentIndex < QUESTIONS_PER_ROUND){
+      loadQuestion();
+    } else {
+      finishQuiz();
+    }
+  }, 1100);
+}
+
+/* ===== resultado ===== */
+function finishQuiz(){
+  const won = correctCount === QUESTIONS_PER_ROUND;
+  showScreen('result');
+
+  document.getElementById('scoreLine').textContent = `${correctCount} / ${QUESTIONS_PER_ROUND} respuestas correctas`;
+
+  const icon = document.getElementById('resultIcon');
+  const title = document.getElementById('resultTitle');
+  const sub = document.getElementById('resultSub');
+  const coupon = document.getElementById('coupon');
+
+  if(won){
+    icon.innerHTML = `<path d="M12 2C8 2 5 6 5 10c0 5 3.5 8.5 7 12 3.5-3.5 7-7 7-12 0-4-3-8-7-8z" fill="var(--hop-bright)"/>`;
+    title.textContent = '¡Ganaste! 🍺';
+    title.style.color = 'var(--hop-bright)';
+    sub.textContent = 'Respondiste las 7 preguntas correctamente. Muestra este cupón en el local para reclamar tu media pinta.';
+    coupon.classList.remove('hidden');
+    document.getElementById('couponCode').textContent = 'CÓDIGO: ' + generateCode();
+  } else {
+    icon.innerHTML = `<circle cx="12" cy="12" r="10" fill="var(--brick)"/>`;
+    title.textContent = 'Casi lo logras';
+    title.style.color = 'var(--brick-bright)';
+    sub.textContent = 'Necesitas las 7 respuestas correctas para ganar la media pinta. ¡Inténtalo de nuevo!';
+    coupon.classList.add('hidden');
+  }
+}
+
+function generateCode(){
+  return Math.random().toString(36).substring(2,8).toUpperCase();
+}
+
+document.getElementById('btn-restart').addEventListener('click', ()=>{
+  showScreen('landing');
+});
+</script>
+</body>
+</html>
