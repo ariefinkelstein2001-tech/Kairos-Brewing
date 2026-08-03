@@ -634,7 +634,7 @@ form.addEventListener('submit', function(e){
   }
   if(!ok) return;
 
-  registerPlayer({name, email, phone});
+  currentPlayer = {name, email, phone};
 
   pickQuestions();
   currentIndex = 0;
@@ -645,20 +645,25 @@ form.addEventListener('submit', function(e){
 });
 
 /* ===== registro de jugador =====
-   Cambia REGISTER_ENDPOINT por la URL de tu Google Apps Script / Sheets webhook
-   (mismo patrón usado en Pasaporte Cervecero) para guardar los registros.
+   Pega aquí la URL de tu Web App de Google Apps Script (mismo patrón usado en
+   Pasaporte Cervecero) para guardar cada intento en una Google Sheet. Se llama
+   una sola vez, al terminar la trivia, con los datos del jugador y su resultado.
    Si se deja vacío, solo se registra en consola. */
-const REGISTER_ENDPOINT = ""; // ej: "https://script.google.com/macros/s/XXXX/exec"
+const WEBAPP_URL = ""; // ej: "https://script.google.com/macros/s/XXXX/exec"
+let currentPlayer = null;
 
-function registerPlayer(data){
-  console.log('Nuevo registro trivia:', data);
-  if(REGISTER_ENDPOINT){
-    fetch(REGISTER_ENDPOINT, {
+async function sendResult(result){
+  const payload = { ...currentPlayer, ...result, timestamp: new Date().toISOString() };
+  console.log('Resultado trivia:', payload);
+  if(!WEBAPP_URL) return;
+  try{
+    await fetch(WEBAPP_URL, {
       method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({...data, timestamp:new Date().toISOString()})
-    }).catch(err=> console.warn('No se pudo enviar el registro:', err));
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload)
+    });
+  }catch(err){
+    console.warn('No se pudo enviar el registro:', err);
   }
 }
 
@@ -774,13 +779,15 @@ function finishQuiz(){
   const sub = document.getElementById('resultSub');
   const coupon = document.getElementById('coupon');
 
+  let code = '';
   if(won){
+    code = generateCode();
     icon.innerHTML = `<path d="M12 2C8 2 5 6 5 10c0 5 3.5 8.5 7 12 3.5-3.5 7-7 7-12 0-4-3-8-7-8z" fill="var(--hop-bright)"/>`;
     title.textContent = '¡Ganaste! 🍺';
     title.style.color = 'var(--hop-bright)';
     sub.textContent = 'Respondiste las 7 preguntas correctamente. Muestra este cupón en el local para reclamar tu media pinta.';
     coupon.classList.remove('hidden');
-    document.getElementById('couponCode').textContent = 'CÓDIGO: ' + generateCode();
+    document.getElementById('couponCode').textContent = 'CÓDIGO: ' + code;
   } else {
     icon.innerHTML = `<circle cx="12" cy="12" r="10" fill="var(--brick)"/>`;
     title.textContent = 'Casi lo logras';
@@ -788,6 +795,8 @@ function finishQuiz(){
     sub.textContent = 'Necesitas las 7 respuestas correctas para ganar la media pinta. ¡Inténtalo de nuevo!';
     coupon.classList.add('hidden');
   }
+
+  sendResult({ correctCount, total: QUESTIONS_PER_ROUND, won, code });
 }
 
 function generateCode(){
