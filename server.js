@@ -235,7 +235,7 @@ function p18IsEligibleBeer(p) {
   return false;
 }
 
-const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 40990 };
+const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 48990 };
 const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc incluido', 12: 'vaso de 500 cc incluido', 24: '2 vasos de 500 cc incluidos' };
 // Vaso real por tamaño de pack: "Vaso Cognac Kairos Brewing 250cc - Copa de
 // Degustación Premium" para el 6 Pack, "Vaso Schopero ... 500cc" (x1 o x2)
