@@ -2451,8 +2451,29 @@ async function p18Checkout(){
       body: JSON.stringify({ size: target, variantIds: p18Sel.map(it => it.variantId) }),
     });
     const data = await r.json();
-    if (!r.ok || !data.url) throw new Error(data.error || 'No se pudo generar el Pack 18');
-    window.location.href = data.url;
+    if (!r.ok || !Array.isArray(data.lineItems) || !data.lineItems.length) throw new Error(data.error || 'No se pudo generar el Pack 18');
+
+    // Carrito normal de Shopify (igual que doKbCheckout) con las latas + vaso
+    // reales. Si hace falta descuento para llegar al precio fijo, el
+    // return_to pasa primero por /discount/{code} para auto-aplicarlo antes
+    // de llegar al checkout — así la caja de código sigue visible/editable.
+    const f = document.createElement('form');
+    f.method = 'POST';
+    f.action = `https://${SHOPIFY_DOMAIN}/cart/add`;
+    f.style.display = 'none';
+    const add = (name, value) => {
+      const i = document.createElement('input');
+      i.type = 'hidden'; i.name = name; i.value = String(value);
+      f.appendChild(i);
+    };
+    data.lineItems.forEach((item, idx) => {
+      add(`items[${idx}][id]`, item.variantId);
+      add(`items[${idx}][quantity]`, item.quantity);
+    });
+    add('attributes[source]', 'kairos-pack18');
+    add('return_to', data.code ? `/discount/${data.code}?redirect=/checkout` : '/checkout');
+    document.body.appendChild(f);
+    f.submit();
   } catch (e) {
     console.error('pack18 checkout', e);
     alert('No pudimos generar tu Pack para el 18. Intenta de nuevo o escríbenos a contacto@kairosdrinks.com.');
