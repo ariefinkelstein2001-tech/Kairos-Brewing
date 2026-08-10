@@ -1887,7 +1887,16 @@ async function populateGridFor(view){
   if (view === 'packs') {
     const el = document.getElementById('gridPacks');
     if (!el || el.dataset.done) return;
-    const list = products.filter(packs);
+    // Orden: 1) los 3 nuevos (Amateur/World Tour/Catador), 2) 6/12/24 de la casa,
+    // 3) los de mezclas, 4) los de una sola lata (comprar 6/12/24 de un estilo).
+    const packRank = p => {
+      const t = (p.title || '').toLowerCase();
+      if (/amateur|world\s*tour|catador/.test(t)) return 0;
+      if (/de\s*la\s*casa/.test(t)) return 1;
+      if (/mix|mezcla|variad|surtid/.test(t)) return 2;
+      return 3;
+    };
+    const list = products.filter(packs).sort((a,b) => packRank(a) - packRank(b));
     el.innerHTML = list.length ? list.map(buildCard).join('') : '<div class="kb-loading">Sin packs disponibles</div>';
     el.dataset.done = '1';
   }
