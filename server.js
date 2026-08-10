@@ -5,6 +5,7 @@
 
 import express from 'express';
 import compression from 'compression';
+import { randomBytes } from 'crypto';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -247,21 +248,24 @@ function p18FindVaso(products, spec) {
   return v0 && v0.id ? { title: p.title, variantId: String(v0.id), price: parseFloat(v0.price || 0) } : null;
 }
 
-const DRAFT_ORDER_CREATE_MUTATION = `
-mutation draftOrderCreate($input: DraftOrderInput!) {
-  draftOrderCreate(input: $input) {
-    draftOrder { id name invoiceUrl totalPriceSet { shopMoney { amount currencyCode } } }
-    userErrors { field message }
+const DISCOUNT_CODE_CREATE_MUTATION = `
+mutation discountCodeBasicCreate($basicCodeDiscount: DiscountCodeBasicInput!) {
+  discountCodeBasicCreate(basicCodeDiscount: $basicCodeDiscount) {
+    codeDiscountNode { id }
+    userErrors { field message code }
   }
 }`;
 
-// POST /api/pack18/checkout { size, variantIds:[...] } → crea una Orden
-// Borrador en Shopify con las latas reales elegidas (para que el stock se
-// descuente correctamente) y le aplica un descuento de monto fijo a nivel de
-// orden que deja el total exactamente en el precio fijo del Pack 18, sin
-// necesidad de crear un SKU nuevo. El precio y la lista de variantes válidas
-// se recalculan siempre desde el catálogo real, nunca se confía en el monto
-// que mande el cliente.
+// POST /api/pack18/checkout { size, variantIds:[...] } → valida las latas
+// elegidas contra el catálogo real, arma las líneas (latas + vaso real del
+// tamaño) y, si la suma real supera el precio fijo del Pack 18, crea un
+// código de descuento de un solo uso (monto fijo, vence en 1 hora) por la
+// diferencia exacta. El front agrega esas líneas al carrito normal de
+// Shopify con ese código pre-aplicado vía /discount/{code}?redirect=/checkout
+// — así el checkout sigue siendo el normal del sitio (con la caja de código
+// visible) en vez de una Orden Borrador, que la ocultaba. El precio y las
+// variantes válidas siempre se recalculan en el servidor, nunca se confía en
+// lo que mande el cliente.
 app.post('/api/pack18/checkout', express.json(), async (req, res) => {
   if (!SHOP || !TOKEN) return res.status(503).json({ error: 'Shopify no está conectado.' });
   try {
@@ -285,55 +289,52 @@ app.post('/api/pack18/checkout', express.json(), async (req, res) => {
     }
 
     const fixedPrice = PACK18_PRICE[size];
-    const lineItems = [...qtyByVariant.entries()].map(([variantId, quantity]) => ({
-      variantId: `gid://shopify/ProductVariant/${variantId}`,
-      quantity,
-    }));
+    const lineItems = [...qtyByVariant.entries()].map(([variantId, quantity]) => ({ variantId, quantity }));
 
     // Agrega el vaso real del tamaño de pack como línea propia (para que se
-    // vea en el pedido y se descuente del inventario). Si el producto no se
-    // encuentra en el catálogo (p.ej. cambió de nombre), se deja una línea a
-    // $0 de todos modos para que quien prepare el pedido no se lo pierda.
+    // vea en el carrito y se descuente del inventario). El carrito público de
+    // Shopify solo acepta variantes reales — si el producto no se encuentra
+    // por nombre, se omite la línea (el total sigue siendo el fijo igual) y
+    // queda un warning en los logs para revisar el nombre del producto.
     const vasoSpec = PACK18_VASO_SPEC[size];
     const vaso = p18FindVaso(products, vasoSpec);
     let vasoRealSum = 0;
     if (vaso) {
-      lineItems.push({ variantId: `gid://shopify/ProductVariant/${vaso.variantId}`, quantity: vasoSpec.qty });
+      lineItems.push({ variantId: vaso.variantId, quantity: vasoSpec.qty });
       vasoRealSum = vaso.price * vasoSpec.qty;
     } else {
-      console.warn(`pack18: vaso ${vasoSpec.cc}cc no encontrado en el catálogo (esperaba título con "${vasoSpec.rx}"), se agrega línea placeholder`);
-      lineItems.push({
-        title: `Vaso ${vasoSpec.cc}cc Kairos × ${vasoSpec.qty} (SKU no encontrado — agregar manualmente)`,
-        quantity: 1,
-        originalUnitPrice: '0.00',
-        requiresShipping: false,
-        taxable: false,
-      });
+      console.warn(`pack18: vaso ${vasoSpec.cc}cc no encontrado en el catálogo (esperaba título con "${vasoSpec.rx}"), no se agrega línea de vaso`);
     }
     realSum += vasoRealSum;
 
-    const input = {
-      lineItems,
-      tags: ['pack-18'],
-      note: `Pack para el 18 · ${size} unidades · ${PACK18_VASO_LABEL[size]} · precio fijo $${fixedPrice}`,
-      useCustomerDefaultAddress: false,
-    };
-    if (realSum > fixedPrice) {
-      input.appliedDiscount = {
-        value: Math.round((realSum - fixedPrice) * 100) / 100,
-        valueType: 'FIXED_AMOUNT',
-        title: 'Pack para el 18',
-        description: `Precio fijo Pack 18 (${PACK18_VASO_LABEL[size]})`,
+    let code = null;
+    const discountAmount = Math.round((realSum - fixedPrice) * 100) / 100;
+    if (discountAmount > 0) {
+      code = `PACK18-${size}-${randomBytes(4).toString('hex').toUpperCase()}`;
+      const now = new Date();
+      const input = {
+        title: `Pack para el 18 · ${size} unidades (${PACK18_VASO_LABEL[size]})`,
+        code,
+        startsAt: now.toISOString(),
+        endsAt: new Date(now.getTime() + 60 * 60 * 1000).toISOString(),
+        usageLimit: 1,
+        appliesOncePerCustomer: false,
+        customerSelection: { all: true },
+        customerGets: {
+          value: { discountAmount: { amount: discountAmount, appliesOnEachItem: false } },
+          items: { all: true },
+        },
+        combinesWith: { orderDiscounts: false, productDiscounts: false, shippingDiscounts: true },
       };
+      const resp = await shopifyGraphQL(DISCOUNT_CODE_CREATE_MUTATION, { basicCodeDiscount: input });
+      if (resp.errors) throw new Error(JSON.stringify(resp.errors));
+      const { userErrors } = resp.data.discountCodeBasicCreate;
+      if (userErrors && userErrors.length) {
+        return res.status(400).json({ error: userErrors.map(e => e.message).join('; ') });
+      }
     }
 
-    const resp = await shopifyGraphQL(DRAFT_ORDER_CREATE_MUTATION, { input });
-    if (resp.errors) throw new Error(JSON.stringify(resp.errors));
-    const { draftOrder, userErrors } = resp.data.draftOrderCreate;
-    if (userErrors && userErrors.length) {
-      return res.status(400).json({ error: userErrors.map(e => e.message).join('; ') });
-    }
-    res.json({ url: draftOrder.invoiceUrl, total: draftOrder.totalPriceSet?.shopMoney?.amount });
+    res.json({ lineItems, code });
   } catch (e) {
     console.error('pack18 checkout error:', e.message);
     res.status(500).json({ error: e.message });
