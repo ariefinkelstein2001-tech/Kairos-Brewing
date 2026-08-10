@@ -433,6 +433,18 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
   .kb-armar-slots{gap:7px}
 }
 
+/* ── Pack para el 18 (Fiestas Patrias): mismo armador, paleta bandera + precio fijo ── */
+.kb-p18{--orange:#D52B1E;--orange-d:#a8190f;--orange-l:#e8503f;--p18-blue:#0039A6}
+.kb-p18 .kb-armar-pill{border-color:var(--p18-blue);color:var(--p18-blue)}
+.kb-p18-banner{width:100%;border-radius:18px;overflow:hidden;margin:0 auto 26px;max-width:900px}
+.kb-p18-banner img{width:100%;height:auto;display:block}
+.kb-p18-price-note{font-size:13px;color:#555;margin-top:6px}
+.kb-p18-price-note b{color:var(--orange-d)}
+.kb-p18-strip{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--p18-blue);font-weight:700}
+.kb-p18-promo{background:linear-gradient(90deg,var(--orange) 0 33%,#fff 33% 66%,var(--p18-blue) 66% 100%);height:4px;border-radius:4px;max-width:220px;margin:0 auto 22px}
+.kb-pack18-card-price{font-weight:700;color:var(--orange-d,#a8190f);font-size:18px;margin-top:-4px}
+.kb-pack18-card-sub{font-size:12px;color:#777;margin-top:-10px}
+
 /* ── Cervecería artesanal independiente (mosaico de fotos + botón) ── */
 .kb-indep{display:flex;flex-direction:column;gap:16px}
 .kb-indep-row{display:flex;gap:16px}
@@ -875,6 +887,14 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
         <a data-route="/arma-tu-pack/24" onclick="go(event)">24 Pack</a>
       </div>
     </div>
+    <div class="kb-navitem">
+      <a data-route="/pack-18/6" onclick="go(event)">🇨🇱 Pack para el 18<span class="kb-caret">▼</span></a>
+      <div class="kb-submenu">
+        <a data-route="/pack-18/6" onclick="go(event)">6 Pack</a>
+        <a data-route="/pack-18/12" onclick="go(event)">12 Pack</a>
+        <a data-route="/pack-18/24" onclick="go(event)">24 Pack</a>
+      </div>
+    </div>
     <a data-route="/packs" onclick="go(event)">Packs</a>
     <a data-route="/merch" onclick="go(event)">Merch</a>
     <div class="kb-navitem">
@@ -921,6 +941,15 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
         <a data-route="/arma-tu-pack/6" onclick="go(event)">6 Pack</a>
         <a data-route="/arma-tu-pack/12" onclick="go(event)">12 Pack</a>
         <a data-route="/arma-tu-pack/24" onclick="go(event)">24 Pack</a>
+      </div>
+    </div>
+
+    <div class="kb-mgroup">
+      <a class="kb-mhead" onclick="toggleMgroup(this)">🇨🇱 Pack para el 18<span class="kb-mcaret">▾</span></a>
+      <div class="kb-msub">
+        <a data-route="/pack-18/6" onclick="go(event)">6 Pack</a>
+        <a data-route="/pack-18/12" onclick="go(event)">12 Pack</a>
+        <a data-route="/pack-18/24" onclick="go(event)">24 Pack</a>
       </div>
     </div>
 
@@ -984,6 +1013,43 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           </a>
           <div class="kb-pack-card-name">24 Pack</div>
           <a class="kb-pill" data-route="/arma-tu-pack/24" onclick="go(event)">Ármalo aquí</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="kb-section kb-p18">
+      <h2 class="kb-section-t">🇨🇱 Arma tu Pack para el 18</h2>
+      <div class="kb-p18-banner">
+        <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465" alt="Arma tu Pack para el 18" loading="lazy">
+      </div>
+      <div class="kb-p18-strip">Precio Fiestas Patrias · vaso incluido</div>
+      <div class="kb-pack-builder">
+        <div class="kb-pack-card">
+          <a class="kb-pack-card-img" data-route="/pack-18/6" onclick="go(event)">
+            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/2_5eabbb88-ab0b-42e1-a247-49611054ffc3.png?v=1784062683&width=900" alt="6 Pack para el 18" loading="lazy">
+          </a>
+          <div class="kb-pack-card-name">6 Pack</div>
+          <div class="kb-pack18-card-sub">+ vaso 250 cc</div>
+          <div class="kb-pack18-card-price">$13.990</div>
+          <a class="kb-pill" data-route="/pack-18/6" onclick="go(event)">Ármalo aquí</a>
+        </div>
+        <div class="kb-pack-card">
+          <a class="kb-pack-card-img" data-route="/pack-18/12" onclick="go(event)">
+            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/3_969e0bc2-ccde-4553-8644-14a6d3f0b87e.png?v=1784062683&width=900" alt="12 Pack para el 18" loading="lazy">
+          </a>
+          <div class="kb-pack-card-name">12 Pack</div>
+          <div class="kb-pack18-card-sub">+ vaso 500 cc</div>
+          <div class="kb-pack18-card-price">$25.990</div>
+          <a class="kb-pill" data-route="/pack-18/12" onclick="go(event)">Ármalo aquí</a>
+        </div>
+        <div class="kb-pack-card">
+          <a class="kb-pack-card-img" data-route="/pack-18/24" onclick="go(event)">
+            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/4_582e494e-855c-4617-bedd-20d62c4aea27.png?v=1784062683&width=900" alt="24 Pack para el 18" loading="lazy">
+          </a>
+          <div class="kb-pack-card-name">24 Pack</div>
+          <div class="kb-pack18-card-sub">+ 2 vasos 500 cc</div>
+          <div class="kb-pack18-card-price">$40.990</div>
+          <a class="kb-pill" data-route="/pack-18/24" onclick="go(event)">Ármalo aquí</a>
         </div>
       </div>
     </section>
@@ -1056,6 +1122,37 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           <span class="kb-armar-total" id="armarTotal">$0</span>
         </div>
         <button class="kb-armar-cta" id="armarCta" disabled onclick="armarCheckout()">Falta completar el pack</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ ARMA TU PACK PARA EL 18 ═════ -->
+  <div class="kb-view kb-light kb-p18" id="view-pack18">
+    <div class="kb-armar">
+      <div class="kb-armar-head">
+        <div class="kb-armar-pill"><span class="kb-dot"></span><span id="p18StylesCount">0</span> estilos disponibles</div>
+        <h1 class="kb-armar-title">🇨🇱 Arma tu Pack para el 18</h1>
+        <div class="kb-armar-sizes">
+          <button class="kb-armar-size" data-size="6" onclick="p18SetSize(6)">6 Pack</button>
+          <button class="kb-armar-size" data-size="12" onclick="p18SetSize(12)">12 Pack</button>
+          <button class="kb-armar-size" data-size="24" onclick="p18SetSize(24)">24 Pack</button>
+        </div>
+        <div class="kb-p18-price-note" id="p18PriceNote"></div>
+        <div class="kb-armar-progress">
+          <div class="kb-armar-progress-row"><span><b id="p18Count">0</b> / <span id="p18Target">6</span> elegidas</span><span id="p18Hint">Empieza eligiendo tu estilo favorito</span></div>
+          <div class="kb-armar-bar"><div class="kb-armar-bar-fill" id="p18BarFill"></div></div>
+        </div>
+      </div>
+      <div class="kb-armar-grid" id="p18Grid"><div class="kb-loading">Cargando…</div></div>
+    </div>
+    <div class="kb-armar-bar-sticky" id="p18Sticky">
+      <div class="kb-armar-slots" id="p18Slots"></div>
+      <div class="kb-armar-foot">
+        <div class="kb-armar-foot-l">
+          <span>Precio Pack 18 · vaso incluido</span>
+          <span class="kb-armar-total" id="p18Total">$0</span>
+        </div>
+        <button class="kb-armar-cta" id="p18Cta" disabled onclick="p18Checkout()">Falta completar el pack</button>
       </div>
     </div>
   </div>
@@ -1466,6 +1563,7 @@ function viewFromPath(path){
   if (p.indexOf('/pages/') === 0) { CURRENT_HANDLE = p.slice(7); return 'page'; }
   if (p.indexOf('/cervezas') === 0) return 'cervezas';
   if (p.indexOf('/arma-tu-pack') === 0) return 'armar';
+  if (p.indexOf('/pack-18') === 0) return 'pack18';
   if (p.indexOf('/restaurantes/garden') === 0) return 'garden';
   if (p.indexOf('/restaurantes') === 0) return 'badass';
   return ROUTES[p] || ROUTES[path] || 'home';
@@ -1840,6 +1938,7 @@ function kbAddToCart(btn){
 // ─── POPULATE per view ───────────────────────────────────────────────────────
 async function populateGridFor(view){
   if (view === 'armar') return populateArmar();
+  if (view === 'pack18') return populatePack18();
   const products = await loadCatalog();
   const beers = isBeer;
   const packs = p => !isHiddenProduct(p) && (isPack(p) || hasZorbo(p)) && !isSubscription(p) && !isDestilado(p) && !/chelada|firulais/i.test(p.title||'');
@@ -2184,7 +2283,7 @@ function armarSetSize(n){
 function armarRender(){
   const target = armarTarget;
   const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
-  document.querySelectorAll('.kb-armar-size').forEach(b => b.classList.toggle('active', +b.dataset.size === target));
+  document.querySelectorAll('#view-armar .kb-armar-size').forEach(b => b.classList.toggle('active', +b.dataset.size === target));
   set('armarTarget', target);
   set('armarCount', armarSel.length);
   const slots = document.getElementById('armarSlots');
@@ -2219,6 +2318,126 @@ function armarCheckout(){
   saveCart(); updateCart();
   armarSel = []; armarRender();
   if (!cartOpen) toggleCart();
+}
+
+// ─── ARMA TU PACK PARA EL 18 (precio fijo, vaso incluido) ─────────────────────
+// El cliente elige cualquier cerveza menos World Tour; el precio mostrado es
+// siempre el fijo de la tabla, nunca la suma de las latas. Al pagar, el
+// backend (POST /api/pack18/checkout) arma una Orden Borrador en Shopify con
+// las latas reales elegidas y le aplica un descuento a nivel de orden que deja
+// el total exactamente en el precio fijo — así no hace falta crear un SKU
+// nuevo y el monto cobrado nunca varía según los estilos elegidos.
+const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 40990 };
+const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc', 12: 'vaso de 500 cc', 24: '2 vasos de 500 cc' };
+let p18Target = 6, p18Sel = [], p18List = [];
+function p18ParseTarget(){
+  const m = location.pathname.match(/pack-18\/(\d+)/);
+  const n = m ? parseInt(m[1],10) : 6;
+  return [6,12,24].includes(n) ? n : 6;
+}
+async function populatePack18(){
+  const grid = document.getElementById('p18Grid');
+  if (!grid) return;
+  const target = p18ParseTarget();
+  if (p18Target !== target){ p18Target = target; p18Sel = []; }
+  if (!p18List.length){
+    const products = await loadCatalog();
+    p18List = products.filter(p => isBeer(p) && classifyBeer(p) !== 'tour');
+  }
+  const sc = document.getElementById('p18StylesCount');
+  if (sc) sc.textContent = p18List.length;
+  if (grid.dataset.done !== '1'){
+    if (!p18List.length){
+      grid.innerHTML = '<div class="kb-loading">Sin cervezas disponibles</div>';
+    } else {
+      const card = (p, i) => {
+        const img = p.image || (p.images&&p.images[0]) || '';
+        return `<div class="kb-armar-card">
+          <div class="kb-armar-card-img">${img?`<img src="${cdnImg(img,400)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">`:''}</div>
+          <div class="kb-armar-card-name">${escapeHtml(cleanTitle(p.title))}</div>
+          <button class="kb-armar-plus" aria-label="Agregar" onclick="p18Add(${i})">+</button>
+        </div>`;
+      };
+      const groups = { casa:[], temporada:[], artista:[], otros:[] };
+      p18List.forEach((p,i) => { const g = classifyBeer(p); (groups[g] || groups.otros).push({p,i}); });
+      const titles = { casa:'De la Casa', temporada:'Colección de Temporada', artista:'Colección de Artista', otros:'Más estilos' };
+      const order = ['casa','temporada','artista','otros'];
+      grid.innerHTML = order.filter(g => groups[g].length).map(g => `
+        <h2 class="kb-coll-t kb-armar-coll-t">${titles[g]}</h2>
+        <div class="kb-hscroll-wrap">
+          <button class="kb-hs-arr prev" onclick="hsScroll(this,-1)" aria-label="Anterior">‹</button>
+          <div class="kb-hscroll kb-armar-row">${groups[g].map(x => card(x.p, x.i)).join('')}</div>
+          <button class="kb-hs-arr next" onclick="hsScroll(this,1)" aria-label="Siguiente">›</button>
+        </div>`).join('');
+    }
+    grid.dataset.done = '1';
+  }
+  p18Render();
+}
+function p18Add(i){
+  if (p18Sel.length >= p18Target) return;
+  const p = p18List[i]; if (!p) return;
+  const v0 = (p.variants||[])[0] || {};
+  if (!v0.id) return;
+  p18Sel.push({ variantId:v0.id, name:cleanTitle(p.title), image:p.image||(p.images&&p.images[0])||null, price:parseFloat(v0.price||0) });
+  p18Render();
+}
+function p18Remove(idx){ p18Sel.splice(idx,1); p18Render(); }
+function p18SetSize(n){
+  if (![6,12,24].includes(n)) return;
+  history.pushState({}, '', '/pack-18/' + n);
+  showView('pack18');
+}
+function p18Render(){
+  const target = p18Target;
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  document.querySelectorAll('#view-pack18 .kb-armar-size').forEach(b => b.classList.toggle('active', +b.dataset.size === target));
+  set('p18Target', target);
+  set('p18Count', p18Sel.length);
+  const note = document.getElementById('p18PriceNote');
+  if (note) note.innerHTML = `Precio fijo <b>${fmtPrice(PACK18_PRICE[target])}</b> · incluye ${PACK18_VASO_LABEL[target]}, elijas los estilos que elijas`;
+  const slots = document.getElementById('p18Slots');
+  if (slots){
+    let s='';
+    for (let i=0;i<target;i++){
+      const it = p18Sel[i];
+      s += it
+        ? `<div class="kb-slot filled"><img src="${cdnImg(it.image||'',300)}" alt=""><button class="kb-slot-x" aria-label="Quitar" onclick="p18Remove(${i})">✕</button></div>`
+        : '<div class="kb-slot"></div>';
+    }
+    slots.innerHTML = s;
+  }
+  set('p18Total', fmtPrice(PACK18_PRICE[target]));
+  const fill = document.getElementById('p18BarFill');
+  if (fill) fill.style.width = Math.min(100, p18Sel.length/target*100) + '%';
+  const left = target - p18Sel.length;
+  const cta = document.getElementById('p18Cta');
+  const hint = document.getElementById('p18Hint');
+  if (cta){
+    if (left <= 0){ cta.disabled=false; cta.classList.add('ready'); cta.textContent='Ir a pagar →'; }
+    else { cta.disabled=true; cta.classList.remove('ready'); cta.textContent='Falta completar el pack'; }
+  }
+  if (hint) hint.textContent = left<=0 ? '¡Pack completo!' : (p18Sel.length ? `Te faltan ${left} para completar` : 'Empieza eligiendo tu estilo favorito');
+}
+async function p18Checkout(){
+  if (p18Sel.length < p18Target) return;
+  const target = p18Target;
+  const cta = document.getElementById('p18Cta');
+  if (cta) { cta.disabled = true; cta.textContent = 'Generando tu pack…'; }
+  try {
+    const r = await fetch('/api/pack18/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ size: target, variantIds: p18Sel.map(it => it.variantId) }),
+    });
+    const data = await r.json();
+    if (!r.ok || !data.url) throw new Error(data.error || 'No se pudo generar el Pack 18');
+    window.location.href = data.url;
+  } catch (e) {
+    console.error('pack18 checkout', e);
+    alert('No pudimos generar tu Pack para el 18. Intenta de nuevo o escríbenos a contacto@kairosdrinks.com.');
+    p18Render();
+  }
 }
 
 // ─── EVENTOS (cotización por correo) ───────────────────────────────────────────
