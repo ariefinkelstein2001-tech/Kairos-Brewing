@@ -444,6 +444,8 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-p18-promo{background:linear-gradient(90deg,var(--orange) 0 33%,#fff 33% 66%,var(--p18-blue) 66% 100%);height:4px;border-radius:4px;max-width:220px;margin:0 auto 22px}
 .kb-pack18-card-price{font-weight:700;color:var(--orange-d,#a8190f);font-size:18px;margin-top:-4px}
 .kb-pack18-card-sub{font-size:12px;color:#777;margin-top:-10px}
+.kb-slot.filled.kb-slot-vaso{outline:2px solid var(--p18-blue);outline-offset:3px;border-radius:10px}
+.kb-slot-vaso-badge{position:absolute;top:-8px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--p18-blue);font-size:11px;display:flex;align-items:center;justify-content:center}
 
 /* ── Cervecería artesanal independiente (mosaico de fotos + botón) ── */
 .kb-indep{display:flex;flex-direction:column;gap:16px}
@@ -2329,6 +2331,19 @@ function armarCheckout(){
 // nuevo y el monto cobrado nunca varía según los estilos elegidos.
 const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 40990 };
 const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc', 12: 'vaso de 500 cc', 24: '2 vasos de 500 cc' };
+// Mismo criterio que el backend (server.js) para ubicar el producto real del
+// vaso en el catálogo y mostrar su foto junto a las latas elegidas.
+const P18_VASO_SPEC = {
+  6:  { rx: /cognac/i,   cc: '250', qty: 1, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_44_43.png?v=1786380617' },
+  12: { rx: /schopero/i, cc: '500', qty: 1, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465' },
+  24: { rx: /schopero/i, cc: '500', qty: 2, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465' },
+};
+function p18VasoImage(target){
+  const spec = P18_VASO_SPEC[target];
+  const found = (PRODUCTS || []).find(p => spec.rx.test(p.title || '') && (p.title || '').includes(spec.cc));
+  const img = found && (found.image || (found.images && found.images[0]));
+  return img || spec.fallbackImg;
+}
 let p18Target = 6, p18Sel = [], p18List = [];
 function p18ParseTarget(){
   const m = location.pathname.match(/pack-18\/(\d+)/);
@@ -2404,6 +2419,11 @@ function p18Render(){
       s += it
         ? `<div class="kb-slot filled"><img src="${cdnImg(it.image||'',300)}" alt=""><button class="kb-slot-x" aria-label="Quitar" onclick="p18Remove(${i})">✕</button></div>`
         : '<div class="kb-slot"></div>';
+    }
+    const vasoSpec = P18_VASO_SPEC[target];
+    const vasoImg = cdnImg(p18VasoImage(target), 300);
+    for (let i=0;i<vasoSpec.qty;i++){
+      s += `<div class="kb-slot filled kb-slot-vaso"><img src="${vasoImg}" alt="Vaso ${vasoSpec.cc} cc incluido"><span class="kb-slot-vaso-badge" title="Vaso incluido">🎁</span></div>`;
     }
     slots.innerHTML = s;
   }
