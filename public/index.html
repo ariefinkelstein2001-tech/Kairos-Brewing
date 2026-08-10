@@ -2312,14 +2312,15 @@ function armarCheckout(){
 }
 
 // ─── ARMA TU PACK PARA EL 18 (precio fijo, vaso incluido) ─────────────────────
-// Nota: mientras no exista en Shopify un SKU "Pack 18" por tamaño (handle
-// pack-18-6 / pack-18-12 / pack-18-24, o título que contenga "Pack 18"/
-// "Fiestas Patrias" + el N de latas) a precio fijo, el checkout no puede cobrar
-// $13.990/$25.990/$40.990 de forma confiable — así que el pedido se captura por
-// correo en vez de forzar un total que no coincidiría con el cobro real.
+// El cliente elige cualquier cerveza menos World Tour; el precio mostrado es
+// siempre el fijo de la tabla, nunca la suma de las latas. Al pagar, el
+// backend (POST /api/pack18/checkout) arma una Orden Borrador en Shopify con
+// las latas reales elegidas y le aplica un descuento a nivel de orden que deja
+// el total exactamente en el precio fijo — así no hace falta crear un SKU
+// nuevo y el monto cobrado nunca varía según los estilos elegidos.
 const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 40990 };
 const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc', 12: 'vaso de 500 cc', 24: '2 vasos de 500 cc' };
-let p18Target = 6, p18Sel = [];
+let p18Target = 6, p18Sel = [], p18List = [];
 function p18ParseTarget(){
   const m = location.pathname.match(/pack-18\/(\d+)/);
   const n = m ? parseInt(m[1],10) : 6;
@@ -2330,14 +2331,14 @@ async function populatePack18(){
   if (!grid) return;
   const target = p18ParseTarget();
   if (p18Target !== target){ p18Target = target; p18Sel = []; }
-  if (!armarList.length){
+  if (!p18List.length){
     const products = await loadCatalog();
-    armarList = products.filter(isBeer);
+    p18List = products.filter(p => isBeer(p) && classifyBeer(p) !== 'tour');
   }
   const sc = document.getElementById('p18StylesCount');
-  if (sc) sc.textContent = armarList.length;
+  if (sc) sc.textContent = p18List.length;
   if (grid.dataset.done !== '1'){
-    if (!armarList.length){
+    if (!p18List.length){
       grid.innerHTML = '<div class="kb-loading">Sin cervezas disponibles</div>';
     } else {
       const card = (p, i) => {
@@ -2348,10 +2349,10 @@ async function populatePack18(){
           <button class="kb-armar-plus" aria-label="Agregar" onclick="p18Add(${i})">+</button>
         </div>`;
       };
-      const groups = { casa:[], temporada:[], artista:[], tour:[], otros:[] };
-      armarList.forEach((p,i) => { const g = classifyBeer(p); (groups[g] || groups.otros).push({p,i}); });
-      const titles = { casa:'De la Casa', temporada:'Colección de Temporada', artista:'Colección de Artista', tour:'🌎 World Tour', otros:'Más estilos' };
-      const order = ['casa','temporada','artista','tour','otros'];
+      const groups = { casa:[], temporada:[], artista:[], otros:[] };
+      p18List.forEach((p,i) => { const g = classifyBeer(p); (groups[g] || groups.otros).push({p,i}); });
+      const titles = { casa:'De la Casa', temporada:'Colección de Temporada', artista:'Colección de Artista', otros:'Más estilos' };
+      const order = ['casa','temporada','artista','otros'];
       grid.innerHTML = order.filter(g => groups[g].length).map(g => `
         <h2 class="kb-coll-t kb-armar-coll-t">${titles[g]}</h2>
         <div class="kb-hscroll-wrap">
@@ -2366,7 +2367,7 @@ async function populatePack18(){
 }
 function p18Add(i){
   if (p18Sel.length >= p18Target) return;
-  const p = armarList[i]; if (!p) return;
+  const p = p18List[i]; if (!p) return;
   const v0 = (p.variants||[])[0] || {};
   if (!v0.id) return;
   p18Sel.push({ variantId:v0.id, name:cleanTitle(p.title), image:p.image||(p.images&&p.images[0])||null, price:parseFloat(v0.price||0) });
@@ -2404,39 +2405,30 @@ function p18Render(){
   const cta = document.getElementById('p18Cta');
   const hint = document.getElementById('p18Hint');
   if (cta){
-    if (left <= 0){ cta.disabled=false; cta.classList.add('ready'); cta.textContent='Ir al carrito →'; }
+    if (left <= 0){ cta.disabled=false; cta.classList.add('ready'); cta.textContent='Ir a pagar →'; }
     else { cta.disabled=true; cta.classList.remove('ready'); cta.textContent='Falta completar el pack'; }
   }
   if (hint) hint.textContent = left<=0 ? '¡Pack completo!' : (p18Sel.length ? `Te faltan ${left} para completar` : 'Empieza eligiendo tu estilo favorito');
 }
-function p18Checkout(){
+async function p18Checkout(){
   if (p18Sel.length < p18Target) return;
   const target = p18Target;
-  const products = PRODUCTS || [];
-  const bundle = products.find(p => {
-    const h = (p.handle||'').toLowerCase();
-    const t = (p.title||'').toLowerCase();
-    if (h === `pack-18-${target}`) return true;
-    return /(pack.*18|18.*pack|fiestas patrias|dieciocho)/.test(t) && new RegExp(`\\b${target}\\b`).test(t);
-  });
-  const v0 = bundle && (bundle.variants||[])[0];
-  if (bundle && v0 && v0.id) {
-    const properties = {};
-    p18Sel.forEach((it,idx) => { properties[`Cerveza ${idx+1}`] = it.name; });
-    const ex = CART.find(i => i.variantId === v0.id && !i.properties);
-    if (ex) { ex.qty += 1; }
-    else { CART.push({ name:cleanTitle(bundle.title), image:bundle.image, price:parseFloat(v0.price||PACK18_PRICE[target]), variantId:v0.id, qty:1, properties }); }
-    saveCart(); updateCart();
-    p18Sel = []; p18Render();
-    if (!cartOpen) toggleCart();
-    return;
+  const cta = document.getElementById('p18Cta');
+  if (cta) { cta.disabled = true; cta.textContent = 'Generando tu pack…'; }
+  try {
+    const r = await fetch('/api/pack18/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ size: target, variantIds: p18Sel.map(it => it.variantId) }),
+    });
+    const data = await r.json();
+    if (!r.ok || !data.url) throw new Error(data.error || 'No se pudo generar el Pack 18');
+    window.location.href = data.url;
+  } catch (e) {
+    console.error('pack18 checkout', e);
+    alert('No pudimos generar tu Pack para el 18. Intenta de nuevo o escríbenos a contacto@kairosdrinks.com.');
+    p18Render();
   }
-  // Todavía no existe el SKU del Pack 18 en Shopify: capturamos el pedido por correo.
-  const lines = p18Sel.map((it,idx) => `${idx+1}. ${it.name}`).join('\n');
-  const body = encodeURIComponent(
-    `Quiero el Pack para el 18 de ${target} unidades (${PACK18_VASO_LABEL[target]}) · ${fmtPrice(PACK18_PRICE[target])}\n\nCervezas elegidas:\n${lines}`
-  );
-  window.location.href = `mailto:contacto@kairosdrinks.com?subject=${encodeURIComponent('Pedido Pack para el 18 · '+target+' unidades')}&body=${body}`;
 }
 
 // ─── EVENTOS (cotización por correo) ───────────────────────────────────────────

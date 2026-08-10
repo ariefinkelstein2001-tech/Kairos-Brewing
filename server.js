@@ -86,14 +86,14 @@ const PAGES_QUERY = `{
   }
 }`;
 
-async function shopifyGraphQL(query) {
+async function shopifyGraphQL(query, variables) {
   if (!SHOP || !TOKEN) {
     throw new Error('Shopify no configurado (faltan SHOPIFY_STORE_DOMAIN o SHOPIFY_ADMIN_TOKEN).');
   }
   const r = await fetch(`https://${SHOP}/admin/api/${SHOPIFY_API_VERSION}/graphql.json`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-Shopify-Access-Token': TOKEN },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify(variables ? { query, variables } : { query }),
   });
   const text = await r.text();
   if (!r.ok) throw new Error(`Shopify ${r.status}: ${text.slice(0, 400)}`);
@@ -183,6 +183,123 @@ app.get('/api/products', async (req, res) => {
     res.json({ count: products.length, products, fetchedAt: cache?.fetchedAt });
   } catch (e) {
     console.error('Shopify products error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── Arma tu Pack para el 18 (precio fijo, vaso incluido) ────────────────────
+// Espeja la clasificación de cervezas del front (public/index.html) para
+// validar en el servidor qué variantes puede elegir el cliente: solo latas
+// individuales (no packs/destilados/merch) y sin la colección World Tour.
+function p18IsPack(p) {
+  const t = (p.title || '').toLowerCase();
+  return /^\s*pack\b/.test(t) || /\d+\s*pack/.test(t) || /\bcatador\b|\bamateur\b|mundialero|world\s*tour/.test(t);
+}
+function p18IsDestilado(p) {
+  const t = (p.title || '').toLowerCase();
+  const type = (p.type || '').toLowerCase();
+  if (/destil|licor|spirit|gin/.test(type)) return true;
+  if ((p.collections || []).some(c => /destil|licor|spirit|gin/i.test((c.handle || '') + ' ' + (c.title || '')))) return true;
+  return /\bgin\b|banny|london dry|whisky|whiskey|\bron\b|\brum\b|vermut|mojito|tonic|rtd/.test(t);
+}
+function p18IsMerch(p) {
+  const t = (p.title || '').toLowerCase();
+  const type = (p.type || '').toLowerCase();
+  if (/camiseta|polera|poler[oó]n|ropa|merch|accesori|gorro|jockey|vaso|jarra|copa|textil|prenda/.test(type)) return true;
+  if ((p.collections || []).some(c => /merch|tienda|ropa|accesori/i.test((c.handle || '') + ' ' + (c.title || '')))) return true;
+  return /vaso|jockey|jarra|copa|growler|\bpin\b|gorr|camiseta|polera|poler[oó]n|hoodie|poler/.test(t);
+}
+function p18IsWorldTour(p) {
+  const cols = (p.collections || []).map(c => ((c.handle || '') + ' ' + (c.title || '')).toLowerCase());
+  const h = (p.handle || '').toLowerCase();
+  return cols.some(c => /world.?tour/.test(c)) || /lanus|lanús|osagui|acholada/.test(h);
+}
+// Cerveza elegible para el Pack 18: lata individual, sin World Tour, no
+// destilado/merch/pack, sin tag ZORBO ni suscripción.
+function p18IsEligibleBeer(p) {
+  if ((p.tags || []).some(t => /^(oculto|hidden|privado|link.?only)$/i.test(String(t)))) return false;
+  if (p18IsPack(p) || p18IsDestilado(p) || p18IsMerch(p) || p18IsWorldTour(p)) return false;
+  if ((p.tags || []).map(t => String(t).toUpperCase()).includes('ZORBO')) return false;
+  if (/suscrip|subscription|chelada|firulais/i.test(p.title || '')) return false;
+  const t = (p.title || '').toLowerCase();
+  const type = (p.type || '').toLowerCase();
+  const sku = ((p.variants && p.variants[0] && p.variants[0].sku) || '').toLowerCase();
+  if (type.includes('cerveza')) return true;
+  if (/\d{3}\s*cc/.test(t) || /\d{3}\s*cc/.test(sku)) return true;
+  if ((p.collections || []).some(c => /casa|temporada|artist|chelita/i.test((c.handle || '') + ' ' + (c.title || '')))) return true;
+  return false;
+}
+
+const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 40990 };
+const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc incluido', 12: 'vaso de 500 cc incluido', 24: '2 vasos de 500 cc incluidos' };
+
+const DRAFT_ORDER_CREATE_MUTATION = `
+mutation draftOrderCreate($input: DraftOrderInput!) {
+  draftOrderCreate(input: $input) {
+    draftOrder { id name invoiceUrl totalPriceSet { shopMoney { amount currencyCode } } }
+    userErrors { field message }
+  }
+}`;
+
+// POST /api/pack18/checkout { size, variantIds:[...] } → crea una Orden
+// Borrador en Shopify con las latas reales elegidas (para que el stock se
+// descuente correctamente) y le aplica un descuento de monto fijo a nivel de
+// orden que deja el total exactamente en el precio fijo del Pack 18, sin
+// necesidad de crear un SKU nuevo. El precio y la lista de variantes válidas
+// se recalculan siempre desde el catálogo real, nunca se confía en el monto
+// que mande el cliente.
+app.post('/api/pack18/checkout', express.json(), async (req, res) => {
+  if (!SHOP || !TOKEN) return res.status(503).json({ error: 'Shopify no está conectado.' });
+  try {
+    const size = parseInt(req.body?.size, 10);
+    const variantIds = Array.isArray(req.body?.variantIds) ? req.body.variantIds.map(String).filter(Boolean) : [];
+    if (!PACK18_PRICE[size]) return res.status(400).json({ error: 'Tamaño de pack inválido.' });
+    if (variantIds.length !== size) return res.status(400).json({ error: `Debes elegir exactamente ${size} cervezas.` });
+
+    const products = await loadKairosProducts();
+    const eligible = new Map();
+    products.filter(p18IsEligibleBeer).forEach(p => {
+      (p.variants || []).forEach(v => { if (v.id) eligible.set(String(v.id), parseFloat(v.price || 0)); });
+    });
+
+    let realSum = 0;
+    const qtyByVariant = new Map();
+    for (const id of variantIds) {
+      if (!eligible.has(id)) return res.status(400).json({ error: 'Una de las cervezas elegidas no está disponible para el Pack 18.' });
+      realSum += eligible.get(id);
+      qtyByVariant.set(id, (qtyByVariant.get(id) || 0) + 1);
+    }
+
+    const fixedPrice = PACK18_PRICE[size];
+    const lineItems = [...qtyByVariant.entries()].map(([variantId, quantity]) => ({
+      variantId: `gid://shopify/ProductVariant/${variantId}`,
+      quantity,
+    }));
+
+    const input = {
+      lineItems,
+      tags: ['pack-18'],
+      note: `Pack para el 18 · ${size} unidades · ${PACK18_VASO_LABEL[size]} · precio fijo $${fixedPrice}`,
+      useCustomerDefaultAddress: false,
+    };
+    if (realSum > fixedPrice) {
+      input.appliedDiscount = {
+        value: Math.round((realSum - fixedPrice) * 100) / 100,
+        valueType: 'FIXED_AMOUNT',
+        title: 'Pack para el 18',
+        description: `Precio fijo Pack 18 (${PACK18_VASO_LABEL[size]})`,
+      };
+    }
+
+    const resp = await shopifyGraphQL(DRAFT_ORDER_CREATE_MUTATION, { input });
+    if (resp.errors) throw new Error(JSON.stringify(resp.errors));
+    const { draftOrder, userErrors } = resp.data.draftOrderCreate;
+    if (userErrors && userErrors.length) {
+      return res.status(400).json({ error: userErrors.map(e => e.message).join('; ') });
+    }
+    res.json({ url: draftOrder.invoiceUrl, total: draftOrder.totalPriceSet?.shopMoney?.amount });
+  } catch (e) {
+    console.error('pack18 checkout error:', e.message);
     res.status(500).json({ error: e.message });
   }
 });
