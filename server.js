@@ -232,6 +232,20 @@ function p18IsEligibleBeer(p) {
 
 const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 40990 };
 const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc incluido', 12: 'vaso de 500 cc incluido', 24: '2 vasos de 500 cc incluidos' };
+// Vaso real por tamaño de pack: "Vaso Cognac Kairos Brewing 250cc - Copa de
+// Degustación Premium" para el 6 Pack, "Vaso Schopero ... 500cc" (x1 o x2)
+// para 12/24. Se busca por palabra clave + cc en vez de título exacto para no
+// romperse si Shopify cambia levemente el nombre del producto.
+const PACK18_VASO_SPEC = {
+  6:  { rx: /cognac/i,   cc: '250', qty: 1 },
+  12: { rx: /schopero/i, cc: '500', qty: 1 },
+  24: { rx: /schopero/i, cc: '500', qty: 2 },
+};
+function p18FindVaso(products, spec) {
+  const p = products.find(pr => spec.rx.test(pr.title || '') && pr.title.includes(spec.cc));
+  const v0 = p && (p.variants || [])[0];
+  return v0 && v0.id ? { title: p.title, variantId: String(v0.id), price: parseFloat(v0.price || 0) } : null;
+}
 
 const DRAFT_ORDER_CREATE_MUTATION = `
 mutation draftOrderCreate($input: DraftOrderInput!) {
@@ -275,6 +289,28 @@ app.post('/api/pack18/checkout', express.json(), async (req, res) => {
       variantId: `gid://shopify/ProductVariant/${variantId}`,
       quantity,
     }));
+
+    // Agrega el vaso real del tamaño de pack como línea propia (para que se
+    // vea en el pedido y se descuente del inventario). Si el producto no se
+    // encuentra en el catálogo (p.ej. cambió de nombre), se deja una línea a
+    // $0 de todos modos para que quien prepare el pedido no se lo pierda.
+    const vasoSpec = PACK18_VASO_SPEC[size];
+    const vaso = p18FindVaso(products, vasoSpec);
+    let vasoRealSum = 0;
+    if (vaso) {
+      lineItems.push({ variantId: `gid://shopify/ProductVariant/${vaso.variantId}`, quantity: vasoSpec.qty });
+      vasoRealSum = vaso.price * vasoSpec.qty;
+    } else {
+      console.warn(`pack18: vaso ${vasoSpec.cc}cc no encontrado en el catálogo (esperaba título con "${vasoSpec.rx}"), se agrega línea placeholder`);
+      lineItems.push({
+        title: `Vaso ${vasoSpec.cc}cc Kairos × ${vasoSpec.qty} (SKU no encontrado — agregar manualmente)`,
+        quantity: 1,
+        originalUnitPrice: '0.00',
+        requiresShipping: false,
+        taxable: false,
+      });
+    }
+    realSum += vasoRealSum;
 
     const input = {
       lineItems,
