@@ -215,11 +215,15 @@ function p18IsWorldTour(p) {
   const h = (p.handle || '').toLowerCase();
   return cols.some(c => /world.?tour/.test(c)) || /lanus|lanús|osagui|acholada/.test(h);
 }
-// Cerveza elegible para el Pack 18: lata individual, sin World Tour, no
-// destilado/merch/pack, sin tag ZORBO ni suscripción.
+function p18IsArtista(p) {
+  const cols = (p.collections || []).map(c => ((c.handle || '') + ' ' + (c.title || '')).toLowerCase());
+  return cols.some(c => /artist/.test(c));
+}
+// Cerveza elegible para el Pack 18: lata individual, sin World Tour ni De
+// Artista, no destilado/merch/pack, sin tag ZORBO ni suscripción.
 function p18IsEligibleBeer(p) {
   if ((p.tags || []).some(t => /^(oculto|hidden|privado|link.?only)$/i.test(String(t)))) return false;
-  if (p18IsPack(p) || p18IsDestilado(p) || p18IsMerch(p) || p18IsWorldTour(p)) return false;
+  if (p18IsPack(p) || p18IsDestilado(p) || p18IsMerch(p) || p18IsWorldTour(p) || p18IsArtista(p)) return false;
   if ((p.tags || []).map(t => String(t).toUpperCase()).includes('ZORBO')) return false;
   if (/suscrip|subscription|chelada|firulais/i.test(p.title || '')) return false;
   const t = (p.title || '').toLowerCase();
