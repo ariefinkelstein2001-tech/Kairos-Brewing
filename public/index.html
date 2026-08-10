@@ -439,8 +439,8 @@ button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-eve
 .kb-p18-price-note{font-size:13px;color:#555;margin-top:6px}
 .kb-p18-price-note b{color:var(--orange-d)}
 .kb-p18-strip{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--p18-blue);font-weight:700}
-.kb-pack18-card-price{font-weight:700;color:var(--orange-d,#a8190f);font-size:18px;margin-top:-4px}
-.kb-pack18-card-sub{font-size:12px;color:#777;margin-top:-10px}
+.kb-p18-cta-section{text-align:center}
+.kb-p18-cta{font-size:16px;padding:16px 36px}
 .kb-slot.filled.kb-slot-vaso{outline:2px solid var(--p18-blue);outline-offset:3px;border-radius:10px}
 .kb-slot-vaso-badge{position:absolute;top:-8px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--p18-blue);font-size:11px;display:flex;align-items:center;justify-content:center}
 
@@ -982,6 +982,12 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       <div class="kb-hero-dots" id="kbHeroDots"></div>
     </div>
 
+    <section class="kb-section kb-p18 kb-p18-cta-section">
+      <h2 class="kb-section-t">🇨🇱 Arma tu Pack para el 18</h2>
+      <div class="kb-p18-strip">Precio Fiestas Patrias · vaso incluido</div>
+      <a class="kb-pill kb-p18-cta" data-route="/pack-18/6" onclick="go(event)">Arma tu pack para el 18 →</a>
+    </section>
+
     <section class="kb-section kb-promo-section" id="kbSambaPromo" style="display:none"></section>
 
     <section class="kb-section">
@@ -1012,40 +1018,6 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
           </a>
           <div class="kb-pack-card-name">24 Pack</div>
           <a class="kb-pill" data-route="/arma-tu-pack/24" onclick="go(event)">Ármalo aquí</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="kb-section kb-p18">
-      <h2 class="kb-section-t">🇨🇱 Arma tu Pack para el 18</h2>
-      <div class="kb-p18-strip">Precio Fiestas Patrias · vaso incluido</div>
-      <div class="kb-pack-builder">
-        <div class="kb-pack-card">
-          <a class="kb-pack-card-img" data-route="/pack-18/6" onclick="go(event)">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_44_43.png?v=1786380617" alt="6 Pack para el 18" loading="lazy">
-          </a>
-          <div class="kb-pack-card-name">6 Pack</div>
-          <div class="kb-pack18-card-sub">+ vaso 250 cc</div>
-          <div class="kb-pack18-card-price">$13.990</div>
-          <a class="kb-pill" data-route="/pack-18/6" onclick="go(event)">Ármalo aquí</a>
-        </div>
-        <div class="kb-pack-card">
-          <a class="kb-pack-card-img" data-route="/pack-18/12" onclick="go(event)">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465" alt="12 Pack para el 18" loading="lazy">
-          </a>
-          <div class="kb-pack-card-name">12 Pack</div>
-          <div class="kb-pack18-card-sub">+ vaso 500 cc</div>
-          <div class="kb-pack18-card-price">$25.990</div>
-          <a class="kb-pill" data-route="/pack-18/12" onclick="go(event)">Ármalo aquí</a>
-        </div>
-        <div class="kb-pack-card">
-          <a class="kb-pack-card-img" data-route="/pack-18/24" onclick="go(event)">
-            <img src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465" alt="24 Pack para el 18" loading="lazy">
-          </a>
-          <div class="kb-pack-card-name">24 Pack</div>
-          <div class="kb-pack18-card-sub">+ 2 vasos 500 cc</div>
-          <div class="kb-pack18-card-price">$40.990</div>
-          <a class="kb-pill" data-route="/pack-18/24" onclick="go(event)">Ármalo aquí</a>
         </div>
       </div>
     </section>
