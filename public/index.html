@@ -1573,7 +1573,10 @@ function isChelita(p){
 }
 function isPack(p){
   if (isHiddenProduct(p)) return false;
-  return /(6\s*pack|12\s*pack|24\s*pack)/i.test(p.title || '');
+  const t = (p.title || '').toLowerCase();
+  // Packs: título que empieza con "Pack", cualquier "N pack" (4/6/12/24…),
+  // o los nombrados (Catador, Amateur, Mundialero, World Tour).
+  return /^\s*pack\b/.test(t) || /\d+\s*pack/.test(t) || /\bcatador\b|\bamateur\b|mundialero|world\s*tour/.test(t);
 }
 function isDestilado(p){
   if (isHiddenProduct(p)) return false;
