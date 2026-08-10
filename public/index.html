@@ -2351,7 +2351,7 @@ async function populatePack18(){
   if (p18Target !== target){ p18Target = target; p18Sel = []; }
   if (!p18List.length){
     const products = await loadCatalog();
-    p18List = products.filter(p => isBeer(p) && classifyBeer(p) !== 'tour');
+    p18List = products.filter(p => isBeer(p) && !['tour','artista'].includes(classifyBeer(p)));
   }
   const sc = document.getElementById('p18StylesCount');
   if (sc) sc.textContent = p18List.length;
