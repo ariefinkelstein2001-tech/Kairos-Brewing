@@ -640,91 +640,77 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 
 /* ── World Tour (sección Cervezas, /cervezas/world-tour) ── */
 .kb-wt{max-width:1240px;margin:0 auto;padding:0 clamp(0px,2vw,16px) 80px}
-.kb-wt-head{text-align:center;padding:56px clamp(1rem,4vw,3rem) 44px;max-width:760px;margin:0 auto}
+.kb-wt-head{text-align:center;padding:56px clamp(1rem,4vw,3rem) 34px;max-width:760px;margin:0 auto}
 .kb-wt-eyebrow{display:inline-block;font-family:var(--font-body);font-weight:700;letter-spacing:.22em;font-size:11px;color:var(--orange-d);text-transform:uppercase;margin-bottom:18px;padding:8px 18px;border:1.5px solid var(--orange);border-radius:30px;background:#fff}
 .kb-wt-title{font-family:var(--font-display);color:#1f1f1f;font-size:clamp(32px,5.5vw,52px);line-height:1.05;text-transform:uppercase;letter-spacing:.02em;margin-bottom:18px}
 .kb-wt-sub{font-family:var(--font-body);color:#555;font-size:16px;line-height:1.65;max-width:560px;margin:0 auto}
 
-.kb-wt-beer{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:clamp(28px,5vw,72px);padding:70px clamp(1.5rem,4vw,4rem);margin:0 0 26px;border-radius:34px;overflow:hidden;isolation:isolate}
-.kb-wt-bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
-.kb-wt-content{position:relative;z-index:2;max-width:520px}
-.kb-wt-img{position:relative;z-index:1;display:flex;align-items:center;justify-content:center}
-.kb-wt-img img{width:100%;max-width:360px;height:auto;object-fit:contain;filter:drop-shadow(0 30px 50px rgba(0,0,0,.35));animation:kb-wt-bob 5s ease-in-out infinite}
-@keyframes kb-wt-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
-.kb-wt-flag{font-size:46px;line-height:1;margin-bottom:6px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.2))}
-.kb-wt-country{font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}
-.kb-wt-name{font-family:var(--font-display);font-size:clamp(40px,7vw,72px);line-height:1;text-transform:uppercase;letter-spacing:.02em;margin-bottom:10px}
-.kb-wt-tagline{font-family:var(--font-body);font-style:italic;font-size:16px;margin-bottom:16px;opacity:.9}
-.kb-wt-style{display:inline-block;font-family:var(--font-body);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px;padding:5px 12px;border-radius:20px;border:1.5px solid currentColor;opacity:.85}
-.kb-wt-desc{font-family:var(--font-body);font-size:15px;line-height:1.65;margin-bottom:22px;max-width:480px}
-.kb-wt-desc p{margin-bottom:8px}
-.kb-wt-desc img,.kb-wt-desc h1,.kb-wt-desc h2,.kb-wt-desc h3{display:none}
-.kb-wt-price-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:24px}
-.kb-wt-was{font-size:18px;text-decoration:line-through;opacity:.55}
-.kb-wt-now{font-family:var(--font-display);font-size:clamp(28px,4vw,38px);font-weight:700}
-.kb-wt-off{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:#e8462e;color:#fff}
-.kb-wt-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.kb-wt-qty{height:44px;border-radius:10px;overflow:hidden;flex-shrink:0;box-shadow:0 6px 18px rgba(0,0,0,.22)}
-.kb-wt-qty button{width:42px;height:44px;font-size:18px;font-weight:700;border:none;cursor:pointer;transition:background .15s}
-.kb-wt-qty .v{height:44px;line-height:44px;background:#fff;color:#1f1f1f;min-width:48px;flex:0 0 auto;text-align:center;font-weight:700;font-size:15px}
-.kb-wt-add{font-family:var(--font-body);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;padding:0 28px;height:44px;border:none;border-radius:10px;cursor:pointer;transition:transform .15s,opacity .15s,background .15s}
-.kb-wt-add:hover{transform:translateY(-2px)}
-.kb-wt-add:disabled{opacity:.45;cursor:not-allowed}
-.kb-wt-more{font-family:var(--font-body);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:12px;opacity:.8;cursor:pointer;text-decoration:none;color:inherit;border-bottom:1px solid currentColor;padding-bottom:2px}
-.kb-wt-more:hover{opacity:1}
+/* ── Mapa interactivo ── */
+.kb-wt-mapwrap{position:relative;margin:0 clamp(0px,1vw,8px) 28px;border-radius:28px;overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#123457 0%,#0a2038 55%,#061426 100%);box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.kb-wt-map{position:relative;width:100%;aspect-ratio:2/1}
+.kb-wt-mapsvg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.kb-wt-continent{fill:#1c4a70;stroke:#2c6390;stroke-width:1.4}
+.kb-wt-flight{fill:none;stroke:var(--orange);stroke-width:2;stroke-dasharray:2 9;stroke-linecap:round;opacity:.65;animation:kb-wt-dash 22s linear infinite}
+@keyframes kb-wt-dash{to{stroke-dashoffset:-400}}
+.kb-wt-dotgrid{opacity:.35}
 
-/* ── Argentina (Lanús) ── */
-.kb-wt-arg{background:linear-gradient(160deg,#7ab8e6 0%,#dceaf5 50%,#7ab8e6 100%);color:#0d2849}
-.kb-wt-arg .kb-wt-name{color:#f6b40e;text-shadow:0 3px 0 rgba(13,40,73,.18)}
-.kb-wt-arg .kb-wt-country{color:#f6b40e}
-.kb-wt-arg .kb-wt-bg::before{content:'';position:absolute;top:-120px;right:-100px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,#f6b40e 0%,#f6b40e 40%,transparent 41%);box-shadow:0 0 100px rgba(246,180,14,.45);opacity:.95}
-.kb-wt-arg .kb-wt-bg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 70px,rgba(255,255,255,.12) 70px 71px)}
-.kb-wt-arg .kb-wt-add{background:#0d2849;color:#f6b40e}
-.kb-wt-arg .kb-wt-add:hover{background:#1a3a5c}
-.kb-wt-arg .kb-wt-style{border-color:#0d2849;color:#0d2849}
-.kb-wt-arg .kb-wt-qty button{background:#0d2849;color:#f6b40e}
-.kb-wt-arg .kb-wt-qty button:hover{background:#1a3a5c}
+.kb-wt-home{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;z-index:2}
+.kb-wt-home-dot{width:12px;height:12px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 5px rgba(246,151,30,.25)}
+.kb-wt-home-label{font-family:var(--font-body);font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.4);padding:3px 8px;border-radius:20px;white-space:nowrap}
 
-/* ── Japón (Osagui) ── */
-.kb-wt-jpn{background:linear-gradient(160deg,#fbf6ed 0%,#ffffff 60%,#fbf6ed 100%);color:#1a1a1a;border:1px solid rgba(188,0,45,.1)}
-.kb-wt-jpn .kb-wt-name{color:#bc002d;font-family:'Anton','Bebas Neue','Oswald',sans-serif;letter-spacing:.04em}
-.kb-wt-jpn .kb-wt-country{color:#bc002d}
-.kb-wt-jpn .kb-wt-bg::before{content:'';position:absolute;top:50%;right:-12%;transform:translateY(-50%);width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,#e63946 0%,#bc002d 55%,transparent 56%);opacity:.16}
-.kb-wt-jpn .kb-wt-bg::after{content:'桜';position:absolute;top:18px;left:24px;font-size:130px;color:rgba(255,183,197,.28);font-family:serif;line-height:1;pointer-events:none}
-.kb-wt-jpn .kb-wt-add{background:#bc002d;color:#fff}
-.kb-wt-jpn .kb-wt-add:hover{background:#9c0024}
-.kb-wt-jpn .kb-wt-style{border-color:#bc002d;color:#bc002d}
-.kb-wt-jpn .kb-wt-qty button{background:#bc002d;color:#fff}
-.kb-wt-jpn .kb-wt-qty button:hover{background:#9c0024}
+.kb-wt-pin{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;cursor:pointer;z-index:3;padding:6px;font-family:var(--font-body)}
+.kb-wt-pin-ring{position:relative;width:clamp(46px,7vw,64px);height:clamp(46px,7vw,64px);border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s,border-color .2s}
+.kb-wt-pin-ring::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:1.5px solid var(--orange);opacity:.55;animation:kb-wt-pulse 2.6s ease-out infinite}
+.kb-wt-pin:nth-of-type(2) .kb-wt-pin-ring::before{animation-delay:.5s}
+.kb-wt-pin:nth-of-type(3) .kb-wt-pin-ring::before{animation-delay:1s}
+@keyframes kb-wt-pulse{0%{transform:scale(.85);opacity:.55}100%{transform:scale(1.5);opacity:0}}
+.kb-wt-pin img{width:70%;height:70%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
+.kb-wt-pin:hover .kb-wt-pin-ring,.kb-wt-pin:focus-visible .kb-wt-pin-ring{transform:translateY(-4px) scale(1.08);background:rgba(255,255,255,.22);border-color:var(--orange)}
+.kb-wt-pin-flag{position:absolute;top:-6px;right:-6px;font-size:18px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.kb-wt-pin-label{font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);padding:4px 10px;border-radius:20px;white-space:nowrap}
 
-/* ── Perú (Acholada) ── */
-.kb-wt-per{background:linear-gradient(160deg,#c91020 0%,#9b0a18 50%,#c91020 100%);color:#fff}
-.kb-wt-per .kb-wt-name{color:#f4c44c;text-shadow:0 3px 12px rgba(0,0,0,.3)}
-.kb-wt-per .kb-wt-country{color:#f4c44c}
-.kb-wt-per .kb-wt-bg::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(244,196,76,.14) 0 22px,transparent 22px 50px,rgba(244,196,76,.07) 50px 95px,transparent 95px 125px)}
-.kb-wt-per .kb-wt-bg::after{content:'';position:absolute;bottom:0;left:0;right:0;height:18px;background:repeating-linear-gradient(90deg,#f4c44c 0 14px,#c91020 14px 28px,#fff 28px 30px);opacity:.7}
-.kb-wt-per .kb-wt-add{background:#f4c44c;color:#1a1a1a}
-.kb-wt-per .kb-wt-add:hover{background:#ffd66b}
-.kb-wt-per .kb-wt-style{border-color:#f4c44c;color:#f4c44c}
-.kb-wt-per .kb-wt-qty button{background:#f4c44c;color:#1a1a1a}
-.kb-wt-per .kb-wt-qty button:hover{background:#ffd66b}
+.kb-wt-cta{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--orange);color:#1a1200;font-family:var(--font-body);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:clamp(13px,1.8vw,15px);padding:18px 20px;text-decoration:none;transition:background .15s}
+.kb-wt-cta:hover{background:var(--orange-l)}
+.kb-wt-cta-ico{font-size:18px}
 
-/* ── Generic fallback ── */
-.kb-wt-other{background:linear-gradient(160deg,#1f1f1f 0%,#111 50%,#1f1f1f 100%);color:#fff}
-.kb-wt-other .kb-wt-name{color:var(--orange)}
-.kb-wt-other .kb-wt-add{background:var(--orange);color:#000}
+.kb-wt-hint{text-align:center;font-family:var(--font-body);font-size:13px;color:#8a8a8a;margin:0 0 40px;letter-spacing:.02em}
 
-@media(max-width:820px){
-  .kb-wt-beer{grid-template-columns:1fr;text-align:center;padding:56px clamp(1.2rem,4vw,3rem);border-radius:28px;margin:0 8px 22px}
-  .kb-wt-content{margin:0 auto;max-width:none}
-  .kb-wt-img{order:-1;margin-bottom:8px}
-  .kb-wt-img img{max-width:220px}
-  .kb-wt-name{font-size:44px}
-  .kb-wt-tagline{font-size:14px}
-  .kb-wt-desc{margin-left:auto;margin-right:auto}
-  .kb-wt-price-row,.kb-wt-acts{justify-content:center}
-  .kb-wt-flag{font-size:38px}
+@media(max-width:640px){
+  .kb-wt-mapwrap{border-radius:20px;margin:0 4px 22px}
+  .kb-wt-cta{font-size:12px;padding:15px 16px}
+  .kb-wt-pin-label{font-size:9px;padding:3px 7px}
+  .kb-wt-home-label{font-size:8px;padding:2px 6px}
 }
+
+/* ── Popup de cerveza (mapa World Tour) ── */
+.kb-wt-modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px;animation:kbLocsFade .2s ease}
+.kb-wt-modal{position:relative;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;background:#fff;border-radius:20px;padding:0 0 26px;box-shadow:0 22px 60px rgba(0,0,0,.4);animation:kbLocsIn .25s cubic-bezier(.2,.8,.2,1)}
+.kb-wt-modal-x{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.85);cursor:pointer;font-size:16px;color:#333;z-index:2;transition:background .15s}
+.kb-wt-modal-x:hover{background:#fff}
+.kb-wt-modal-hero{position:relative;padding:30px 26px 20px;text-align:center;overflow:hidden}
+.kb-wt-modal-hero img{width:150px;height:auto;object-fit:contain;filter:drop-shadow(0 16px 24px rgba(0,0,0,.3));position:relative;z-index:1}
+.kb-wt-modal-flag{font-size:34px;margin-bottom:4px}
+.kb-wt-modal-country{font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.85;margin-bottom:6px}
+.kb-wt-modal-body{padding:6px 26px 0}
+.kb-wt-modal-name{font-family:var(--font-display);font-size:clamp(26px,6vw,34px);color:#1f1f1f;text-transform:uppercase;line-height:1.05;margin-bottom:6px}
+.kb-wt-modal-tagline{font-family:var(--font-body);font-style:italic;font-size:14px;color:#666;margin-bottom:12px}
+.kb-wt-modal-style{display:inline-block;font-family:var(--font-body);font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;padding:5px 12px;border-radius:20px;border:1.5px solid var(--orange-d);color:var(--orange-d)}
+.kb-wt-modal-desc{font-family:var(--font-body);font-size:14px;line-height:1.65;color:#444;margin-bottom:18px}
+.kb-wt-modal-desc p{margin-bottom:8px}
+.kb-wt-modal-desc img,.kb-wt-modal-desc h1,.kb-wt-modal-desc h2,.kb-wt-modal-desc h3{display:none}
+.kb-wt-modal-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.kb-wt-modal-was{font-size:15px;text-decoration:line-through;color:#999}
+.kb-wt-modal-now{font-family:var(--font-display);font-size:28px;color:#1f1f1f}
+.kb-wt-modal-off{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:4px;background:#e8462e;color:#fff}
+.kb-wt-modal-acts{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kb-wt-modal-qty{height:44px;border-radius:10px;overflow:hidden;flex-shrink:0;border:1px solid #cfcabb}
+.kb-wt-modal-qty button{width:40px;height:44px;font-size:18px;font-weight:700;border:none;background:#efe2c4;color:#5a4a22;cursor:pointer}
+.kb-wt-modal-qty .v{height:44px;line-height:44px;background:#fff;color:#1f1f1f;min-width:44px;display:inline-block;text-align:center;font-weight:700;font-size:15px}
+.kb-wt-modal-add{flex:1;font-family:var(--font-body);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px;padding:0 18px;height:44px;border:none;border-radius:10px;cursor:pointer;background:#1f1f1f;color:#fff;transition:background .15s}
+.kb-wt-modal-add:hover{background:#000}
+.kb-wt-modal-add:disabled{opacity:.45;cursor:not-allowed}
+.kb-wt-modal-more{display:block;text-align:center;font-family:var(--font-body);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12px;color:var(--orange-d);text-decoration:none;border-top:1px solid #eee5d5;padding-top:14px;margin-top:6px}
+.kb-wt-modal-more:hover{text-decoration:underline}
 
 /* ── Product Page (PDP) ── */
 .kb-pdp{max-width:1180px;margin:0 auto;padding:40px clamp(1rem,4vw,3rem) 80px}
@@ -1710,13 +1696,50 @@ function wtThemeFor(p){
   if (/acholada|per[uú]/.test(s))  return 'per';
   return 'other';
 }
+// Coordenadas aproximadas (equirectangular, viewBox 1000×500) del país de cada
+// cerveza, en % del contenedor del mapa, para posicionar el pin correspondiente.
+// Coordenadas ligeramente separadas entre sí (no 100% geográficas) para que
+// los pines de Perú / Argentina / Chile —muy cercanos en la realidad— no se
+// encimen visualmente dentro del mapa.
 const WT_INFO = {
-  arg:   { flag:'🇦🇷', country:'Argentina', tagline:'Cielo, sol y mate en una lata.' },
-  jpn:   { flag:'🇯🇵', country:'Japón',     tagline:'Tradición milenaria, precisión en cada sorbo.' },
-  per:   { flag:'🇵🇪', country:'Perú',      tagline:'Misticismo andino destilado en cerveza.' },
-  other: { flag:'🌎', country:'Del mundo',  tagline:'Una expedición cervecera.' },
+  arg:   { flag:'🇦🇷', country:'Argentina', tagline:'Cielo, sol y mate en una lata.',              x:38,   y:76 },
+  jpn:   { flag:'🇯🇵', country:'Japón',     tagline:'Tradición milenaria, precisión en cada sorbo.', x:88.8, y:30.2 },
+  per:   { flag:'🇵🇪', country:'Perú',      tagline:'Misticismo andino destilado en cerveza.',       x:25,   y:50 },
+  other: { flag:'🌎', country:'Del mundo',  tagline:'Una expedición cervecera.',                     x:50,   y:50 },
 };
-function renderWorldTour(beers){
+// Santiago de Chile: base de operaciones de Kairos, punto de partida del tour.
+const WT_HOME = { x:22, y:80, label:'🏠 Kairos HQ' };
+
+// Continentes estilizados (no geográficamente exactos, solo decorativos) para
+// dar ambientación de "mundo" al fondo del mapa.
+const WT_MAP_SVG = `
+<svg class="kb-wt-mapsvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <pattern id="kbWtDots" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#3d7aa8"></circle>
+    </pattern>
+  </defs>
+  <rect class="kb-wt-dotgrid" x="0" y="0" width="1000" height="500" fill="url(#kbWtDots)"></rect>
+  <path class="kb-wt-continent" d="M150,45 C190,40 230,55 245,80 C260,100 255,120 240,130 C250,145 245,165 230,175 C235,195 220,205 205,200 C210,215 195,225 180,220 C165,230 150,225 140,210 C120,215 105,200 100,185 C85,180 75,165 80,150 C65,140 65,120 78,108 C70,95 78,80 95,75 C90,60 105,48 122,50 C130,42 142,42 150,45 Z"></path>
+  <path class="kb-wt-continent" d="M310,232 C330,225 355,228 375,238 C395,250 400,270 392,290 C405,310 400,335 385,350 C395,365 390,385 375,400 C365,415 360,430 345,445 C335,455 325,462 315,455 C320,440 310,420 305,405 C290,410 278,400 275,385 C260,380 255,365 262,350 C250,335 252,315 265,300 C255,285 258,268 270,258 C260,248 270,235 285,232 C295,228 302,230 310,232 Z"></path>
+  <path class="kb-wt-continent" d="M460,65 C490,60 520,68 535,85 C550,95 545,110 535,120 C545,135 535,150 520,150 C525,165 510,175 495,168 C485,178 468,175 460,165 C445,170 435,158 438,145 C425,140 425,120 438,110 C430,95 440,78 460,65 Z"></path>
+  <path class="kb-wt-continent" d="M480,185 C520,178 555,190 565,215 C580,225 575,250 565,265 C575,290 570,315 555,330 C560,355 550,380 535,395 C530,410 515,420 500,412 C495,400 485,395 480,382 C465,385 455,370 458,355 C445,345 445,325 455,312 C445,300 448,280 460,270 C450,255 452,235 465,222 C458,208 465,192 480,185 Z"></path>
+  <path class="kb-wt-continent" d="M600,60 C650,35 720,30 780,45 C830,35 880,50 910,80 C940,90 950,115 935,135 C945,155 935,175 915,180 C920,200 900,215 880,205 C875,225 850,230 835,215 C815,225 795,215 790,198 C770,205 750,195 748,178 C725,185 705,170 708,150 C685,155 665,140 668,120 C645,125 620,110 615,90 C595,95 585,75 600,60 Z"></path>
+  <path class="kb-wt-continent" d="M875,135 C885,130 895,135 895,145 C900,150 898,160 890,163 C892,172 885,178 878,173 C870,178 862,170 866,160 C858,155 860,145 870,140 Z"></path>
+  <path class="kb-wt-continent" d="M800,335 C840,320 890,325 920,345 C945,355 950,380 935,395 C940,410 925,420 905,415 C895,425 875,422 865,412 C845,418 825,410 820,395 C800,398 785,385 790,370 C775,365 778,345 800,335 Z"></path>
+  <path class="kb-wt-flight" d="M220,400 Q300,412 380,380"></path>
+  <path class="kb-wt-flight" d="M220,400 Q195,320 250,250"></path>
+  <path class="kb-wt-flight" d="M220,400 Q500,60 888,151"></path>
+</svg>`;
+
+// Ubica el producto "Pack World Tour" en el catálogo (si existe) para que el
+// CTA del mapa lleve directo a su PDP; si no está publicado, cae a /packs.
+function wtPackRoute(products){
+  const pack = (products || []).find(p => isPack(p) && /world\s*tour/i.test(p.title || ''));
+  return pack ? `/products/${pack.handle}` : '/packs';
+}
+
+function renderWorldTour(beers, products){
   if (!beers || !beers.length) {
     return '<div class="kb-loading">Próximamente</div>';
   }
@@ -1728,55 +1751,123 @@ function renderWorldTour(beers){
     <div class="kb-wt-head">
       <div class="kb-wt-eyebrow">🌎 Colección World Tour</div>
       <h1 class="kb-wt-title">Sabores que cruzan fronteras</h1>
-      <p class="kb-wt-sub">Tres cervezas, tres países, tres tradiciones. Una expedición artesanal por los rincones cerveceros del mundo, hecha en Kairos.</p>
+      <p class="kb-wt-sub">Tres cervezas, tres países, tres tradiciones. Explora el mapa y toca cada lata para descubrirla.</p>
     </div>`;
 
-  const sections = themed.map(({p, theme}) => {
+  window.__WT_DATA = {};
+  const pins = themed.map(({p, theme}, i) => {
     const info = WT_INFO[theme];
     const v0 = (p.variants||[])[0] || {};
-    const price = parseFloat(v0.price || 0);
-    const compareAt = parseFloat(v0.compareAtPrice || 0);
-    const hasSale = compareAt && compareAt > price;
-    const inStock = !!v0.available;
-    const productData = { name: cleanTitle(p.title), image: cdnImg(p.image,200), price, variantId: v0.id };
-    const dataAttr = JSON.stringify(productData).replace(/'/g,"&#39;");
+    const key = theme + '_' + i;
+    window.__WT_DATA[key] = {
+      key, theme,
+      title: cleanTitle(p.title),
+      handle: p.handle,
+      image: cdnImg(p.image, 900),
+      type: p.type || '',
+      descriptionHtml: p.descriptionHtml || '',
+      price: parseFloat(v0.price || 0),
+      compareAt: parseFloat(v0.compareAtPrice || 0),
+      available: !!v0.available,
+      variantId: v0.id,
+      flag: info.flag, country: info.country, tagline: info.tagline,
+    };
     return `
-      <section class="kb-wt-beer kb-wt-${theme}">
-        <div class="kb-wt-bg" aria-hidden="true"></div>
-        <div class="kb-wt-content">
-          <div class="kb-wt-flag" aria-hidden="true">${info.flag}</div>
-          <div class="kb-wt-country">${info.country}</div>
-          <h2 class="kb-wt-name">${escapeHtml(cleanTitle(p.title))}</h2>
-          <div class="kb-wt-tagline">${info.tagline}</div>
-          ${p.type ? `<div class="kb-wt-style">${escapeHtml(p.type)}</div>` : ''}
-          ${p.descriptionHtml ? `<div class="kb-wt-desc">${p.descriptionHtml}</div>` : ''}
-          <div class="kb-wt-price-row">
-            ${hasSale ? `<span class="kb-wt-was">${fmtPrice(compareAt)}</span>` : ''}
-            <span class="kb-wt-now">${fmtPrice(price)}</span>
-            ${hasSale ? `<span class="kb-wt-off">Oferta</span>` : ''}
-          </div>
-          <div class="kb-wt-acts">
-            ${inStock
-              ? `<div class="kb-qty kb-wt-qty"><button onclick="cardQty(this,-1)">−</button><span class="v">1</span><button onclick="cardQty(this,1)">+</button></div>
-                 <button class="kb-wt-add" data-product='${dataAttr}' onclick="wtAddToCart(this)">Añadir al carrito</button>`
-              : `<button class="kb-wt-add" disabled>Agotado</button>`}
-            <a class="kb-wt-more" data-route="/products/${p.handle}" onclick="go(event)">Ver detalle →</a>
-          </div>
-        </div>
-        <div class="kb-wt-img">
-          ${p.image ? `<img src="${cdnImg(p.image,900)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">` : ''}
-        </div>
-      </section>`;
+      <button class="kb-wt-pin" style="left:${info.x}%;top:${info.y}%" onclick="wtOpenBeer('${key}')" aria-label="${escapeHtml(cleanTitle(p.title))} — ${info.country}">
+        <span class="kb-wt-pin-ring">
+          ${p.image ? `<img src="${cdnImg(p.image,160)}" alt="" loading="lazy" decoding="async">` : ''}
+          <span class="kb-wt-pin-flag" aria-hidden="true">${info.flag}</span>
+        </span>
+        <span class="kb-wt-pin-label">${escapeHtml(cleanTitle(p.title))}</span>
+      </button>`;
   }).join('');
 
-  return head + sections;
+  const map = `
+    <div class="kb-wt-mapwrap">
+      <div class="kb-wt-map">
+        ${WT_MAP_SVG}
+        <div class="kb-wt-home" style="left:${WT_HOME.x}%;top:${WT_HOME.y}%">
+          <span class="kb-wt-home-dot"></span>
+          <span class="kb-wt-home-label">${WT_HOME.label}</span>
+        </div>
+        ${pins}
+      </div>
+      <a class="kb-wt-cta" data-route="${wtPackRoute(products)}" onclick="go(event)">
+        <span class="kb-wt-cta-ico">🧳</span> Arma tu Pack World Tour
+      </a>
+    </div>
+    <p class="kb-wt-hint">Toca una lata en el mapa para ver el detalle y el precio ✦ o arma tu propio pack con las tres.</p>`;
+
+  return head + map;
 }
 
+function wtOpenBeer(key){
+  const d = window.__WT_DATA && window.__WT_DATA[key];
+  if (!d) return;
+  const hasSale = d.compareAt && d.compareAt > d.price;
+  const html = `
+    <div class="kb-wt-modal-overlay" id="kbWtOverlay" onclick="if(event.target===this) wtCloseBeer()">
+      <div class="kb-wt-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(d.title)}">
+        <button class="kb-wt-modal-x" onclick="wtCloseBeer()" aria-label="Cerrar">✕</button>
+        <div class="kb-wt-modal-hero">
+          <div class="kb-wt-modal-flag" aria-hidden="true">${d.flag}</div>
+          <div class="kb-wt-modal-country">${d.country}</div>
+          ${d.image ? `<img src="${d.image}" alt="${escapeHtml(d.title)}" loading="lazy" decoding="async">` : ''}
+        </div>
+        <div class="kb-wt-modal-body">
+          <h2 class="kb-wt-modal-name">${escapeHtml(d.title)}</h2>
+          <div class="kb-wt-modal-tagline">${d.tagline}</div>
+          ${d.type ? `<div class="kb-wt-modal-style">${escapeHtml(d.type)}</div>` : ''}
+          ${d.descriptionHtml ? `<div class="kb-wt-modal-desc">${d.descriptionHtml}</div>` : ''}
+          <div class="kb-wt-modal-price-row">
+            ${hasSale ? `<span class="kb-wt-modal-was">${fmtPrice(d.compareAt)}</span>` : ''}
+            <span class="kb-wt-modal-now">${fmtPrice(d.price)}</span>
+            ${hasSale ? `<span class="kb-wt-modal-off">Oferta</span>` : ''}
+          </div>
+          <div class="kb-wt-modal-acts">
+            ${d.available
+              ? `<div class="kb-wt-modal-qty"><button onclick="wtModalQty(-1)">−</button><span class="v" id="kbWtModalQty">1</span><button onclick="wtModalQty(1)">+</button></div>
+                 <button class="kb-wt-modal-add" id="kbWtModalAdd" onclick="wtModalAdd('${key}')">Añadir al carrito</button>`
+              : `<button class="kb-wt-modal-add" disabled>Agotado</button>`}
+          </div>
+          <a class="kb-wt-modal-more" data-route="/products/${d.handle}" onclick="wtCloseBeer(); go(event)">Ver ficha completa →</a>
+        </div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.addEventListener('keydown', wtEscHandler);
+}
+function wtEscHandler(e){ if (e.key === 'Escape') wtCloseBeer(); }
+function wtCloseBeer(){
+  const ov = document.getElementById('kbWtOverlay');
+  if (ov) ov.remove();
+  document.removeEventListener('keydown', wtEscHandler);
+}
+function wtModalQty(delta){
+  const el = document.getElementById('kbWtModalQty'); if (!el) return;
+  el.textContent = Math.max(1, (parseInt(el.textContent,10) || 1) + delta);
+}
+function wtModalAdd(key){
+  const d = window.__WT_DATA && window.__WT_DATA[key];
+  if (!d || !d.variantId) { alert('Este producto no está disponible online'); return; }
+  const qtyEl = document.getElementById('kbWtModalQty');
+  const qty = Math.max(1, parseInt(qtyEl ? qtyEl.textContent : '1', 10) || 1);
+  const data = { name: d.title, image: cdnImg(d.image,200), price: d.price, variantId: d.variantId };
+  const ex = CART.find(i => i.variantId === data.variantId);
+  if (ex) ex.qty += qty; else CART.push({ ...data, qty });
+  saveCart(); updateCart();
+  const btn = document.getElementById('kbWtModalAdd');
+  if (btn) btn.textContent = `✓ Agregadas (${qty})`;
+  if (!cartOpen) toggleCart();
+  setTimeout(wtCloseBeer, 900);
+}
+// Helper genérico de "añadir al carrito" reusado por tarjetas promo simples
+// (p. ej. el promo de Samba) que no tienen selector de cantidad propio.
 function wtAddToCart(btn){
   const data = JSON.parse(btn.getAttribute('data-product').replace(/&#39;/g,"'"));
   if (!data.variantId) { alert('Este producto no está disponible online'); return; }
-  const section = btn.closest('.kb-wt-beer');
-  const v = section ? section.querySelector('.kb-qty .v') : null;
+  const card = btn.closest('.kb-promo-card');
+  const v = card ? card.querySelector('.kb-qty .v') : null;
   const qty = v ? Math.max(1, parseInt(v.textContent,10) || 1) : 1;
   const ex = CART.find(i => i.variantId === data.variantId);
   if (ex) ex.qty += qty; else CART.push({ ...data, qty });
@@ -1942,7 +2033,7 @@ async function populateGridFor(view){
       groups[k].length ? groups[k].map(buildCard).join('') : '<div class="kb-loading">Próximamente</div>'}</div>`;
     let html;
     if (mode === 'tour') {
-      html = renderWorldTour(groups.tour);
+      html = renderWorldTour(groups.tour, products);
     } else if (mode === 'todas') {
       html = ['casa','temporada','artista'].filter(k => groups[k].length).map(sectionHTML).join('');
     } else {
