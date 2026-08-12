@@ -439,6 +439,9 @@ select.kb-sel{
 .kb-p18 .kb-armar-pill{border-color:var(--p18-blue);color:var(--p18-blue)}
 .kb-p18-price-note{font-size:13px;color:#555;margin-top:6px}
 .kb-p18-price-note b{color:var(--orange-d)}
+.kb-p18-full{display:block;font-size:12.5px;color:#777;margin-top:2px;font-weight:500}
+.kb-p18-full s{color:#999}
+.kb-p18-full b{color:var(--orange-d);font-weight:800}
 .kb-p18-strip{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--p18-blue);font-weight:700}
 .kb-p18-cta-section{text-align:center}
 .kb-p18-cta{font-size:16px;padding:16px 36px}
@@ -1126,6 +1129,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
         <div class="kb-armar-foot-l">
           <span>Precio Pack 18 · vaso incluido</span>
           <span class="kb-armar-total" id="p18Total">$0</span>
+          <span class="kb-p18-full" id="p18Full"></span>
         </div>
         <button class="kb-armar-cta" id="p18Cta" disabled onclick="p18Checkout()">Falta completar el pack</button>
       </div>
@@ -2496,15 +2500,27 @@ const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc', 12: 'vaso de 500 cc', 24: '2 va
 // Mismo criterio que el backend (server.js) para ubicar el producto real del
 // vaso en el catálogo y mostrar su foto junto a las latas elegidas.
 const P18_VASO_SPEC = {
-  6:  { rx: /cognac/i,   cc: '250', qty: 1, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_44_43.png?v=1786380617' },
-  12: { rx: /schopero/i, cc: '500', qty: 1, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465' },
-  24: { rx: /schopero/i, cc: '500', qty: 2, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465' },
+  6:  { rx: /cognac/i,   cc: '250', qty: 1, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_44_43.png?v=1786380617', fallbackPrice: 2990 },
+  12: { rx: /schopero/i, cc: '500', qty: 1, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465', fallbackPrice: 4990 },
+  24: { rx: /schopero/i, cc: '500', qty: 2, fallbackImg: 'https://cdn.shopify.com/s/files/1/0668/0081/2327/files/ChatGPT_Image_10_de_ago._de_2026_10_38_26.png?v=1786377465', fallbackPrice: 4990 },
 };
+function p18Vaso(target){
+  const spec = P18_VASO_SPEC[target];
+  return (PRODUCTS || []).find(p => spec.rx.test(p.title || '') && (p.title || '').includes(spec.cc)) || null;
+}
 function p18VasoImage(target){
   const spec = P18_VASO_SPEC[target];
-  const found = (PRODUCTS || []).find(p => spec.rx.test(p.title || '') && (p.title || '').includes(spec.cc));
+  const found = p18Vaso(target);
   const img = found && (found.image || (found.images && found.images[0]));
   return img || spec.fallbackImg;
+}
+// Precio TOTAL de los vasos incluidos (unitario × cantidad).
+function p18VasoTotalPrice(target){
+  const spec = P18_VASO_SPEC[target];
+  const found = p18Vaso(target);
+  const v0 = found && (found.variants || [])[0];
+  const unit = (v0 && parseFloat(v0.price || 0)) || spec.fallbackPrice || 0;
+  return unit * spec.qty;
 }
 let p18Target = 6, p18Sel = [], p18List = [];
 function p18ParseTarget(){
@@ -2590,6 +2606,20 @@ function p18Render(){
     slots.innerHTML = s;
   }
   set('p18Total', fmtPrice(PACK18_PRICE[target]));
+  // Precio sin descuento 18ero = vasos (desde el inicio) + latas elegidas.
+  const vasoTotal = p18VasoTotalPrice(target);
+  const cansTotal = p18Sel.reduce((a,b) => a + (b.price || 0), 0);
+  const fullPrice = vasoTotal + cansTotal;
+  const fixed = PACK18_PRICE[target];
+  const fullEl = document.getElementById('p18Full');
+  if (fullEl){
+    if (fullPrice > fixed){
+      const off = Math.round((1 - fixed / fullPrice) * 100);
+      fullEl.innerHTML = `Sin descuento <s>${fmtPrice(fullPrice)}</s> · ahorras <b>${fmtPrice(fullPrice - fixed)} (-${off}%)</b>`;
+    } else {
+      fullEl.innerHTML = `Valor real armado: <s>${fmtPrice(fullPrice)}</s> <span style="opacity:.7">(incluye vasos)</span>`;
+    }
+  }
   const fill = document.getElementById('p18BarFill');
   if (fill) fill.style.width = Math.min(100, p18Sel.length/target*100) + '%';
   const left = target - p18Sel.length;
