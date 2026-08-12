@@ -442,6 +442,11 @@ select.kb-sel{
 .kb-p18-full{display:block;font-size:12.5px;color:#777;margin-top:2px;font-weight:500}
 .kb-p18-full s{color:#999}
 .kb-p18-full b{color:var(--orange-d);font-weight:800}
+.kb-p18-disc-big{position:absolute;left:clamp(1rem,4vw,3rem);top:12px;width:150px;height:104px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1;z-index:2;pointer-events:none}
+.kb-p18-disc-big.on{display:flex}
+.kb-p18-disc-big .pct{font-family:var(--font-display);font-size:52px;color:var(--orange);line-height:.85;text-shadow:0 2px 0 rgba(0,0,0,.08)}
+.kb-p18-disc-big .txt{font-family:var(--font-body);font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--orange);margin-top:6px}
+@media(max-width:900px){.kb-p18-disc-big{display:none!important}}
 .kb-p18-strip{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--p18-blue);font-weight:700}
 .kb-p18-cta-section{text-align:center}
 .kb-p18-cta{font-size:16px;padding:16px 36px}
@@ -1124,6 +1129,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       <div class="kb-armar-grid" id="p18Grid"><div class="kb-loading">Cargando…</div></div>
     </div>
     <div class="kb-armar-bar-sticky" id="p18Sticky">
+      <div class="kb-p18-disc-big" id="p18DiscBig" aria-hidden="true"></div>
       <div class="kb-armar-slots" id="p18Slots"></div>
       <div class="kb-armar-foot">
         <div class="kb-armar-foot-l">
@@ -2611,13 +2617,23 @@ function p18Render(){
   const cansTotal = p18Sel.reduce((a,b) => a + (b.price || 0), 0);
   const fullPrice = vasoTotal + cansTotal;
   const fixed = PACK18_PRICE[target];
+  const off = fullPrice > fixed ? Math.round((1 - fixed / fullPrice) * 100) : 0;
   const fullEl = document.getElementById('p18Full');
   if (fullEl){
     if (fullPrice > fixed){
-      const off = Math.round((1 - fixed / fullPrice) * 100);
       fullEl.innerHTML = `Sin descuento <s>${fmtPrice(fullPrice)}</s> · ahorras <b>${fmtPrice(fullPrice - fixed)} (-${off}%)</b>`;
     } else {
       fullEl.innerHTML = `Valor real armado: <s>${fmtPrice(fullPrice)}</s> <span style="opacity:.7">(incluye vasos)</span>`;
+    }
+  }
+  const discBig = document.getElementById('p18DiscBig');
+  if (discBig){
+    if (off > 0){
+      discBig.classList.add('on');
+      discBig.innerHTML = `<span class="pct">-${off}%</span><span class="txt">Ahorras ${fmtPrice(fullPrice - fixed)}</span>`;
+    } else {
+      discBig.classList.remove('on');
+      discBig.innerHTML = '';
     }
   }
   const fill = document.getElementById('p18BarFill');
