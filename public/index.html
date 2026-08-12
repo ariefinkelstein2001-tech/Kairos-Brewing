@@ -2155,7 +2155,7 @@ function renderProductPage(products){
   // Packs armables: Amateur y Catador → elegir 4 variedades.
   let builderCfg = null;
   if (/amateur/i.test(p.title||'')) builderCfg = { target:4, options:['Pils','Golden','NEIPA','Red','APA'], note:'' };
-  else if (/catador/i.test(p.title||'')) builderCfg = { target:4, options:['IPA','Stout','Amber','Weizen','Hoppy / Barley','Imperial','Doppelbock'], note:'* Excluye la Colección de Artistas vigente (ej. Mango Session), que tiene su propia rotación.' };
+  else if (/catador/i.test(p.title||'')) builderCfg = { target:4, options:['IPA','Stout','Amber','Weizen','Hoppy / Barley','Imperial','Doppelbock'], note:'* Excluye la Colección de Artistas vigente (ej. Mango Session).' };
   window.__pdpBuilder = builderCfg ? { cfg: builderCfg, sel: [], variantId: v0.id, name: cleanTitle(p.title), image: p.image, price } : null;
   const actionsHTML = builderCfg
     ? `<div class="kb-pdp-pk">
