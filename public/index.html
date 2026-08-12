@@ -329,15 +329,16 @@ select.kb-sel{
   text-align:center;font-weight:700;font-family:var(--font-body);
   font-size:15px;min-width:42px;user-select:none;
 }
-button.kb-add{
+.kb-add{
   background:var(--orange);color:#000;
   font-family:var(--font-body);font-size:14px;letter-spacing:.06em;text-transform:uppercase;
-  height:44px;border-radius:6px;font-weight:600;
+  height:44px;border-radius:6px;font-weight:600;cursor:pointer;border:none;
+  display:flex;align-items:center;justify-content:center;text-decoration:none;text-align:center;
   transition:background .15s,transform .12s;
 }
-button.kb-add:hover{background:var(--orange-l)}
-button.kb-add:active{transform:scale(.97)}
-button.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-events:none}
+.kb-add:hover{background:var(--orange-l)}
+.kb-add:active{transform:scale(.97)}
+.kb-add.done{background:#4caf50!important;color:#fff!important;pointer-events:none}
 
 /* ── Pack builder (ARMA EL PACK A TU PINTA) ── */
 .kb-pack-builder{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -1914,6 +1915,14 @@ function buildCard(p){
   };
   const phref = `/products/${p.handle}`;
   const soldOut = (variants||[]).length > 0 && (variants||[]).every(v => !v.available);
+  // Packs armables (Amateur/Catador): en vez de añadir directo, llevan a elegir variedades.
+  const isCustomPack = /amateur|catador/i.test(p.title || '');
+  const actions = soldOut
+    ? `<button class="kb-add kb-add-out" disabled>Sin stock</button>`
+    : isCustomPack
+      ? `<a class="kb-add" data-route="${phref}" onclick="go(event)">Escoge tus variedades →</a>`
+      : `<div class="kb-qty"><button onclick="cardQty(this,-1)">−</button><span class="v">1</span><button onclick="cardQty(this,1)">+</button></div>
+         <button class="kb-add" data-product='${JSON.stringify(productData).replace(/'/g,"&#39;")}' onclick="kbAddToCart(this)">Añadir al carrito</button>`;
   return `<div class="kb-card${soldOut?' sold-out':''}">
     <a class="kb-card-link" data-route="${phref}" onclick="go(event)" aria-label="${escapeHtml(p.title)}">
       ${visual}${soldOut ? '<span class="kb-card-soldout">Agotado</span>' : ''}
@@ -1923,10 +1932,7 @@ function buildCard(p){
       <div class="kb-card-price">${oldP}${fmtPrice(price)}</div>
       <div class="kb-card-acts">
         ${variantSelect}
-        ${soldOut
-          ? `<button class="kb-add kb-add-out" disabled>Sin stock</button>`
-          : `<div class="kb-qty"><button onclick="cardQty(this,-1)">−</button><span class="v">1</span><button onclick="cardQty(this,1)">+</button></div>
-             <button class="kb-add" data-product='${JSON.stringify(productData).replace(/'/g,"&#39;")}' onclick="kbAddToCart(this)">Añadir al carrito</button>`}
+        ${actions}
       </div>
     </div>
   </div>`;
