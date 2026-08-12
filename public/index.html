@@ -2082,7 +2082,7 @@ async function populateGridFor(view){
     // 3) los de mezclas, 4) los de una sola lata (comprar 6/12/24 de un estilo).
     const packRank = p => {
       const t = (p.title || '').toLowerCase();
-      if (/amateur|world\s*tour|catador/.test(t)) return 0;
+      if (/amateur|world\s*tour|catador|invierno/.test(t)) return 0;
       if (/de\s*la\s*casa/.test(t)) return 1;
       if (/mix|mezcla|variad|surtid/.test(t)) return 2;
       return 3;
