@@ -753,11 +753,14 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-pdp-pk-head label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#555;font-weight:700}
 .kb-pdp-pk-count{font-size:14px;color:#555}
 .kb-pdp-pk-count b{font-size:18px;color:var(--orange-d)}
-.kb-pdp-pk-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.kb-pdp-opt{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #d8d4c6;border-radius:30px;padding:9px 16px;font-family:var(--font-body);font-size:14px;font-weight:600;color:#1f1f1f;cursor:pointer;transition:border-color .15s,background .15s;text-transform:uppercase;letter-spacing:.02em}
-.kb-pdp-opt span{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--orange);color:#000;font-size:13px;font-weight:700}
-.kb-pdp-opt:hover{border-color:var(--orange)}
-.kb-pdp-opt:disabled{opacity:.4;cursor:not-allowed}
+.kb-pk-row{gap:12px;margin-bottom:8px}
+.kb-pk-opt{flex:0 0 116px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;text-align:center}
+.kb-pk-opt-img{height:130px;width:100%;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px}
+.kb-pk-opt-img img{max-height:130px;width:auto;object-fit:contain}
+.kb-pk-opt-name{font-family:var(--font-body);font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px}
+.kb-pk-opt-plus{width:40px;height:40px;border-radius:50%;background:var(--orange);color:#000;border:none;font-size:20px;font-weight:700;line-height:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s}
+.kb-pk-opt-plus:hover{background:var(--orange-l);transform:scale(1.1)}
+.kb-pk-opt-plus:disabled{opacity:.32;cursor:not-allowed;transform:none}
 .kb-pdp-pk-sel{display:flex;flex-wrap:wrap;gap:8px;min-height:34px;margin-bottom:8px}
 .kb-pdp-pk-chip{display:inline-flex;align-items:center;gap:8px;background:#1f1f1f;color:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase}
 .kb-pdp-pk-chip button{background:transparent;border:none;color:var(--orange);cursor:pointer;font-size:12px;padding:0;line-height:1}
@@ -2152,15 +2155,45 @@ function renderProductPage(products){
   const variantOpts = (p.variants||[]).length > 1
     ? `<div class="kb-pdp-variants"><label>Formato</label><select id="pdpVariant" onchange="pdpSetVariant(this)">${(p.variants||[]).map((v,i) => `<option value="${i}" data-price="${v.price}" data-compare="${v.compareAtPrice||''}" data-stock="${v.stock||0}" data-available="${v.available?'1':''}" data-id="${v.id}">${escapeHtml(v.title)} — ${fmtPrice(parseFloat(v.price))}</option>`).join('')}</select></div>`
     : '';
-  // Packs armables: Amateur y Catador → elegir 4 variedades.
+  // Packs armables: Amateur y Catador → elegir 4 variedades (con foto de cada lata).
   let builderCfg = null;
-  if (/amateur/i.test(p.title||'')) builderCfg = { target:4, options:['Pils','Golden','NEIPA','Red','APA'], note:'' };
-  else if (/catador/i.test(p.title||'')) builderCfg = { target:4, options:['IPA','Stout','Amber','Weizen','Hoppy / Barley','Imperial','Doppelbock'], note:'* Excluye la Colección de Artistas vigente (ej. Mango Session).' };
+  if (/amateur/i.test(p.title||'')) builderCfg = { target:4, note:'', options:[
+    {label:'Pils',   rx:/nada personal/i},
+    {label:'Golden', rx:/galactic/i},
+    {label:'NEIPA',  rx:/imperio perdido/i},
+    {label:'Red',    rx:/alerta roja/i},
+    {label:'APA',    rx:/secret lab/i},
+  ]};
+  else if (/catador/i.test(p.title||'')) builderCfg = { target:4, note:'* Excluye la Colección de Artistas vigente (ej. Mango Session).', options:[
+    {label:'IPA',        rx:/samba/i},
+    {label:'Stout',      rx:/obertura/i},
+    {label:'Amber',      rx:/kenny bell/i},
+    {label:'Weizen',     rx:/ritual de la banana/i},
+    {label:'Hoppy',      rx:/hoyo en uno|hoppy/i},
+    {label:'Barley',     rx:/valle nevado|barley/i},
+    {label:'Imperial',   rx:/goodbye my lover|imperial/i},
+    {label:'Doppelbock', rx:/doppelbock|goat.?father/i},
+  ]};
+  if (builderCfg){
+    builderCfg.options = builderCfg.options.map(o => {
+      const bp = (products||[]).find(x => o.rx.test(x.title||''));
+      return { label:o.label, image: bp ? (bp.image || (bp.images&&bp.images[0]) || null) : null };
+    });
+  }
   window.__pdpBuilder = builderCfg ? { cfg: builderCfg, sel: [], variantId: v0.id, name: cleanTitle(p.title), image: p.image, price } : null;
   const actionsHTML = builderCfg
     ? `<div class="kb-pdp-pk">
          <div class="kb-pdp-pk-head"><label>Arma tu 4 pack · elige 4</label><span class="kb-pdp-pk-count"><b id="pkCount">0</b> / ${builderCfg.target}</span></div>
-         <div class="kb-pdp-pk-opts">${builderCfg.options.map((o,i) => `<button type="button" class="kb-pdp-opt" onclick="pdpPackAdd(${i})">${escapeHtml(o)}<span>＋</span></button>`).join('')}</div>
+         <div class="kb-hscroll-wrap">
+           <button class="kb-hs-arr prev" onclick="hsScroll(this,-1)" aria-label="Anterior">‹</button>
+           <div class="kb-hscroll kb-pk-row">${builderCfg.options.map((o,i) => `
+             <div class="kb-pk-opt">
+               <div class="kb-pk-opt-img">${o.image?`<img src="${cdnImg(o.image,300)}" alt="${escapeHtml(o.label)}" loading="lazy">`:''}</div>
+               <div class="kb-pk-opt-name">${escapeHtml(o.label)}</div>
+               <button class="kb-pk-opt-plus" aria-label="Agregar" onclick="pdpPackAdd(${i})">＋</button>
+             </div>`).join('')}</div>
+           <button class="kb-hs-arr next" onclick="hsScroll(this,1)" aria-label="Siguiente">›</button>
+         </div>
          <div class="kb-pdp-pk-sel" id="pkSel"></div>
          ${builderCfg.note ? `<p class="kb-pdp-pk-note">${escapeHtml(builderCfg.note)}</p>` : ''}
          <button class="kb-pdp-add" id="pkAddBtn" onclick="pdpPackAddCart()" ${inStock?'':'disabled'}>Elige ${builderCfg.target} cervezas</button>
@@ -2291,7 +2324,7 @@ function pdpPackAdd(i){
   const b = window.__pdpBuilder; if (!b) return;
   if (b.sel.length >= b.cfg.target) return;
   const opt = b.cfg.options[i]; if (opt == null) return;
-  b.sel.push(opt); pdpPackRender();
+  b.sel.push(opt.label != null ? opt.label : opt); pdpPackRender();
 }
 function pdpPackRemove(idx){
   const b = window.__pdpBuilder; if (!b) return;
@@ -2302,7 +2335,7 @@ function pdpPackRender(){
   const sel = document.getElementById('pkSel');
   if (sel) sel.innerHTML = b.sel.map((o,idx) => `<span class="kb-pdp-pk-chip">${escapeHtml(o)}<button onclick="pdpPackRemove(${idx})" aria-label="Quitar">✕</button></span>`).join('') || '<span class="kb-pdp-pk-empty">Aún no eliges ninguna</span>';
   const c = document.getElementById('pkCount'); if (c) c.textContent = b.sel.length;
-  document.querySelectorAll('.kb-pdp-opt').forEach(btn => { btn.disabled = b.sel.length >= b.cfg.target; });
+  document.querySelectorAll('.kb-pk-opt-plus').forEach(btn => { btn.disabled = b.sel.length >= b.cfg.target; });
   const btn = document.getElementById('pkAddBtn');
   if (btn){
     const left = b.cfg.target - b.sel.length;
