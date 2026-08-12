@@ -746,6 +746,22 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-pdp-qty-row button:hover{background:#e6d4ad}
 .kb-pdp-qty-row span{display:inline-block;min-width:54px;text-align:center;font-weight:600;color:#1f1f1f;font-size:16px}
 .kb-pdp-acts{display:flex;flex-direction:column;gap:10px;margin-bottom:30px}
+/* Pack armable (Amateur/Catador) */
+.kb-pdp-pk{margin-bottom:28px}
+.kb-pdp-pk-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.kb-pdp-pk-head label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#555;font-weight:700}
+.kb-pdp-pk-count{font-size:14px;color:#555}
+.kb-pdp-pk-count b{font-size:18px;color:var(--orange-d)}
+.kb-pdp-pk-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.kb-pdp-opt{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #d8d4c6;border-radius:30px;padding:9px 16px;font-family:var(--font-body);font-size:14px;font-weight:600;color:#1f1f1f;cursor:pointer;transition:border-color .15s,background .15s;text-transform:uppercase;letter-spacing:.02em}
+.kb-pdp-opt span{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--orange);color:#000;font-size:13px;font-weight:700}
+.kb-pdp-opt:hover{border-color:var(--orange)}
+.kb-pdp-opt:disabled{opacity:.4;cursor:not-allowed}
+.kb-pdp-pk-sel{display:flex;flex-wrap:wrap;gap:8px;min-height:34px;margin-bottom:8px}
+.kb-pdp-pk-chip{display:inline-flex;align-items:center;gap:8px;background:#1f1f1f;color:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase}
+.kb-pdp-pk-chip button{background:transparent;border:none;color:var(--orange);cursor:pointer;font-size:12px;padding:0;line-height:1}
+.kb-pdp-pk-empty{font-size:13px;color:#999}
+.kb-pdp-pk-note{font-size:12px;color:#8a6a3a;margin:6px 0 16px;line-height:1.5}
 .kb-pdp-add,.kb-pdp-buy{padding:16px;border:none;border-radius:8px;font-family:var(--font-body);font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .15s,transform .1s}
 .kb-pdp-add{background:#1f1f1f;color:#fff}
 .kb-pdp-add:hover{background:#000}
@@ -2130,6 +2146,30 @@ function renderProductPage(products){
   const variantOpts = (p.variants||[]).length > 1
     ? `<div class="kb-pdp-variants"><label>Formato</label><select id="pdpVariant" onchange="pdpSetVariant(this)">${(p.variants||[]).map((v,i) => `<option value="${i}" data-price="${v.price}" data-compare="${v.compareAtPrice||''}" data-stock="${v.stock||0}" data-available="${v.available?'1':''}" data-id="${v.id}">${escapeHtml(v.title)} — ${fmtPrice(parseFloat(v.price))}</option>`).join('')}</select></div>`
     : '';
+  // Packs armables: Amateur y Catador → elegir 4 variedades.
+  let builderCfg = null;
+  if (/amateur/i.test(p.title||'')) builderCfg = { target:4, options:['Pils','Golden','NEIPA','Red','APA'], note:'' };
+  else if (/catador/i.test(p.title||'')) builderCfg = { target:4, options:['IPA','Stout','Amber','Weizen','Hoppy / Barley','Imperial','Doppelbock'], note:'* Excluye la Colección de Artistas vigente (ej. Mango Session), que tiene su propia rotación.' };
+  window.__pdpBuilder = builderCfg ? { cfg: builderCfg, sel: [], variantId: v0.id, name: cleanTitle(p.title), image: p.image, price } : null;
+  const actionsHTML = builderCfg
+    ? `<div class="kb-pdp-pk">
+         <div class="kb-pdp-pk-head"><label>Arma tu 4 pack · elige 4</label><span class="kb-pdp-pk-count"><b id="pkCount">0</b> / ${builderCfg.target}</span></div>
+         <div class="kb-pdp-pk-opts">${builderCfg.options.map((o,i) => `<button type="button" class="kb-pdp-opt" onclick="pdpPackAdd(${i})">${escapeHtml(o)}<span>＋</span></button>`).join('')}</div>
+         <div class="kb-pdp-pk-sel" id="pkSel"></div>
+         ${builderCfg.note ? `<p class="kb-pdp-pk-note">${escapeHtml(builderCfg.note)}</p>` : ''}
+         <button class="kb-pdp-add" id="pkAddBtn" onclick="pdpPackAddCart()" ${inStock?'':'disabled'}>Elige ${builderCfg.target} cervezas</button>
+       </div>`
+    : `<div class="kb-pdp-qty">
+         <label>Cantidad</label>
+         <div class="kb-pdp-qty-row">
+           <button onclick="pdpQty(-1)">−</button>
+           <span id="pdpQty">1</span>
+           <button onclick="pdpQty(1)">+</button>
+         </div>
+       </div>
+       <div class="kb-pdp-acts">
+         <button class="kb-pdp-add" id="pdpAdd" onclick="pdpAdd('${p.handle}')" ${inStock?'':'disabled'}>Agregar al carrito</button>
+       </div>`;
   host.innerHTML = `
     <div class="kb-pdp">
       <a class="kb-pdp-crumbs" data-route="/cervezas" onclick="go(event)">← Volver al catálogo</a>
@@ -2149,22 +2189,13 @@ function renderProductPage(products){
           <div class="kb-pdp-stock ${inStock?'ok':'no'}" id="pdpStock">${inStock ? `✓ En stock · Despacho RM` : '✗ Agotado por ahora'}</div>
           <a class="kb-pdp-locs-link" onclick="pdpShowLocations()">📍 Ver disponibilidad por local</a>
           ${variantOpts}
-          <div class="kb-pdp-qty">
-            <label>Cantidad</label>
-            <div class="kb-pdp-qty-row">
-              <button onclick="pdpQty(-1)">−</button>
-              <span id="pdpQty">1</span>
-              <button onclick="pdpQty(1)">+</button>
-            </div>
-          </div>
-          <div class="kb-pdp-acts">
-            <button class="kb-pdp-add" id="pdpAdd" onclick="pdpAdd('${p.handle}')" ${inStock?'':'disabled'}>Agregar al carrito</button>
-          </div>
+          ${actionsHTML}
           ${p.descriptionHtml ? `<div class="kb-pdp-desc">${p.descriptionHtml}</div>` : ''}
         </div>
       </div>
     </div>`;
   window.__pdpProduct = p;
+  if (window.__pdpBuilder) pdpPackRender();
 }
 function pdpShowLocations(){
   const p = window.__pdpProduct; if (!p) return;
@@ -2248,6 +2279,43 @@ function pdpAdd(handle){
 function pdpBuy(handle){
   const v = pdpCurrentVariant(); if (!v || !v.id) { alert('Producto no disponible online'); return; }
   window.location.href = `https://${SHOPIFY_DOMAIN}/cart/${v.id}:${PDP_QTY}?attributes[source]=kairos-clone`;
+}
+// ─── Pack armable (Amateur / Catador): elegir 4 variedades ────────────────────
+function pdpPackAdd(i){
+  const b = window.__pdpBuilder; if (!b) return;
+  if (b.sel.length >= b.cfg.target) return;
+  const opt = b.cfg.options[i]; if (opt == null) return;
+  b.sel.push(opt); pdpPackRender();
+}
+function pdpPackRemove(idx){
+  const b = window.__pdpBuilder; if (!b) return;
+  b.sel.splice(idx,1); pdpPackRender();
+}
+function pdpPackRender(){
+  const b = window.__pdpBuilder; if (!b) return;
+  const sel = document.getElementById('pkSel');
+  if (sel) sel.innerHTML = b.sel.map((o,idx) => `<span class="kb-pdp-pk-chip">${escapeHtml(o)}<button onclick="pdpPackRemove(${idx})" aria-label="Quitar">✕</button></span>`).join('') || '<span class="kb-pdp-pk-empty">Aún no eliges ninguna</span>';
+  const c = document.getElementById('pkCount'); if (c) c.textContent = b.sel.length;
+  document.querySelectorAll('.kb-pdp-opt').forEach(btn => { btn.disabled = b.sel.length >= b.cfg.target; });
+  const btn = document.getElementById('pkAddBtn');
+  if (btn){
+    const left = b.cfg.target - b.sel.length;
+    if (left <= 0){ btn.disabled = false; btn.textContent = 'Agregar al carrito'; }
+    else { btn.disabled = true; btn.textContent = `Elige ${left} más`; }
+  }
+}
+function pdpPackAddCart(){
+  const b = window.__pdpBuilder; if (!b) return;
+  if (b.sel.length < b.cfg.target) return;
+  if (!b.variantId){ alert('Producto no disponible online'); return; }
+  const counts = {};
+  b.sel.forEach(o => { counts[o] = (counts[o]||0) + 1; });
+  const props = {};
+  Object.keys(counts).forEach(k => { props[k] = String(counts[k]); });
+  CART.push({ variantId: b.variantId, name: b.name, image: cdnImg(b.image,200), price: b.price, qty: 1, properties: props });
+  b.sel = []; pdpPackRender();
+  saveCart(); updateCart();
+  if (!cartOpen) toggleCart();
 }
 
 // ─── CONTENT PAGE (/pages/{handle}) ───────────────────────────────────────────
