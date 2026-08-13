@@ -237,12 +237,12 @@ function p18IsEligibleBeer(p) {
 
 const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 48990 };
 const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc incluido', 12: 'vaso de 500 cc incluido', 24: '2 vasos de 500 cc incluidos' };
-// Vaso real por tamaño de pack: "Vaso Cognac Kairos Brewing 250cc - Copa de
-// Degustación Premium" para el 6 Pack, "Vaso Schopero ... 500cc" (x1 o x2)
-// para 12/24. Se busca por palabra clave + cc en vez de título exacto para no
-// romperse si Shopify cambia levemente el nombre del producto.
+// Vaso real por tamaño de pack: "Vaso Schopero Kairos Brewing 250cc" para el
+// 6 Pack, "Vaso Schopero ... 500cc" (x1 o x2) para 12/24. Se busca por
+// palabra clave + cc en vez de título exacto para no romperse si Shopify
+// cambia levemente el nombre del producto (el cc distingue cuál es cuál).
 const PACK18_VASO_SPEC = {
-  6:  { rx: /cognac/i,   cc: '250', qty: 1 },
+  6:  { rx: /schopero/i, cc: '250', qty: 1 },
   12: { rx: /schopero/i, cc: '500', qty: 1 },
   24: { rx: /schopero/i, cc: '500', qty: 2 },
 };
