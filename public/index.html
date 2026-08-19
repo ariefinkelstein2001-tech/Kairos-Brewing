@@ -839,6 +839,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-ci-img{width:60px;height:60px;background:#000;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .kb-ci-img img{max-width:100%;max-height:100%;object-fit:contain}
 .kb-ci-info{min-width:0}
+.kb-ci-pack{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--orange);margin-bottom:2px}
 .kb-ci-name{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
 .kb-ci-unit{font-size:12px;color:var(--mut);margin-top:3px}
 .kb-ci-qty{display:flex;align-items:center;gap:4px;margin-top:6px}
@@ -1518,7 +1519,11 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 <script>
 const SHOPIFY_DOMAIN = 'checkout.zorbo.cl';
 const STORAGE_KEY = 'kb-cart-v1';
+const PACK18_DISCOUNT_KEY = 'kb-pack18-discount';
 let CART = loadCart();
+// Código de descuento (monto fijo) del último Pack 18 agregado al carrito.
+// Se auto-aplica en el checkout vía /discount/{code} y se limpia al pagar.
+let PACK18_DISCOUNT_CODE = loadPack18Discount();
 let cartOpen = false, menuOpen = false, heroCur = 0, heroTmr = null;
 let PRODUCTS = null;
 
@@ -1527,6 +1532,8 @@ function fmtPrice(n){return '$'+Math.round(n).toLocaleString('es-CL')}
 function cdnImg(u,w){ if(!u) return u; return u.includes('width=') ? u : u + (u.includes('?')?'&':'?') + 'width=' + w; }
 function loadCart(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{return[]}}
 function saveCart(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(CART))}catch{}}
+function loadPack18Discount(){try{return localStorage.getItem(PACK18_DISCOUNT_KEY)||null}catch{return null}}
+function savePack18Discount(){try{ PACK18_DISCOUNT_CODE ? localStorage.setItem(PACK18_DISCOUNT_KEY, PACK18_DISCOUNT_CODE) : localStorage.removeItem(PACK18_DISCOUNT_KEY); }catch{}}
 
 // ─── ROUTING (SPA) ─────────────────────────────────────────────────────────
 const ROUTES = {
@@ -2642,7 +2649,7 @@ function p18Render(){
   const cta = document.getElementById('p18Cta');
   const hint = document.getElementById('p18Hint');
   if (cta){
-    if (left <= 0){ cta.disabled=false; cta.classList.add('ready'); cta.textContent='Ir a pagar →'; }
+    if (left <= 0){ cta.disabled=false; cta.classList.add('ready'); cta.textContent='Agregar al carrito →'; }
     else { cta.disabled=true; cta.classList.remove('ready'); cta.textContent='Falta completar el pack'; }
   }
   if (hint) hint.textContent = left<=0 ? '¡Pack completo!' : (p18Sel.length ? `Te faltan ${left} para completar` : 'Empieza eligiendo tu estilo favorito');
@@ -2651,7 +2658,7 @@ async function p18Checkout(){
   if (p18Sel.length < p18Target) return;
   const target = p18Target;
   const cta = document.getElementById('p18Cta');
-  if (cta) { cta.disabled = true; cta.textContent = 'Generando tu pack…'; }
+  if (cta) { cta.disabled = true; cta.textContent = 'Agregando…'; }
   try {
     const r = await fetch('/api/pack18/checkout', {
       method: 'POST',
@@ -2661,30 +2668,38 @@ async function p18Checkout(){
     const data = await r.json();
     if (!r.ok || !Array.isArray(data.lineItems) || !data.lineItems.length) throw new Error(data.error || 'No se pudo generar el Pack 18');
 
-    // Carrito normal de Shopify (igual que doKbCheckout) con las latas + vaso
-    // reales. Si hace falta descuento para llegar al precio fijo, el
-    // return_to pasa primero por /discount/{code} para auto-aplicarlo antes
-    // de llegar al checkout — así la caja de código sigue visible/editable.
-    const f = document.createElement('form');
-    f.method = 'POST';
-    f.action = `https://${SHOPIFY_DOMAIN}/cart/add`;
-    f.style.display = 'none';
-    const add = (name, value) => {
-      const i = document.createElement('input');
-      i.type = 'hidden'; i.name = name; i.value = String(value);
-      f.appendChild(i);
-    };
-    data.lineItems.forEach((item, idx) => {
-      add(`items[${idx}][id]`, item.variantId);
-      add(`items[${idx}][quantity]`, item.quantity);
+    // En vez de saltar directo al checkout de Shopify, las latas + el vaso se
+    // agregan al carrito local (mismo CART que usan las cervezas sueltas) para
+    // que el cliente pueda seguir comprando otras cosas antes de pagar. El
+    // descuento es un MONTO fijo (no %), así que sigue funcionando igual sin
+    // importar qué más haya en el carrito al momento de pagar.
+    const packLabel = `Pack 18 · ${target} unidades`;
+    const qtyByVariant = new Map();
+    p18Sel.forEach(it => qtyByVariant.set(it.variantId, (qtyByVariant.get(it.variantId) || 0) + 1));
+    qtyByVariant.forEach((qty, variantId) => {
+      const it = p18Sel.find(s => s.variantId === variantId);
+      const ex = CART.find(i => i.variantId === variantId && i.pack18);
+      if (ex) ex.qty += qty;
+      else CART.push({ variantId, name: it.name, image: it.image, price: it.price, qty, pack18: true, properties: { Pack: packLabel } });
     });
-    add('attributes[source]', 'kairos-pack18');
-    add('return_to', data.code ? `/discount/${data.code}?redirect=/checkout` : '/checkout');
-    document.body.appendChild(f);
-    f.submit();
+    const vasoP = p18Vaso(target);
+    const vasoV0 = vasoP && (vasoP.variants || [])[0];
+    const vasoSpec = P18_VASO_SPEC[target];
+    if (vasoV0 && vasoV0.id) {
+      const ex = CART.find(i => i.variantId === vasoV0.id && i.pack18);
+      if (ex) ex.qty += vasoSpec.qty;
+      else CART.push({ variantId: vasoV0.id, name: cleanTitle(vasoP.title), image: p18VasoImage(target), price: parseFloat(vasoV0.price||0), qty: vasoSpec.qty, pack18: true, properties: { Pack: packLabel } });
+    }
+
+    if (data.code) { PACK18_DISCOUNT_CODE = data.code; savePack18Discount(); }
+    saveCart(); updateCart();
+    if (!cartOpen) toggleCart();
+
+    p18Sel = [];
+    p18Render();
   } catch (e) {
     console.error('pack18 checkout', e);
-    alert('No pudimos generar tu Pack para el 18. Intenta de nuevo o escríbenos a contacto@kairosdrinks.com.');
+    alert('No pudimos agregar tu Pack para el 18. Intenta de nuevo o escríbenos a contacto@kairosdrinks.com.');
     p18Render();
   }
 }
@@ -2732,6 +2747,7 @@ function updateCart(){
     <div class="kb-ci">
       <div class="kb-ci-img">${i.image ? `<img src="${i.image}" alt="">` : ''}</div>
       <div class="kb-ci-info">
+        ${i.pack18 ? `<div class="kb-ci-pack">🇨🇱 ${escapeHtml(i.properties && i.properties.Pack || 'Pack 18')}</div>` : ''}
         <div class="kb-ci-name">${escapeHtml(i.name)}</div>
         <div class="kb-ci-unit">${fmtPrice(i.price)} c/u</div>
         <div class="kb-ci-qty">
@@ -2779,7 +2795,11 @@ function doKbCheckout(){
     }
   });
   add('attributes[source]', 'kairos-clone');
-  add('return_to', '/checkout');
+  // Si hay un Pack 18 en el carro, su código de descuento (monto fijo) se
+  // auto-aplica antes de llegar al checkout — la caja de código sigue
+  // visible/editable igual.
+  add('return_to', PACK18_DISCOUNT_CODE ? `/discount/${PACK18_DISCOUNT_CODE}?redirect=/checkout` : '/checkout');
+  PACK18_DISCOUNT_CODE = null; savePack18Discount();
   document.body.appendChild(f);
   f.submit();
 }
