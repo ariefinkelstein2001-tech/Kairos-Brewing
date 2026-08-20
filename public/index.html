@@ -439,6 +439,7 @@ select.kb-sel{
 .kb-p18 .kb-armar-pill{border-color:var(--p18-blue);color:var(--p18-blue)}
 .kb-p18-price-note{font-size:13px;color:#555;margin-top:6px}
 .kb-p18-price-note b{color:var(--orange-d)}
+.kb-p18-price-note s{color:#999;margin-right:4px}
 .kb-p18-full{display:block;font-size:12.5px;color:#777;margin-top:2px;font-weight:500}
 .kb-p18-full s{color:#999}
 .kb-p18-full b{color:var(--orange-d);font-weight:800}
@@ -2510,6 +2511,11 @@ function armarCheckout(){
 // nuevo y el monto cobrado nunca varía según los estilos elegidos.
 const PACK18_PRICE = { 6: 13990, 12: 25990, 24: 48990 };
 const PACK18_VASO_LABEL = { 6: 'vaso de 250 cc', 12: 'vaso de 500 cc', 24: '2 vasos de 500 cc' };
+// Descuento real del precio fijo Pack 18 vs. el valor normal de esa cantidad
+// de latas (sin promo). El "precio anterior" tachado se calcula desde acá.
+const PACK18_DISCOUNT_PCT = { 6: 0.223, 12: 0.25, 24: 0.30 };
+const PACK18_ORIGINAL_PRICE = { 6: Math.round(PACK18_PRICE[6] / (1 - PACK18_DISCOUNT_PCT[6])), 12: Math.round(PACK18_PRICE[12] / (1 - PACK18_DISCOUNT_PCT[12])), 24: Math.round(PACK18_PRICE[24] / (1 - PACK18_DISCOUNT_PCT[24])) };
+function p18DiscountLabel(target){ return (Math.round(PACK18_DISCOUNT_PCT[target] * 1000) / 10).toString(); }
 // Mismo criterio que el backend (server.js) para ubicar el producto real del
 // vaso en el catálogo y mostrar su foto junto a las latas elegidas.
 const P18_VASO_SPEC = {
@@ -2526,14 +2532,6 @@ function p18VasoImage(target){
   const found = p18Vaso(target);
   const img = found && (found.image || (found.images && found.images[0]));
   return img || spec.fallbackImg;
-}
-// Precio TOTAL de los vasos incluidos (unitario × cantidad).
-function p18VasoTotalPrice(target){
-  const spec = P18_VASO_SPEC[target];
-  const found = p18Vaso(target);
-  const v0 = found && (found.variants || [])[0];
-  const unit = (v0 && parseFloat(v0.price || 0)) || spec.fallbackPrice || 0;
-  return unit * spec.qty;
 }
 let p18Target = 6, p18Sel = [], p18List = [];
 function p18ParseTarget(){
@@ -2601,7 +2599,7 @@ function p18Render(){
   set('p18Target', target);
   set('p18Count', p18Sel.length);
   const note = document.getElementById('p18PriceNote');
-  if (note) note.innerHTML = `Precio fijo <b>${fmtPrice(PACK18_PRICE[target])}</b> · incluye ${PACK18_VASO_LABEL[target]}, elijas los estilos que elijas`;
+  if (note) note.innerHTML = `Antes <s>${fmtPrice(PACK18_ORIGINAL_PRICE[target])}</s> · precio fijo <b>${fmtPrice(PACK18_PRICE[target])}</b> · incluye ${PACK18_VASO_LABEL[target]}, elijas los estilos que elijas`;
   const slots = document.getElementById('p18Slots');
   if (slots){
     let s='';
@@ -2619,29 +2617,16 @@ function p18Render(){
     slots.innerHTML = s;
   }
   set('p18Total', fmtPrice(PACK18_PRICE[target]));
-  // Precio sin descuento 18ero = vasos (desde el inicio) + latas elegidas.
-  const vasoTotal = p18VasoTotalPrice(target);
-  const cansTotal = p18Sel.reduce((a,b) => a + (b.price || 0), 0);
-  const fullPrice = vasoTotal + cansTotal;
+  // Precio anterior = precio fijo Pack 18 / (1 - descuento fijo del tamaño).
   const fixed = PACK18_PRICE[target];
-  const off = fullPrice > fixed ? Math.round((1 - fixed / fullPrice) * 100) : 0;
+  const fullPrice = PACK18_ORIGINAL_PRICE[target];
+  const offLabel = p18DiscountLabel(target);
   const fullEl = document.getElementById('p18Full');
-  if (fullEl){
-    if (fullPrice > fixed){
-      fullEl.innerHTML = `Sin descuento <s>${fmtPrice(fullPrice)}</s> · ahorras <b>${fmtPrice(fullPrice - fixed)} (-${off}%)</b>`;
-    } else {
-      fullEl.innerHTML = `Valor real armado: <s>${fmtPrice(fullPrice)}</s> <span style="opacity:.7">(incluye vasos)</span>`;
-    }
-  }
+  if (fullEl) fullEl.innerHTML = `Antes <s>${fmtPrice(fullPrice)}</s> · ahorras <b>${fmtPrice(fullPrice - fixed)} (-${offLabel}%)</b>`;
   const discBig = document.getElementById('p18DiscBig');
   if (discBig){
-    if (off > 0){
-      discBig.classList.add('on');
-      discBig.innerHTML = `<span class="pct">-${off}%</span><span class="txt">Ahorras ${fmtPrice(fullPrice - fixed)}</span>`;
-    } else {
-      discBig.classList.remove('on');
-      discBig.innerHTML = '';
-    }
+    discBig.classList.add('on');
+    discBig.innerHTML = `<span class="pct">-${offLabel}%</span><span class="txt">Ahorras ${fmtPrice(fullPrice - fixed)}</span>`;
   }
   const fill = document.getElementById('p18BarFill');
   if (fill) fill.style.width = Math.min(100, p18Sel.length/target*100) + '%';
