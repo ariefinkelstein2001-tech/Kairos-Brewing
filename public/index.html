@@ -841,6 +841,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-ci-img img{max-width:100%;max-height:100%;object-fit:contain}
 .kb-ci-info{min-width:0}
 .kb-ci-pack{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--orange);margin-bottom:2px}
+.kb-ci-pack a{color:var(--mut);text-decoration:underline;text-transform:none;letter-spacing:0;cursor:pointer}
+.kb-ci-qty-fixed span{min-width:24px;text-align:center;font-size:13px;font-weight:700;color:var(--mut)}
 .kb-ci-name{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
 .kb-ci-unit{font-size:12px;color:var(--mut);margin-top:3px}
 .kb-ci-qty{display:flex;align-items:center;gap:4px;margin-top:6px}
@@ -2732,14 +2734,18 @@ function updateCart(){
     <div class="kb-ci">
       <div class="kb-ci-img">${i.image ? `<img src="${i.image}" alt="">` : ''}</div>
       <div class="kb-ci-info">
-        ${i.pack18 ? `<div class="kb-ci-pack">🇨🇱 ${escapeHtml(i.properties && i.properties.Pack || 'Pack 18')}</div>` : ''}
+        ${i.pack18 ? `<div class="kb-ci-pack">🇨🇱 ${escapeHtml(i.properties && i.properties.Pack || 'Pack 18')} · <a href="javascript:void(0)" onclick="removePack18()">quitar pack</a></div>` : ''}
         <div class="kb-ci-name">${escapeHtml(i.name)}</div>
         <div class="kb-ci-unit">${fmtPrice(i.price)} c/u</div>
+        ${i.pack18 ? `
+        <div class="kb-ci-qty kb-ci-qty-fixed">
+          <span>${i.qty}</span>
+        </div>` : `
         <div class="kb-ci-qty">
           <button onclick="changeCartQty(${idx},-1)">−</button>
           <span>${i.qty}</span>
           <button onclick="changeCartQty(${idx},1)">+</button>
-        </div>
+        </div>`}
       </div>
       <div class="kb-ci-price">${fmtPrice(i.qty * i.price)}</div>
     </div>`).join('');
@@ -2747,7 +2753,18 @@ function updateCart(){
 function removeCartItem(idx){
   CART.splice(idx,1); saveCart(); updateCart();
 }
+// Las líneas de un Pack 18 (latas + vaso) no se pueden editar ni quitar una
+// por una: el código de descuento se calculó para ESA combinación exacta, y
+// si el cliente saca el vaso o cambia cantidades el monto fijo del descuento
+// igual se aplicaría completo, dejando el pack más barato de lo debido. Solo
+// se puede quitar el pack completo.
+function removePack18(){
+  CART = CART.filter(i => !i.pack18);
+  PACK18_DISCOUNT_CODE = null; savePack18Discount();
+  saveCart(); updateCart();
+}
 function changeCartQty(idx, delta){
+  if (CART[idx].pack18) return;
   CART[idx].qty += delta;
   if (CART[idx].qty <= 0) CART.splice(idx, 1);
   saveCart(); updateCart();
