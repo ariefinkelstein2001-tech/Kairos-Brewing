@@ -249,7 +249,7 @@ const PACK18_VASO_SPEC = {
 function p18FindVaso(products, spec) {
   const p = products.find(pr => spec.rx.test(pr.title || '') && pr.title.includes(spec.cc));
   const v0 = p && (p.variants || [])[0];
-  return v0 && v0.id ? { title: p.title, variantId: String(v0.id), price: parseFloat(v0.price || 0) } : null;
+  return v0 && v0.id ? { title: p.title, variantId: String(v0.id), price: parseFloat(v0.price || 0), productId: p.id } : null;
 }
 
 const DISCOUNT_CODE_CREATE_MUTATION = `
@@ -280,16 +280,19 @@ app.post('/api/pack18/checkout', express.json(), async (req, res) => {
 
     const products = await loadKairosProducts();
     const eligible = new Map();
+    const variantToProduct = new Map();
     products.filter(p18IsEligibleBeer).forEach(p => {
-      (p.variants || []).forEach(v => { if (v.id) eligible.set(String(v.id), parseFloat(v.price || 0)); });
+      (p.variants || []).forEach(v => { if (v.id) { eligible.set(String(v.id), parseFloat(v.price || 0)); variantToProduct.set(String(v.id), p.id); } });
     });
 
     let realSum = 0;
     const qtyByVariant = new Map();
+    const productIds = new Set();
     for (const id of variantIds) {
       if (!eligible.has(id)) return res.status(400).json({ error: 'Una de las cervezas elegidas no está disponible para el Pack 18.' });
       realSum += eligible.get(id);
       qtyByVariant.set(id, (qtyByVariant.get(id) || 0) + 1);
+      productIds.add(variantToProduct.get(id));
     }
 
     const fixedPrice = PACK18_PRICE[size];
@@ -306,6 +309,7 @@ app.post('/api/pack18/checkout', express.json(), async (req, res) => {
     if (vaso) {
       lineItems.push({ variantId: vaso.variantId, quantity: vasoSpec.qty });
       vasoRealSum = vaso.price * vasoSpec.qty;
+      productIds.add(vaso.productId);
     } else {
       console.warn(`pack18: vaso ${vasoSpec.cc}cc no encontrado en el catálogo (esperaba título con "${vasoSpec.rx}"), no se agrega línea de vaso`);
     }
@@ -326,7 +330,11 @@ app.post('/api/pack18/checkout', express.json(), async (req, res) => {
         customerSelection: { all: true },
         customerGets: {
           value: { discountAmount: { amount: discountAmount, appliesOnEachItem: false } },
-          items: { all: true },
+          // Acota el descuento a los productos elegidos para ESTE Pack 18
+          // (latas + vaso), nunca a "todo el carrito" — así el monto fijo no
+          // puede terminar restando el precio de otros productos que el
+          // cliente agregue o cambie en el carrito antes de pagar.
+          items: { products: { productsToAdd: [...productIds].map(id => `gid://shopify/Product/${id}`) } },
         },
         combinesWith: { orderDiscounts: false, productDiscounts: false, shippingDiscounts: true },
       };
