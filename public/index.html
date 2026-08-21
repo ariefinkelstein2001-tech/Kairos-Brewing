@@ -2667,7 +2667,7 @@ async function p18Checkout(){
       const it = p18Sel.find(s => s.variantId === variantId);
       const ex = CART.find(i => i.variantId === variantId && i.pack18);
       if (ex) ex.qty += qty;
-      else CART.push({ variantId, name: it.name, image: it.image, price: it.price, qty, pack18: true, properties: { Pack: packLabel } });
+      else CART.push({ variantId, name: it.name, image: it.image, price: it.price, qty, pack18: true, pack18Size: target, properties: { Pack: packLabel } });
     });
     const vasoP = p18Vaso(target);
     const vasoV0 = vasoP && (vasoP.variants || [])[0];
@@ -2675,7 +2675,7 @@ async function p18Checkout(){
     if (vasoV0 && vasoV0.id) {
       const ex = CART.find(i => i.variantId === vasoV0.id && i.pack18);
       if (ex) ex.qty += vasoSpec.qty;
-      else CART.push({ variantId: vasoV0.id, name: cleanTitle(vasoP.title), image: p18VasoImage(target), price: parseFloat(vasoV0.price||0), qty: vasoSpec.qty, pack18: true, properties: { Pack: packLabel } });
+      else CART.push({ variantId: vasoV0.id, name: cleanTitle(vasoP.title), image: p18VasoImage(target), price: parseFloat(vasoV0.price||0), qty: vasoSpec.qty, pack18: true, pack18Size: target, properties: { Pack: packLabel } });
     }
 
     if (data.code) { PACK18_DISCOUNT_CODE = data.code; savePack18Discount(); }
@@ -2721,7 +2721,19 @@ function updateCart(){
   const totalEl = document.getElementById('kbCartTotal');
   const btn = document.getElementById('kbCheckoutBtn');
   const count = CART.reduce((s,i) => s + i.qty, 0);
-  const total = CART.reduce((s,i) => s + i.qty * i.price, 0);
+  // El total no puede sumar el precio "de lista" de cada línea del Pack 18:
+  // esas líneas se pagan al precio fijo del pack (el descuento se aplica en
+  // el checkout de Shopify), así que cada tamaño de pack presente en el
+  // carro cuenta una sola vez por PACK18_PRICE, no por línea.
+  const packSizesCounted = new Set();
+  const total = CART.reduce((s,i) => {
+    if (i.pack18) {
+      if (packSizesCounted.has(i.pack18Size)) return s;
+      packSizesCounted.add(i.pack18Size);
+      return s + (PACK18_PRICE[i.pack18Size] ?? i.qty * i.price);
+    }
+    return s + i.qty * i.price;
+  }, 0);
   badge.textContent = count;
   badge.classList.toggle('on', count > 0);
   totalEl.textContent = fmtPrice(total);
