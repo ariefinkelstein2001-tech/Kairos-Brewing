@@ -404,6 +404,8 @@ select.kb-sel{
 .kb-armar-plus{width:44px;height:44px;border-radius:50%;background:var(--orange);color:#000;font-size:26px;line-height:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:transform .15s,background .15s}
 .kb-armar-plus:hover{background:var(--orange-l);transform:scale(1.1)}
 .kb-armar-plus:disabled{opacity:.3;pointer-events:none}
+.kb-armar-card.off .kb-armar-card-img{opacity:.45;filter:grayscale(.6)}
+.kb-armar-unavail{font-size:11px;font-weight:700;color:#c4392a;text-transform:uppercase;letter-spacing:.04em}
 
 .kb-armar-bar-sticky{position:fixed;left:0;right:0;bottom:0;z-index:300;background:#f3f1e7;border-top:2px solid var(--orange);padding:14px clamp(1rem,4vw,3rem) 16px;box-shadow:0 -8px 26px rgba(0,0,0,.16)}
 .kb-armar-slots{display:flex;gap:10px;justify-content:center;margin-bottom:14px;flex-wrap:nowrap;overflow-x:auto;align-items:flex-end;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
@@ -770,6 +772,8 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-pk-opt-plus{width:40px;height:40px;border-radius:50%;background:var(--orange);color:#000;border:none;font-size:20px;font-weight:700;line-height:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s}
 .kb-pk-opt-plus:hover{background:var(--orange-l);transform:scale(1.1)}
 .kb-pk-opt-plus:disabled{opacity:.32;cursor:not-allowed;transform:none}
+.kb-pk-opt.off .kb-pk-opt-img{opacity:.45;filter:grayscale(.6)}
+.kb-pk-opt-unavail{font-size:11px;font-weight:700;color:#c4392a;text-transform:uppercase;letter-spacing:.04em}
 .kb-pdp-pk-sel{display:flex;flex-wrap:wrap;gap:8px;min-height:34px;margin-bottom:8px}
 .kb-pdp-pk-chip{display:inline-flex;align-items:center;gap:8px;background:#1f1f1f;color:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase}
 .kb-pdp-pk-chip button{background:transparent;border:none;color:var(--orange);cursor:pointer;font-size:12px;padding:0;line-height:1}
@@ -2196,7 +2200,8 @@ function renderProductPage(products){
   if (builderCfg){
     builderCfg.options = builderCfg.options.map(o => {
       const bp = (products||[]).find(x => o.rx.test(x.title||''));
-      return { label:o.label, image: bp ? (bp.image || (bp.images&&bp.images[0]) || null) : null };
+      const bv0 = bp && (bp.variants||[])[0];
+      return { label:o.label, image: bp ? (bp.image || (bp.images&&bp.images[0]) || null) : null, available: bv0 ? !!bv0.available : true };
     });
   }
   window.__pdpBuilder = builderCfg ? { cfg: builderCfg, sel: [], variantId: v0.id, name: cleanTitle(p.title), image: p.image, price } : null;
@@ -2206,10 +2211,12 @@ function renderProductPage(products){
          <div class="kb-hscroll-wrap">
            <button class="kb-hs-arr prev" onclick="hsScroll(this,-1)" aria-label="Anterior">‹</button>
            <div class="kb-hscroll kb-pk-row">${builderCfg.options.map((o,i) => `
-             <div class="kb-pk-opt">
+             <div class="kb-pk-opt${o.available===false?' off':''}">
                <div class="kb-pk-opt-img">${o.image?`<img src="${cdnImg(o.image,300)}" alt="${escapeHtml(o.label)}" loading="lazy">`:''}</div>
                <div class="kb-pk-opt-name">${escapeHtml(o.label)}</div>
-               <button class="kb-pk-opt-plus" aria-label="Agregar" onclick="pdpPackAdd(${i})">＋</button>
+               ${o.available===false
+                 ? `<span class="kb-pk-opt-unavail">No disponible</span>`
+                 : `<button class="kb-pk-opt-plus" aria-label="Agregar" onclick="pdpPackAdd(${i})">＋</button>`}
              </div>`).join('')}</div>
            <button class="kb-hs-arr next" onclick="hsScroll(this,1)" aria-label="Siguiente">›</button>
          </div>
@@ -2342,7 +2349,7 @@ function pdpBuy(handle){
 function pdpPackAdd(i){
   const b = window.__pdpBuilder; if (!b) return;
   if (b.sel.length >= b.cfg.target) return;
-  const opt = b.cfg.options[i]; if (opt == null) return;
+  const opt = b.cfg.options[i]; if (opt == null || opt.available === false) return;
   b.sel.push(opt.label != null ? opt.label : opt); pdpPackRender();
 }
 function pdpPackRemove(idx){
@@ -2426,11 +2433,12 @@ async function populateArmar(){
       const card = (p, i) => {
         const v0 = (p.variants||[])[0] || {};
         const img = p.image || (p.images&&p.images[0]) || '';
-        return `<div class="kb-armar-card">
+        const off = !v0.available;
+        return `<div class="kb-armar-card${off?' off':''}">
           <div class="kb-armar-card-img">${img?`<img src="${cdnImg(img,400)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">`:''}</div>
           <div class="kb-armar-card-name">${escapeHtml(cleanTitle(p.title))}</div>
           <div class="kb-armar-card-price">${fmtPrice(parseFloat(v0.price||0))}</div>
-          <button class="kb-armar-plus" aria-label="Agregar" onclick="armarAdd(${i})">+</button>
+          ${off ? `<span class="kb-armar-unavail">No disponible</span>` : `<button class="kb-armar-plus" aria-label="Agregar" onclick="armarAdd(${i})">+</button>`}
         </div>`;
       };
       const groups = { casa:[], temporada:[], artista:[], tour:[], otros:[] };
@@ -2453,7 +2461,7 @@ function armarAdd(i){
   if (armarSel.length >= armarTarget) return;
   const p = armarList[i]; if (!p) return;
   const v0 = (p.variants||[])[0] || {};
-  if (!v0.id) return;
+  if (!v0.id || !v0.available) return;
   armarSel.push({ variantId:v0.id, name:cleanTitle(p.title), image:p.image||(p.images&&p.images[0])||null, price:parseFloat(v0.price||0) });
   armarRender();
 }
@@ -2556,11 +2564,13 @@ async function populatePack18(){
       grid.innerHTML = '<div class="kb-loading">Sin cervezas disponibles</div>';
     } else {
       const card = (p, i) => {
+        const v0 = (p.variants||[])[0] || {};
         const img = p.image || (p.images&&p.images[0]) || '';
-        return `<div class="kb-armar-card">
+        const off = !v0.available;
+        return `<div class="kb-armar-card${off?' off':''}">
           <div class="kb-armar-card-img">${img?`<img src="${cdnImg(img,400)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">`:''}</div>
           <div class="kb-armar-card-name">${escapeHtml(cleanTitle(p.title))}</div>
-          <button class="kb-armar-plus" aria-label="Agregar" onclick="p18Add(${i})">+</button>
+          ${off ? `<span class="kb-armar-unavail">No disponible</span>` : `<button class="kb-armar-plus" aria-label="Agregar" onclick="p18Add(${i})">+</button>`}
         </div>`;
       };
       const groups = { casa:[], temporada:[], artista:[], otros:[] };
@@ -2583,7 +2593,7 @@ function p18Add(i){
   if (p18Sel.length >= p18Target) return;
   const p = p18List[i]; if (!p) return;
   const v0 = (p.variants||[])[0] || {};
-  if (!v0.id) return;
+  if (!v0.id || !v0.available) return;
   p18Sel.push({ variantId:v0.id, name:cleanTitle(p.title), image:p.image||(p.images&&p.images[0])||null, price:parseFloat(v0.price||0) });
   p18Render();
 }
