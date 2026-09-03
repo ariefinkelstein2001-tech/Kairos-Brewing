@@ -47,6 +47,10 @@ const HIDE_TITLE_RX = /^(pago factura|reservas?|recarga)/i;
 // y con distintos nombres (Garden Vespucio, etc.).
 const SHOW_LOCATION_RX = /garden|badass|antofagasta|vespucio/i;
 
+// Productos marcados manualmente sin stock para venta online, más allá de lo
+// que reporte Shopify (p.ej. Secret Lab APA con problemas de stock puntuales).
+const MANUAL_OUT_OF_STOCK_RX = /secret lab/i;
+
 // Mayorista = no se muestra en la tienda B2C de Kairos.
 function isMayorista(p) {
   const tags = (p.tags || []).map(t => t.toUpperCase());
@@ -132,6 +136,9 @@ async function loadKairosProducts(force = false) {
         locations: [],
       })),
     }))
+    .map(p => MANUAL_OUT_OF_STOCK_RX.test(p.title || '')
+      ? { ...p, variants: p.variants.map(v => ({ ...v, available: false, stock: 0 })) }
+      : p)
     .filter(p => (p.vendor || '').trim().toLowerCase() === VENDOR.toLowerCase())
     .filter(p => !HIDE_HANDLES.has(p.handle))
     .filter(p => !HIDE_TITLE_RX.test(p.title || ''))
