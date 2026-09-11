@@ -85,6 +85,35 @@ const PRODUCTS_QUERY = `{
   }
 }`;
 
+// Query liviana, separada de PRODUCTS_QUERY a propósito: solo trae el
+// desglose de inventario por local. Si falla (p.ej. falta el scope
+// read_inventory) NO debe romper la carga del catálogo — por eso se corre
+// aparte y con su propio try/catch (ver loadSingleLocationStock).
+const SINGLE_LOCATION_STOCK_QUERY = `{
+  products(first: 250, query: "status:active") {
+    edges {
+      node {
+        variants(first: 25) {
+          edges {
+            node {
+              id
+              inventoryItem {
+                tracked
+                inventoryLevels(first: 10) {
+                  edges { node {
+                    location { name }
+                    quantities(names: ["available"]) { name quantity }
+                  } }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
+
 const PAGES_QUERY = `{
   pages(first: 100) {
     edges { node { id title handle body bodySummary updatedAt } }
@@ -105,12 +134,40 @@ async function shopifyGraphQL(query, variables) {
   return JSON.parse(text);
 }
 
+// Un pedido con despacho o retiro no puede armarse combinando stock de dos
+// locales distintos (Garden Vespucio, Garden Antofagasta, Badass): lo
+// disponible para vender es lo que haya en UN solo local, no la suma de
+// todos, que es lo que reportan por defecto availableForSale/
+// inventoryQuantity de Shopify. Devuelve variantId -> stock del mejor local
+// único (o null si la query falló y hay que usar el agregado de Shopify).
+async function loadSingleLocationStock() {
+  const map = new Map();
+  try {
+    const resp = await shopifyGraphQL(SINGLE_LOCATION_STOCK_QUERY);
+    if (resp.errors) throw new Error(JSON.stringify(resp.errors));
+    (resp.data?.products?.edges || []).forEach(({ node: p }) => {
+      (p.variants?.edges || []).forEach(({ node: v }) => {
+        if (!v.inventoryItem?.tracked) return; // sin tracking: se deja el agregado de Shopify
+        const qtys = (v.inventoryItem.inventoryLevels?.edges || [])
+          .map(({ node: lvl }) => parseInt((lvl.quantities || []).find(x => x.name === 'available')?.quantity, 10) || 0);
+        const singleLocationStock = qtys.reduce((max, q) => Math.max(max, q), 0);
+        map.set(stripGid(v.id, 'ProductVariant'), singleLocationStock);
+      });
+    });
+  } catch (e) {
+    console.warn('No se pudo calcular stock por local único, se usa la disponibilidad agregada de Shopify:', e.message);
+  }
+  return map;
+}
+
 // Devuelve SOLO productos del vendor Kairos (incluye los individuales que no
 // están en Zorbo), excluyendo mayorista y ocultos.
 async function loadKairosProducts(force = false) {
   if (!force && cache && Date.now() - cacheAt < TTL_MS) return cache.products;
   const resp = await shopifyGraphQL(PRODUCTS_QUERY);
   if (resp.errors) throw new Error(JSON.stringify(resp.errors));
+
+  const singleLocationStock = await loadSingleLocationStock();
 
   const products = resp.data.products.edges
     .map(({ node: p }) => ({
@@ -124,17 +181,23 @@ async function loadKairosProducts(force = false) {
       image:       p.featuredImage?.url || null,
       images:      (p.images?.edges || []).map(e => e.node.url),
       collections: (p.collections?.edges || []).map(e => ({ handle: e.node.handle, title: e.node.title })),
-      variants: p.variants.edges.map(({ node: v }) => ({
-        id:             stripGid(v.id, 'ProductVariant'),
-        title:          v.title,
-        price:          v.price,
-        compareAtPrice: v.compareAtPrice,
-        sku:            v.sku,
-        available:      v.availableForSale,
-        stock:          v.inventoryQuantity,
-        image:          v.image?.url || null,
-        locations: [],
-      })),
+      variants: p.variants.edges.map(({ node: v }) => {
+        const id = stripGid(v.id, 'ProductVariant');
+        const singleLoc = singleLocationStock.get(id);
+        const stock = singleLoc != null ? singleLoc : v.inventoryQuantity;
+        const available = singleLoc != null ? (v.availableForSale && singleLoc > 0) : v.availableForSale;
+        return {
+          id,
+          title:          v.title,
+          price:          v.price,
+          compareAtPrice: v.compareAtPrice,
+          sku:            v.sku,
+          available,
+          stock,
+          image:          v.image?.url || null,
+          locations: [],
+        };
+      }),
     }))
     .map(p => MANUAL_OUT_OF_STOCK_RX.test(p.title || '')
       ? { ...p, variants: p.variants.map(v => ({ ...v, available: false, stock: 0 })) }
@@ -422,6 +485,78 @@ app.get('/api/inventory', async (req, res) => {
   } catch (e) {
     console.warn('inventory error:', e.message);
     res.json({ locations: [], error: e.message });
+  }
+});
+
+const CART_LOCATIONS_QUERY = (gids) => `{
+  nodes(ids: [${gids.map(id => `"${id}"`).join(', ')}]) {
+    ... on ProductVariant {
+      id
+      inventoryItem {
+        tracked
+        inventoryLevels(first: 10) {
+          edges { node {
+            location { name }
+            quantities(names: ["available"]) { name quantity }
+          } }
+        }
+      }
+    }
+  }
+}`;
+
+// POST /api/cart/check-locations { items:[{variantId, qty}, ...] } → un
+// pedido no puede despacharse combinando stock de dos locales distintos, así
+// que este endpoint revisa si existe al menos UN local (Garden Vespucio,
+// Garden Antofagasta o Badass) que tenga stock suficiente para TODAS las
+// líneas del carrito a la vez. Tolerante a fallos: si la validación no se
+// puede hacer (falta el scope de inventario, Shopify no responde, etc.) no
+// bloquea el checkout — solo evita dejar pasar un caso que sí pudo verificar.
+app.post('/api/cart/check-locations', express.json(), async (req, res) => {
+  if (!TOKEN) return res.json({ ok: true });
+  try {
+    const items = (Array.isArray(req.body?.items) ? req.body.items : [])
+      .map(it => ({ variantId: String(it?.variantId || '').replace(/\D/g, ''), qty: parseInt(it?.qty, 10) || 0 }))
+      .filter(it => it.variantId && it.qty > 0);
+    if (items.length < 2) return res.json({ ok: true });
+
+    const gids = items.map(it => `gid://shopify/ProductVariant/${it.variantId}`);
+    const resp = await shopifyGraphQL(CART_LOCATIONS_QUERY(gids));
+    if (resp.errors) throw new Error(JSON.stringify(resp.errors));
+
+    const stockByVariant = new Map(); // variantId -> Map(locationName -> qty) | null (sin tracking, no restringe)
+    (resp.data?.nodes || []).forEach(n => {
+      if (!n?.id) return;
+      const variantId = stripGid(n.id, 'ProductVariant');
+      if (!n.inventoryItem?.tracked) { stockByVariant.set(variantId, null); return; }
+      const byLocation = new Map();
+      (n.inventoryItem.inventoryLevels?.edges || []).forEach(({ node: lvl }) => {
+        const name = lvl.location?.name || '';
+        if (!SHOW_LOCATION_RX.test(name)) return;
+        const q = parseInt((lvl.quantities || []).find(x => x.name === 'available')?.quantity, 10) || 0;
+        byLocation.set(name, q);
+      });
+      stockByVariant.set(variantId, byLocation);
+    });
+
+    let commonLocations = null; // null = sin restricción todavía (nada tracked visto aún)
+    for (const it of items) {
+      const byLocation = stockByVariant.get(it.variantId);
+      if (byLocation == null) continue; // variante no encontrada o sin tracking: no restringe
+      const okHere = new Set([...byLocation.entries()].filter(([, q]) => q >= it.qty).map(([name]) => name));
+      commonLocations = commonLocations === null ? okHere : new Set([...commonLocations].filter(name => okHere.has(name)));
+    }
+
+    if (commonLocations !== null && commonLocations.size === 0) {
+      return res.json({
+        ok: false,
+        message: 'No podemos despachar juntos estos productos: el stock está repartido en locales distintos y un pedido no se puede armar combinando dos puntos de venta.',
+      });
+    }
+    res.json({ ok: true });
+  } catch (e) {
+    console.warn('check-locations error:', e.message);
+    res.json({ ok: true });
   }
 });
 

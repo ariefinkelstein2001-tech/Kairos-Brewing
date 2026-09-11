@@ -2791,10 +2791,29 @@ function changeCartQty(idx, delta){
   if (CART[idx].qty <= 0) CART.splice(idx, 1);
   saveCart(); updateCart();
 }
-function doKbCheckout(){
+async function doKbCheckout(){
   if (!CART.length) return;
   const valid = CART.filter(i => i.variantId);
   if (!valid.length) { alert('Ningún producto del carro está disponible online'); return; }
+
+  const btn = document.getElementById('kbCheckoutBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Verificando stock...'; }
+  try {
+    const r = await fetch('/api/cart/check-locations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: valid.map(i => ({ variantId: i.variantId, qty: i.qty })) }),
+    });
+    const data = await r.json();
+    if (data && data.ok === false) {
+      alert(data.message || 'No podemos despachar juntos estos productos: el stock está repartido en locales distintos.');
+      return;
+    }
+  } catch (e) {
+    // Si la validación falla (red, servidor, etc.) no bloqueamos el pago.
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Ir a Pagar'; }
+  }
 
   // POST bulk a /cart/add de Shopify con todas las líneas + sus line item
   // properties. return_to=/checkout salta el carrito y va directo al checkout.
