@@ -343,7 +343,10 @@ app.post('/api/pack18/checkout', express.json(), async (req, res) => {
           // cliente agregue o cambie en el carrito antes de pagar.
           items: { products: { productsToAdd: [...productIds].map(id => `gid://shopify/Product/${id}`) } },
         },
-        combinesWith: { orderDiscounts: false, productDiscounts: false, shippingDiscounts: true },
+        // No se combina con nada: solo se puede usar un código de descuento
+        // por compra (antes shippingDiscounts:true dejaba que un código de
+        // envío gratis se sumara al descuento del Pack 18 en el mismo pedido).
+        combinesWith: { orderDiscounts: false, productDiscounts: false, shippingDiscounts: false },
       };
       const resp = await shopifyGraphQL(DISCOUNT_CODE_CREATE_MUTATION, { basicCodeDiscount: input });
       if (resp.errors) throw new Error(JSON.stringify(resp.errors));
