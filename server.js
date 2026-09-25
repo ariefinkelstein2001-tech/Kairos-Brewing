@@ -100,11 +100,48 @@ async function shopifyGraphQL(query, variables) {
   return JSON.parse(text);
 }
 
+// ─── Disponibilidad real en la Tienda online ─────────────────────────────────
+// El checkout pasa por la Tienda online de Shopify (checkout.zorbo.cl), que
+// puede considerar agotada una variante aunque el Admin la reporte disponible
+// (p.ej. producto no publicado en "Tienda online", o stock en sucursales que
+// no atienden ese mercado). Leemos /products.json de la tienda para saber qué
+// variantes se pueden comprar de verdad ahí. Devuelve Map(variantId → bool),
+// o null si no se pudo leer (en ese caso se usa lo que diga el Admin).
+const CHECKOUT_DOMAIN = process.env.SHOPIFY_CHECKOUT_DOMAIN || 'checkout.zorbo.cl';
+async function loadOnlineStoreAvailability() {
+  try {
+    const map = new Map();
+    for (let page = 1; page <= 10; page++) {
+      const r = await fetch(`https://${CHECKOUT_DOMAIN}/products.json?limit=250&page=${page}`, {
+        headers: { 'Accept': 'application/json', 'Cookie': 'localization=CL; cart_currency=CLP' },
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const { products = [] } = await r.json();
+      for (const p of products) for (const v of p.variants || []) map.set(String(v.id), !!v.available);
+      if (products.length < 250) break;
+    }
+    // Salvaguarda: si la tienda no devuelve nada o marca TODO como agotado,
+    // probablemente la respuesta no es confiable (contexto de mercado, bloqueo,
+    // etc.), así que no la aplicamos.
+    if (!map.size || ![...map.values()].some(Boolean)) {
+      console.warn('online store availability: respuesta vacía o todo agotado, se ignora');
+      return null;
+    }
+    return map;
+  } catch (e) {
+    console.warn('online store availability error:', e.message);
+    return null;
+  }
+}
+
 // Devuelve SOLO productos del vendor Kairos (incluye los individuales que no
 // están en Zorbo), excluyendo mayorista y ocultos.
 async function loadKairosProducts(force = false) {
   if (!force && cache && Date.now() - cacheAt < TTL_MS) return cache.products;
-  const resp = await shopifyGraphQL(PRODUCTS_QUERY);
+  const [resp, onlineAvail] = await Promise.all([
+    shopifyGraphQL(PRODUCTS_QUERY),
+    loadOnlineStoreAvailability(),
+  ]);
   if (resp.errors) throw new Error(JSON.stringify(resp.errors));
 
   const products = resp.data.products.edges
@@ -125,7 +162,10 @@ async function loadKairosProducts(force = false) {
         price:          v.price,
         compareAtPrice: v.compareAtPrice,
         sku:            v.sku,
-        available:      v.availableForSale,
+        // Disponible solo si el Admin la reporta a la venta Y la Tienda online
+        // (donde se paga) también la puede vender. Una variante que no aparece
+        // en la Tienda online (producto no publicado ahí) no se puede comprar.
+        available:      v.availableForSale && (!onlineAvail || onlineAvail.get(stripGid(v.id, 'ProductVariant')) === true),
         stock:          v.inventoryQuantity,
         image:          v.image?.url || null,
         locations: [],
