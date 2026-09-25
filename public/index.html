@@ -1841,7 +1841,10 @@ function wtAddToCart(btn){
 
 function buildCard(p){
   const variants = p.variants || [];
-  const v0 = variants[0] || {};
+  // Parte en el primer formato disponible (p.ej. si el 6 pack está agotado
+  // pero el 12 no, la tarjeta arranca en el 12 pack).
+  const v0 = variants.find(v => v.available) || variants[0] || {};
+  const withFormat = v => cleanTitle(p.title) + (variants.length > 1 && v.title && v.title !== 'Default Title' ? ' · ' + v.title : '');
   const price = parseFloat(v0.price || 0);
   const compareAt = parseFloat(v0.compareAtPrice || 0);
   const oldP = (compareAt && compareAt > price) ? `<span class="old">${fmtPrice(compareAt)}</span>` : '';
@@ -1851,10 +1854,10 @@ function buildCard(p){
     ? `<div class="kb-card-img${img2 ? ' has2' : ''}"><img class="img1" src="${cdnImg(img1,600)}" alt="${escapeHtml(p.title)}" loading="lazy" decoding="async">${img2 ? `<img class="img2" src="${cdnImg(img2,600)}" alt="" loading="lazy" decoding="async">` : ''}</div>`
     : `<div class="kb-card-img"></div>`;
   const variantSelect = variants.length > 1
-    ? `<select class="kb-sel" onchange="onVariantChange(this)">${variants.map(v => `<option value="${v.id}" data-price="${v.price}">${escapeHtml(v.title)} — ${fmtPrice(parseFloat(v.price))}</option>`).join('')}</select>`
+    ? `<select class="kb-sel" onchange="onVariantChange(this)">${variants.map(v => `<option value="${v.id}" data-price="${v.price}" data-name="${escapeHtml(withFormat(v))}"${v.available ? '' : ' disabled'}${v === v0 ? ' selected' : ''}>${escapeHtml(v.title)} — ${v.available ? fmtPrice(parseFloat(v.price)) : 'Agotado'}</option>`).join('')}</select>`
     : '';
   const productData = {
-    name: cleanTitle(p.title),
+    name: withFormat(v0),
     image: cdnImg(img1,200),
     price,
     variantId: v0.id,
@@ -1944,6 +1947,7 @@ function onVariantChange(sel){
   if (btn){
     const data = JSON.parse(btn.getAttribute('data-product').replace(/&#39;/g,"'"));
     data.variantId = sel.value; data.price = newPrice;
+    if (opt.dataset.name) data.name = opt.dataset.name;
     btn.setAttribute('data-product', JSON.stringify(data).replace(/'/g,"&#39;"));
   }
 }
@@ -2088,14 +2092,14 @@ function renderProductPage(products){
   PDP_QTY = 1;
   const imgs = [p.image].concat((p.images||[]).filter(u => u && u !== p.image)).filter(Boolean);
   const main = imgs[0] || null;
-  const v0 = (p.variants||[])[0] || {};
+  const v0 = (p.variants||[]).find(v => v.available) || (p.variants||[])[0] || {};
   const price = parseFloat(v0.price||0);
   const compareAt = parseFloat(v0.compareAtPrice||0);
   const hasSale = compareAt && compareAt > price;
   const off = hasSale ? Math.round((1 - price/compareAt) * 100) : 0;
   const inStock = !!v0.available;
   const variantOpts = (p.variants||[]).length > 1
-    ? `<div class="kb-pdp-variants"><label>Formato</label><select id="pdpVariant" onchange="pdpSetVariant(this)">${(p.variants||[]).map((v,i) => `<option value="${i}" data-price="${v.price}" data-compare="${v.compareAtPrice||''}" data-stock="${v.stock||0}" data-available="${v.available?'1':''}" data-id="${v.id}">${escapeHtml(v.title)} — ${fmtPrice(parseFloat(v.price))}</option>`).join('')}</select></div>`
+    ? `<div class="kb-pdp-variants"><label>Formato</label><select id="pdpVariant" onchange="pdpSetVariant(this)">${(p.variants||[]).map((v,i) => `<option value="${i}" data-price="${v.price}" data-compare="${v.compareAtPrice||''}" data-stock="${v.stock||0}" data-available="${v.available?'1':''}" data-id="${v.id}"${v.available ? '' : ' disabled'}${v === v0 ? ' selected' : ''}>${escapeHtml(v.title)} — ${v.available ? fmtPrice(parseFloat(v.price)) : 'Agotado'}</option>`).join('')}</select></div>`
     : '';
   // Packs armables: Amateur y Catador → elegir 4 variedades (con foto de cada lata).
   let builderCfg = null;
