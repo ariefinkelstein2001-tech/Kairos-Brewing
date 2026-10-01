@@ -881,6 +881,9 @@ font-family:var(--b);color:var(--ink);background:var(--cream);line-height:1.6;le
 .oktoberfest .hero{min-height:calc(100svh - 90px);background:radial-gradient(ellipse at 50% 120%,#f2b41855,transparent 60%),linear-gradient(180deg,#071c3f,var(--navy) 55%,#123f86);color:var(--cream);display:flex;align-items:center;text-align:center;overflow:hidden;padding:120px 0 130px;position:relative}
 .oktoberfest .hero h1{font-size:clamp(3rem,11vw,8.2rem);color:var(--cream);text-shadow:0 5px 0 var(--blue),0 10px 0 #061837,0 18px 30px #0008;position:relative;z-index:2}
 .oktoberfest .hero h1 span{display:block;color:var(--gold);text-shadow:0 5px 0 var(--wood),0 10px 0 #2b1808,0 18px 30px #0008}
+.oktoberfest .hero h1{text-transform:uppercase}
+.oktoberfest .hero h1 .cities{display:block;font-size:clamp(1.3rem,4.2vw,3rem);color:var(--cream);margin-top:18px;letter-spacing:.04em;text-shadow:0 3px 0 var(--blue),0 6px 0 #061837}
+.oktoberfest .hero h1 .cities::before,.oktoberfest .hero h1 .cities::after{content:"—";color:var(--gold);margin:0 .4em}
 .oktoberfest .hero p.sub{font-size:clamp(1.1rem,2.6vw,1.6rem);font-weight:700;margin:26px auto 34px;max-width:28ch;position:relative;z-index:2}
 .oktoberfest .ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2}
 .oktoberfest .flags{position:absolute;top:0;left:0;width:100%;height:90px;z-index:1;transform-origin:top}
@@ -909,7 +912,9 @@ font-family:var(--b);color:var(--ink);background:var(--cream);line-height:1.6;le
 .oktoberfest .tl time{font:400 1.5rem var(--d);color:var(--gold)}.oktoberfest .tl b{display:block;font-size:1.2rem}.oktoberfest .tl span{opacity:.85}
 /* info */
 .oktoberfest .info{display:grid;gap:30px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:stretch}
+.oktoberfest .facts{display:flex;flex-wrap:wrap;gap:0 34px;margin:10px 0 30px}
 .oktoberfest .facts p{font-size:1.25rem;margin:0 0 14px}
+.oktoberfest .how{display:flex;flex-direction:column}.oktoberfest .how p{margin:0 0 12px}.oktoberfest .how .btn{align-self:flex-start;margin-top:auto}
 .oktoberfest .how{background:#fff;border:3px solid var(--navy);border-radius:18px;padding:28px;box-shadow:8px 8px 0 var(--navy)}.oktoberfest .how h3{font-size:1.5rem;color:var(--navy);margin-bottom:10px}
 /* entradas */
 .oktoberfest .tickets{background:var(--gold)}.oktoberfest .tickets .title{color:var(--navy)}
@@ -925,7 +930,7 @@ font-family:var(--b);color:var(--ink);background:var(--cream);line-height:1.6;le
 /* final */
 .oktoberfest .final{text-align:center;overflow:hidden}.oktoberfest .final h2{font-size:clamp(2.2rem,6vw,4.6rem);color:var(--cream)}.oktoberfest .final p{font-size:1.25rem;margin:18px 0 34px}
 .oktoberfest .rv{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.oktoberfest .rv.in{opacity:1;transform:none}
-@media(max-width:640px){.oktoberfest section{padding:64px 0}.oktoberfest .mug{display:none}.oktoberfest .btn{width:100%;text-align:center}.oktoberfest .ctas{flex-direction:column;padding:0 6px}}
+@media(max-width:640px){.oktoberfest .hero h1 .cities::before,.oktoberfest .hero h1 .cities::after{display:none}.oktoberfest section{padding:64px 0}.oktoberfest .mug{display:none}.oktoberfest .btn{width:100%;text-align:center}.oktoberfest .ctas{flex-direction:column;padding:0 6px}}
 @media(prefers-reduced-motion:reduce){.oktoberfest *{animation:none!important;transition:none!important}.oktoberfest .rv{opacity:1;transform:none}}
 </style>
 </head>
@@ -1324,9 +1329,9 @@ font-family:var(--b);color:var(--ink);background:var(--cream);line-height:1.6;le
       <svg class="mug r" viewBox="0 0 120 160" aria-hidden="true"><path d="M20 34h62v104q0 12-12 12H32q-12 0-12-12z" fill="#F2B418"/><path d="M82 52h16q14 0 14 22t-14 22H82" fill="none" stroke="#F6EBD0" stroke-width="9"/><path d="M14 38q0-26 26-22 10-14 28-4 18-6 20 14 6 10-4 16H18q-8-2-4-4z" fill="#fff"/></svg>
       <div class="bubbles" aria-hidden="true"><i style="left:12%;animation-delay:0s"></i><i style="left:30%;animation-delay:2s"></i><i style="left:52%;animation-delay:4s"></i><i style="left:71%;animation-delay:1s"></i><i style="left:88%;animation-delay:3s"></i></div>
       <div class="wrap">
-        <h1>Oktoberfest <span>Kairos</span></h1>
+        <h1>Oktoberfest <span>Kairos</span><small class="cities">Santiago y Antofagasta</small></h1>
         <p class="sub">La fiesta cervecera que estabas esperando.</p>
-        <p class="when">17 de octubre · Desde las 13:00 hrs · Kairos Garden</p>
+        <p class="when">17 de octubre · Desde las 13:00 hrs · Mall Plaza Vespucio y Mall Plaza Antofagasta</p>
         <div class="ctas"><a class="btn gold big" href="#okt-entradas">QUIERO IR 🍺</a><a class="btn ghost big" href="#okt-programa">VER PROGRAMACIÓN</a></div>
       </div>
       <svg class="foam" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true"><path fill="#F6EBD0" d="M0 60q30-50 60-10t60 0 60-20 60 20 60-10 60 10 60-30 60 30 60-10 60 10 60-20 60 20 60-10 60 10 60-30 60 30 60-10 60 10 60-20 60 20V110H0z"/></svg>
@@ -1342,23 +1347,28 @@ font-family:var(--b);color:var(--ink);background:var(--cream);line-height:1.6;le
 
     <section class="dark" id="okt-programa"><div class="wrap">
       <h2 class="title rv">Programa tu Kairos</h2>
-      <p class="lead rv">Una tarde completa de cerveza, música y premios.</p>
+      <p class="lead rv">Una tarde completa de cerveza, música y premios. El cronograma es similar en <b>Santiago</b> (Mall Plaza Vespucio) y <b>Antofagasta</b> (Mall Plaza Antofagasta).</p>
       <ul class="tl" id="okt-tl"></ul>
     </div></section>
 
     <section id="okt-donde"><div class="wrap">
       <h2 class="title rv">Dónde y cuándo</h2>
+      <div class="facts rv">
+        <p>📅 <b>Fecha:</b> 17 de octubre</p>
+        <p>⏰ <b>Horario:</b> 13:00 a 18:30</p>
+      </div>
       <div class="info">
-        <div class="facts rv">
-          <p>📍 <b>Lugar:</b> Kairos Garden, Froilán Roa 7205, La Florida</p>
-          <p>📅 <b>Fecha:</b> 17 de octubre</p>
-          <p>⏰ <b>Horario:</b> 13:00 a 18:30</p>
+        <div class="how rv">
+          <h3>📍 Santiago · Mall Plaza Vespucio</h3>
+          <p>Kairos Garden, Froilán Roa 7205, La Florida.</p>
+          <p>Nos encuentras en el <b>segundo piso de las terrazas</b> del Mall Plaza Vespucio 🐰</p>
+          <p>Puedes estacionar en esa dirección, al interior del mall.</p>
           <a class="btn navy" href="#" id="okt-maps-link" target="_blank" rel="noopener">CÓMO LLEGAR</a>
         </div>
         <div class="how rv">
-          <h3>Cómo llegar</h3>
-          <p>Nos encuentras en el <b>segundo piso de las terrazas</b> del Mall Plaza Vespucio 🐰</p>
-          <p>Puedes estacionar en esa dirección, al interior del mall.</p>
+          <h3>📍 Antofagasta · Mall Plaza Antofagasta</h3>
+          <p>Nos encuentras en <b>Kairos Garden</b>, al interior del Mall Plaza Antofagasta.</p>
+          <a class="btn navy" href="#" id="okt-maps-link-afta" target="_blank" rel="noopener">CÓMO LLEGAR</a>
         </div>
       </div>
     </div></section>
@@ -2798,7 +2808,7 @@ function doKbCheckout(){
 <script>
 (function(){
 /* ===== CONTENIDO EDITABLE ===== */
-const LINKS={reserva:"https://checkout.zorbo.cl/products/oktoberfest-kairos",maps:"https://www.google.com/maps/search/?api=1&query=Froil%C3%A1n+Roa+7205+La+Florida"};
+const LINKS={reserva:"https://checkout.zorbo.cl/products/oktoberfest-kairos",maps:"https://www.google.com/maps/search/?api=1&query=Froil%C3%A1n+Roa+7205+La+Florida",mapsAntofagasta:"https://www.google.com/maps/search/?api=1&query=Mall+Plaza+Antofagasta"};
 const PILARES=[["🍺","Cerveza","Cerveza ilimitada hasta las 18:00 en vaso conmemorativo."],["🥨","Gastronomía","Gastronomía alemana y pretzel gratis para acompañar tus cervezas."],["🎶","Música","Música en vivo, DJ y ambiente festivo."],["🎉","Entretención","Juegos, concursos, regalos y stands de marcas invitadas."],["🍻","Buenos momentos","Disfrutar, compartir y repetir."]];
 const PROGRAMA=[["13:00","Apertura","Puertas abiertas y primer brindis"],["13:30 – 15:30","DJ y animación","Música y ambiente para entrar en calor"],["16:00 – 18:00","Banda, animación y concursos","Música en vivo y premios en cada concurso"],["18:00","Fin de la cerveza ilimitada","Último refill"],["18:30","Cierre del evento","Gracias por brindar con nosotros"],["Todo el evento","Juegos, stands y regalos","Stands de marcas invitadas, gastronomía alemana, concursos y grandes premios"]];
 /* ============================== */
@@ -2807,7 +2817,7 @@ if(!root) return;
 const $=id=>document.getElementById(id);
 $("okt-pilares").innerHTML=PILARES.map(p=>`<article class="card rv"><div class="ic">${p[0]}</div><h3>${p[1]}</h3><p>${p[2]}</p></article>`).join("");
 $("okt-tl").innerHTML=PROGRAMA.map(p=>`<li class="rv"><time>${p[0]}</time><b>${p[1]}</b><span>${p[2]}</span></li>`).join("");
-$("okt-reserve").href=LINKS.reserva;$("okt-reserve").target="_blank";$("okt-reserve").rel="noopener";$("okt-maps-link").href=LINKS.maps;
+$("okt-reserve").href=LINKS.reserva;$("okt-reserve").target="_blank";$("okt-reserve").rel="noopener";$("okt-maps-link").href=LINKS.maps;$("okt-maps-link-afta").href=LINKS.mapsAntofagasta;
 // banderines
 const cols=["#F2B418","#F6EBD0","#1F5FBF"];let f="";
 for(let i=0;i<22;i++){const x=30+i*54;
