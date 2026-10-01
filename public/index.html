@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 <script>window.__catalog=fetch('/api/products?mode=b2c').then(r=>r.json()).then(d=>d.products||[]).catch(()=>[]);</script>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Dela+Gothic+One&family=Roboto:wght@400;700&family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Dela+Gothic+One&family=Roboto:wght@400;700&family=Josefin+Sans:wght@400;700&family=Alfa+Slab+One&family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 /* Fuentes propias de Kairos (mismas que el sitio original en PageFly) */
 @font-face{font-family:'Rigeko';src:url("https://cdn.shopify.com/s/files/1/0668/0081/2327/files/Rigeko_42dc2729-db72-4867-b240-0bddd82a9bc1.woff2?v=1739802873") format("woff2");font-display:swap}
@@ -108,6 +108,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 @media(max-width:999px){
   .kb-header-l a{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+}
+/* Con el link de Oktoberfest Kairos el menú no cabe entre 1000 y 1199px: se compacta un poco */
+@media(min-width:1000px) and (max-width:1199px){
+  .kb-nav-desktop{gap:14px;font-size:14px;letter-spacing:.05em}
 }
 
 /* ── MENU OVERLAY (mobile) ── */
@@ -851,6 +855,78 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
 .kb-loading{padding:60px 20px;text-align:center;color:var(--mut);font-size:14px;letter-spacing:.08em;text-transform:uppercase}
 .kb-view{display:none}
 .kb-view.active{display:block}
+
+/* ── OKTOBERFEST KAIROS (vista /oktoberfest) ──
+   Todo encapsulado bajo .oktoberfest para no chocar con los estilos del sitio. */
+.oktoberfest{--navy:#0B2A5B;--blue:#1F5FBF;--cream:#F6EBD0;--gold:#F2B418;--wood:#5A3518;--green:#4C6B3A;--ink:#1a1a24;
+--d:'Alfa Slab One',Georgia,serif;--b:'Nunito Sans',system-ui,sans-serif;
+font-family:var(--b);color:var(--ink);background:var(--cream);line-height:1.6;letter-spacing:normal;overflow-x:hidden}
+.oktoberfest.active{display:block}
+.oktoberfest p{margin:1em 0}
+.oktoberfest h1,.oktoberfest h2,.oktoberfest h3{font-family:var(--d);font-weight:400;line-height:1.05;margin:0}
+.oktoberfest .wrap{max-width:1120px;margin:auto;padding:0 20px}
+.oktoberfest section{padding:84px 0;position:relative;scroll-margin-top:100px}
+.oktoberfest .band{height:28px;background-color:#fff;background-image:repeating-conic-gradient(from 45deg,var(--blue) 0 25%,#fff 0 50%);background-size:28px 28px}
+.oktoberfest .btn{display:inline-block;font:800 1.05rem var(--b);letter-spacing:.04em;text-decoration:none;padding:18px 34px;border-radius:999px;min-height:56px;transition:transform .2s,box-shadow .2s;cursor:pointer;border:0}
+.oktoberfest .btn:hover{transform:translateY(-3px) rotate(-1deg)}.oktoberfest .btn:active{transform:scale(.97)}
+.oktoberfest .btn.gold{background:var(--gold);color:var(--navy);box-shadow:0 6px 0 #b8810a}.oktoberfest .btn.gold:hover{box-shadow:0 9px 0 #b8810a}
+.oktoberfest .btn.ghost{border:2px solid var(--cream);color:var(--cream);background:transparent}
+.oktoberfest .btn.navy{background:var(--navy);color:var(--cream);box-shadow:0 6px 0 #061837}
+.oktoberfest .btn.big{font-size:1.3rem;padding:22px 46px}
+.oktoberfest .title{font-size:clamp(2rem,5vw,3.4rem);color:var(--navy);margin-bottom:14px}
+.oktoberfest .lead{max-width:60ch;font-size:1.1rem}
+.oktoberfest .dark{background:var(--navy);color:var(--cream)}.oktoberfest .dark .title{color:var(--gold)}
+.oktoberfest a:focus-visible,.oktoberfest .btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+/* HERO */
+.oktoberfest .hero{min-height:calc(100svh - 90px);background:radial-gradient(ellipse at 50% 120%,#f2b41855,transparent 60%),linear-gradient(180deg,#071c3f,var(--navy) 55%,#123f86);color:var(--cream);display:flex;align-items:center;text-align:center;overflow:hidden;padding:120px 0 130px;position:relative}
+.oktoberfest .hero h1{font-size:clamp(3rem,11vw,8.2rem);color:var(--cream);text-shadow:0 5px 0 var(--blue),0 10px 0 #061837,0 18px 30px #0008;position:relative;z-index:2}
+.oktoberfest .hero h1 span{display:block;color:var(--gold);text-shadow:0 5px 0 var(--wood),0 10px 0 #2b1808,0 18px 30px #0008}
+.oktoberfest .hero p.sub{font-size:clamp(1.1rem,2.6vw,1.6rem);font-weight:700;margin:26px auto 34px;max-width:28ch;position:relative;z-index:2}
+.oktoberfest .ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2}
+.oktoberfest .flags{position:absolute;top:0;left:0;width:100%;height:90px;z-index:1;transform-origin:top}
+.oktoberfest .flags path{animation:okt-sway 4s ease-in-out infinite alternate;transform-origin:top}
+@keyframes okt-sway{to{transform:translateY(4px) skewX(1.5deg)}}
+.oktoberfest .mug{position:absolute;bottom:90px;width:clamp(90px,16vw,200px);z-index:1;opacity:.95}
+.oktoberfest .mug.l{left:3%;transform:rotate(-8deg)}.oktoberfest .mug.r{right:3%;transform:rotate(8deg) scaleX(-1)}
+.oktoberfest .foam{position:absolute;bottom:-2px;left:0;width:200%;height:110px;z-index:3;animation:okt-drift 18s linear infinite}
+@keyframes okt-drift{to{transform:translateX(-50%)}}
+.oktoberfest .bubbles i{position:absolute;bottom:0;width:8px;height:8px;border-radius:50%;background:#f2b41899;animation:okt-rise 7s linear infinite}
+@keyframes okt-rise{to{transform:translateY(-70vh);opacity:0}}
+.oktoberfest .when{font:400 clamp(1.1rem,3vw,1.7rem) var(--d);color:var(--gold);margin:-8px 0 30px;position:relative;z-index:2}
+/* cards */
+.oktoberfest .grid{display:grid;gap:22px;margin-top:40px}
+.oktoberfest .g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.oktoberfest .card{background:#fff;border-radius:18px;padding:28px;border:3px solid var(--navy);box-shadow:8px 8px 0 var(--navy);transition:transform .25s}
+.oktoberfest .card:hover{transform:translate(-3px,-3px) rotate(-.5deg)}
+.oktoberfest .card .ic{font-size:2.6rem;line-height:1}.oktoberfest .card h3{font-size:1.5rem;color:var(--navy);margin:12px 0 6px}
+.oktoberfest .pill .card:nth-child(even){background:var(--cream)}
+.oktoberfest .chips{list-style:none;display:flex;flex-wrap:wrap;gap:12px;padding:0;margin:44px 0 0}
+.oktoberfest .chips li{background:var(--gold);color:var(--navy);font:800 1.1rem var(--b);padding:14px 24px;border-radius:999px;border:3px solid var(--navy);box-shadow:4px 4px 0 var(--navy)}
+/* programa */
+.oktoberfest .tl{list-style:none;margin:40px 0 0;padding:0 0 0 26px;border-left:4px dashed var(--gold)}
+.oktoberfest .tl li{position:relative;padding:0 0 28px 22px}
+.oktoberfest .tl li::before{content:"🍺";position:absolute;left:-46px;top:-2px;background:var(--navy);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;font-size:1.1rem}
+.oktoberfest .tl time{font:400 1.5rem var(--d);color:var(--gold)}.oktoberfest .tl b{display:block;font-size:1.2rem}.oktoberfest .tl span{opacity:.85}
+/* info */
+.oktoberfest .info{display:grid;gap:30px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:stretch}
+.oktoberfest .facts p{font-size:1.25rem;margin:0 0 14px}
+.oktoberfest .how{background:#fff;border:3px solid var(--navy);border-radius:18px;padding:28px;box-shadow:8px 8px 0 var(--navy)}.oktoberfest .how h3{font-size:1.5rem;color:var(--navy);margin-bottom:10px}
+/* entradas */
+.oktoberfest .tickets{background:var(--gold)}.oktoberfest .tickets .title{color:var(--navy)}
+.oktoberfest .tix{background:var(--navy);color:var(--cream);border-radius:22px;padding:34px;max-width:520px;margin:34px auto 0;position:relative;text-align:left}
+.oktoberfest .tix::before,.oktoberfest .tix::after{content:"";position:absolute;top:58%;width:34px;height:34px;border-radius:50%;background:var(--gold)}
+.oktoberfest .tix::before{left:-17px}.oktoberfest .tix::after{right:-17px}
+.oktoberfest .tix .price{font:400 3rem var(--d);color:var(--gold)}.oktoberfest .tix ul{padding-left:20px;margin:10px 0 26px}
+.oktoberfest .note{font-size:.95rem;opacity:.85;margin:0 0 10px}
+/* video */
+.oktoberfest .vid{display:block;text-decoration:none;color:var(--cream);margin-top:36px;border-radius:22px;padding:clamp(34px,7vw,70px) 24px;text-align:center;background:linear-gradient(160deg,var(--navy),var(--blue));border:3px solid var(--gold);box-shadow:8px 8px 0 var(--navy);transition:transform .25s}
+.oktoberfest .vid:hover{transform:translateY(-4px)}.oktoberfest .vid .play{width:84px;height:84px;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-size:2.2rem;margin:0 auto 18px;padding-left:6px}
+.oktoberfest .vid h3{font-size:clamp(1.6rem,4vw,2.4rem);color:var(--gold)}.oktoberfest .vid p{margin:8px 0 0}
+/* final */
+.oktoberfest .final{text-align:center;overflow:hidden}.oktoberfest .final h2{font-size:clamp(2.2rem,6vw,4.6rem);color:var(--cream)}.oktoberfest .final p{font-size:1.25rem;margin:18px 0 34px}
+.oktoberfest .rv{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.oktoberfest .rv.in{opacity:1;transform:none}
+@media(max-width:640px){.oktoberfest section{padding:64px 0}.oktoberfest .mug{display:none}.oktoberfest .btn{width:100%;text-align:center}.oktoberfest .ctas{flex-direction:column;padding:0 6px}}
+@media(prefers-reduced-motion:reduce){.oktoberfest *{animation:none!important;transition:none!important}.oktoberfest .rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -895,6 +971,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
         <a data-route="/restaurantes/garden" onclick="go(event)">Garden</a>
       </div>
     </div>
+    <a data-route="/oktoberfest" onclick="go(event)">Oktoberfest Kairos</a>
     <a data-route="/eventos" onclick="go(event)">Eventos</a>
     <a data-route="/nosotros" onclick="go(event)">Nosotros</a>
   </nav>
@@ -946,6 +1023,7 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
       </div>
     </div>
 
+    <a data-route="/oktoberfest" onclick="go(event)">Oktoberfest Kairos</a>
     <a data-route="/eventos" onclick="go(event)">Eventos</a>
     <a data-route="/nosotros" onclick="go(event)">Nosotros</a>
   </div>
@@ -1235,6 +1313,79 @@ textarea.kb-ev-field{min-height:120px;resize:vertical}
     </div>
   </div>
 
+  <!-- ═════ OKTOBERFEST KAIROS ═════ -->
+  <div class="kb-view oktoberfest" id="view-oktoberfest">
+    <div class="hero" id="okt-top">
+      <svg class="flags" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 6 Q600 70 1200 6" fill="none" stroke="#F6EBD0" stroke-width="3"/>
+        <g id="okt-fl"></g>
+      </svg>
+      <svg class="mug l" viewBox="0 0 120 160" aria-hidden="true"><path d="M20 34h62v104q0 12-12 12H32q-12 0-12-12z" fill="#F2B418"/><path d="M82 52h16q14 0 14 22t-14 22H82" fill="none" stroke="#F6EBD0" stroke-width="9"/><path d="M14 38q0-26 26-22 10-14 28-4 18-6 20 14 6 10-4 16H18q-8-2-4-4z" fill="#fff"/><rect x="30" y="50" width="8" height="90" fill="#fff" opacity=".3"/></svg>
+      <svg class="mug r" viewBox="0 0 120 160" aria-hidden="true"><path d="M20 34h62v104q0 12-12 12H32q-12 0-12-12z" fill="#F2B418"/><path d="M82 52h16q14 0 14 22t-14 22H82" fill="none" stroke="#F6EBD0" stroke-width="9"/><path d="M14 38q0-26 26-22 10-14 28-4 18-6 20 14 6 10-4 16H18q-8-2-4-4z" fill="#fff"/></svg>
+      <div class="bubbles" aria-hidden="true"><i style="left:12%;animation-delay:0s"></i><i style="left:30%;animation-delay:2s"></i><i style="left:52%;animation-delay:4s"></i><i style="left:71%;animation-delay:1s"></i><i style="left:88%;animation-delay:3s"></i></div>
+      <div class="wrap">
+        <h1>Oktoberfest <span>Kairos</span></h1>
+        <p class="sub">La fiesta cervecera que estabas esperando.</p>
+        <p class="when">17 de octubre · Desde las 13:00 hrs · Kairos Garden</p>
+        <div class="ctas"><a class="btn gold big" href="#okt-entradas">QUIERO IR 🍺</a><a class="btn ghost big" href="#okt-programa">VER PROGRAMACIÓN</a></div>
+      </div>
+      <svg class="foam" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true"><path fill="#F6EBD0" d="M0 60q30-50 60-10t60 0 60-20 60 20 60-10 60 10 60-30 60 30 60-10 60 10 60-20 60 20 60-10 60 10 60-30 60 30 60-10 60 10 60-20 60 20V110H0z"/></svg>
+    </div>
+
+    <section id="okt-que-es"><div class="wrap">
+      <h2 class="title rv">Cerveza, comida, música y buena compañía.</h2>
+      <p class="lead rv">Oktoberfest Kairos es una celebración donde la cerveza, la gastronomía, la música y los buenos momentos se encuentran. Una experiencia para disfrutar nuestras cervezas, compartir con amigos y vivir el espíritu Oktoberfest a la manera Kairos.</p>
+      <div class="grid g3 pill" id="okt-pilares"></div>
+      <ul class="chips rv"><li>🎮 Juegos</li><li>🏷️ Stands de marcas invitadas</li><li>🎁 Regalos</li><li>🏆 Concursos</li></ul>
+    </div></section>
+    <div class="band"></div>
+
+    <section class="dark" id="okt-programa"><div class="wrap">
+      <h2 class="title rv">Programa tu Kairos</h2>
+      <p class="lead rv">Una tarde completa de cerveza, música y premios.</p>
+      <ul class="tl" id="okt-tl"></ul>
+    </div></section>
+
+    <section id="okt-donde"><div class="wrap">
+      <h2 class="title rv">Dónde y cuándo</h2>
+      <div class="info">
+        <div class="facts rv">
+          <p>📍 <b>Lugar:</b> Kairos Garden, Froilán Roa 7205, La Florida</p>
+          <p>📅 <b>Fecha:</b> 17 de octubre</p>
+          <p>⏰ <b>Horario:</b> 13:00 a 18:30</p>
+          <a class="btn navy" href="#" id="okt-maps-link" target="_blank" rel="noopener">CÓMO LLEGAR</a>
+        </div>
+        <div class="how rv">
+          <h3>Cómo llegar</h3>
+          <p>Nos encuentras en el <b>segundo piso de las terrazas</b> del Mall Plaza Vespucio 🐰</p>
+          <p>Puedes estacionar en esa dirección, al interior del mall.</p>
+        </div>
+      </div>
+    </div></section>
+
+    <section class="tickets" id="okt-entradas"><div class="wrap" style="text-align:center">
+      <h2 class="title rv">Tu mesa te está esperando 🍺</h2>
+      <div class="tix rv">
+        <h3 style="color:var(--gold)">Entrada general · 1 persona</h3>
+        <div class="price">$24.990</div>
+        <ul><li>Cerveza ILIMITADA hasta las 18:00</li><li>Vaso conmemorativo de 500cc + pulsera de regalo</li><li>Pretzel GRATIS para acompañar tus cervezas</li><li>Bonus: ven disfrazado de Oktoberfest (camisa, shorts, gorro y tirantes) y te damos un vaso de litro</li></ul>
+        <p class="note">Entrada válida para una persona. Refill cada 10 minutos y en zona delimitada.</p>
+        <a class="btn gold big" href="#" id="okt-reserve" style="width:100%;text-align:center">RESERVAR AHORA</a>
+      </div>
+    </div></section>
+
+    <section id="okt-galeria"><div class="wrap">
+      <h2 class="title rv">Así se vive</h2>
+      <a class="vid rv" href="https://www.instagram.com/p/DQFXubBkb8p/" target="_blank" rel="noopener"><div class="play" aria-hidden="true">▶</div><h3>Mira cómo se vive Kairos</h3><p>Ver video en Instagram</p></a>
+    </div></section>
+
+    <section class="dark final" id="okt-final"><div class="wrap">
+      <h2 class="rv">Nos vemos en Oktoberfest Kairos 🍺</h2>
+      <p>Ven a celebrar, brindar y repetir el momento.</p>
+      <a class="btn gold big" href="#okt-entradas">QUIERO SER PARTE</a>
+    </div></section>
+  </div>
+
   <!-- ═════ NOSOTROS ═════ -->
   <div class="kb-view kb-light" id="view-nosotros">
     <div class="kb-ns-hero" style="background-image:url('https://cdn.shopify.com/s/files/1/0668/0081/2327/files/NOSTROS12.png?v=1769536256')">
@@ -1470,6 +1621,7 @@ const ROUTES = {
   '/destileria':    'destileria',
   '/merch':         'merch',
   '/eventos':       'eventos',
+  '/oktoberfest':   'oktoberfest',
   '/nosotros':      'nosotros',
   '/arma-tu-pack':  'armar',
   '/politicas-de-uso': 'terminos',
@@ -2642,6 +2794,43 @@ function doKbCheckout(){
 </script>
 
 <!-- ===== Age Gate (+18) ===== -->
+<!-- ═════ OKTOBERFEST KAIROS (script de la vista /oktoberfest) ═════ -->
+<script>
+(function(){
+/* ===== CONTENIDO EDITABLE ===== */
+const LINKS={reserva:"https://checkout.zorbo.cl/products/oktoberfest-kairos",maps:"https://www.google.com/maps/search/?api=1&query=Froil%C3%A1n+Roa+7205+La+Florida"};
+const PILARES=[["🍺","Cerveza","Cerveza ilimitada hasta las 18:00 en vaso conmemorativo."],["🥨","Gastronomía","Gastronomía alemana y pretzel gratis para acompañar tus cervezas."],["🎶","Música","Música en vivo, DJ y ambiente festivo."],["🎉","Entretención","Juegos, concursos, regalos y stands de marcas invitadas."],["🍻","Buenos momentos","Disfrutar, compartir y repetir."]];
+const PROGRAMA=[["13:00","Apertura","Puertas abiertas y primer brindis"],["13:30 – 15:30","DJ y animación","Música y ambiente para entrar en calor"],["16:00 – 18:00","Banda, animación y concursos","Música en vivo y premios en cada concurso"],["18:00","Fin de la cerveza ilimitada","Último refill"],["18:30","Cierre del evento","Gracias por brindar con nosotros"],["Todo el evento","Juegos, stands y regalos","Stands de marcas invitadas, gastronomía alemana, concursos y grandes premios"]];
+/* ============================== */
+const root=document.getElementById("view-oktoberfest");
+if(!root) return;
+const $=id=>document.getElementById(id);
+$("okt-pilares").innerHTML=PILARES.map(p=>`<article class="card rv"><div class="ic">${p[0]}</div><h3>${p[1]}</h3><p>${p[2]}</p></article>`).join("");
+$("okt-tl").innerHTML=PROGRAMA.map(p=>`<li class="rv"><time>${p[0]}</time><b>${p[1]}</b><span>${p[2]}</span></li>`).join("");
+$("okt-reserve").href=LINKS.reserva;$("okt-reserve").target="_blank";$("okt-reserve").rel="noopener";$("okt-maps-link").href=LINKS.maps;
+// banderines
+const cols=["#F2B418","#F6EBD0","#1F5FBF"];let f="";
+for(let i=0;i<22;i++){const x=30+i*54;
+const yy=6+64*(1-Math.pow((x-600)/600,2))*0.5*2*0.5*2/2*1;
+f+=`<path d="M${x-14} ${yy+2}h28l-14 34z" fill="${cols[i%3]}"/>`}
+$("okt-fl").innerHTML=f;
+// reveal al scroll
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});
+root.querySelectorAll(".rv").forEach((el,i)=>{el.style.transitionDelay=(i%4)*80+"ms";io.observe(el)});
+// anclas internas (#okt-…): scroll suave dentro de la vista sin tocar la URL,
+// para que el router de la SPA no recargue la vista ni vuelva arriba.
+root.addEventListener("click",e=>{
+  const a=e.target.closest('a[href^="#okt-"]');if(!a)return;
+  const t=$(a.getAttribute("href").slice(1));if(!t)return;
+  e.preventDefault();
+  t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+});
+// parallax leve (solo con la vista visible)
+const hero=root.querySelector(".hero h1");
+addEventListener("scroll",()=>{if(root.classList.contains("active")&&scrollY<900)hero.style.transform=`translateY(${scrollY*.12}px)`},{passive:true});
+})();
+</script>
+
 <div id="kbAgeGate" class="kb-age-gate" role="dialog" aria-modal="true" aria-label="Verificación de edad">
   <div class="kb-age-card">
     <img class="kb-age-logo" src="https://cdn.shopify.com/s/files/1/0668/0081/2327/files/LOGO_KAIROS_BREWING.png?v=1769017156&width=300" alt="Kairos Brewing">
